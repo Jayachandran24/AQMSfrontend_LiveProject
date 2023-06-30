@@ -382,7 +382,7 @@ export default function ManagementReportTab() {
                 </Card>
                 <Card className={'mt-5 mb-5'}
                     sx={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
-                    <CardContent  className='h-[71vh]'>
+                    <CardContent  className='h-[71vh] overflow-auto lg:overflow-hidden'>
                         {/* <Grid container spacing={1} xs={12} item className={' overflow-hidden'}> */}
                             <Box width='100%' className='px-0 sm:px-0 '>
                                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"

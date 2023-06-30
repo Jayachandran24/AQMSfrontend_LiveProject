@@ -246,9 +246,8 @@ function Navbar(props) {
         <div className="items flex items-cente w-full justify-end">
           {userDetails.userRole !== 'superAdmin' &&
             <>
-              <div className="item text-xs text-black mt-3 px-0 font-semibold font-[inherit] mr-0 sm:mr-5">
+              <div className="item text-xs text-black mt-2 sm:mt-3 px-0 font-semibold font-[inherit] mr-3 sm:mr-5">
                 {userDisplayName}
-                {/* <p className='text-xs font-thin'>Type</p> */}
               </div>
               <Tooltip title="Notifications" placement="bottom" TransitionComponent={Zoom} arrow>
                 <div className="notification item flex items-center mr-5 relative ">

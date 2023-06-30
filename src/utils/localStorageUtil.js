@@ -24,7 +24,7 @@ const ApplicationStore = () => {
   }
 
   function getCompanyName(){
-    return localStorage.getItem('companyName') != null ? localStorage.getItem('companyName') : 'aragen';
+    return localStorage.getItem('companyName') != null ? localStorage.getItem('companyName') : 'Ai-DEA Labs Pvt. Ltd';
   }
   function getCustomerImage(){
     return (localStorage.getItem('customerImage') != null && localStorage.getItem('customerImage') != ""  ) && (localStorage.getItem('customerImage') != "null")  ? `https://wisething.in/aideaLabs/blog/public/`+localStorage.getItem('customerImage') : null;

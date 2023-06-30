@@ -13,7 +13,7 @@ import ApplicationStore from "../utils/localStorageUtil";
 import { LoginFormValidate } from "../validation/formValidation";
 import NotificationBar from "../components/notification/ServiceNotificationBar";
 
-import Logo1 from "../images/Logo1.svg";
+import Logo1 from "../images/Janane_Logo.png";
 
 function LoginPage() {
   const successCaseCode = [200, 201];

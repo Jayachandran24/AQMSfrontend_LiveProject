@@ -245,7 +245,7 @@ function FloorModal({
                     >
                       <img src={previewFloor || previewImage} 
                       // style={{ width: '-webkit-fill-available' }} 
-                      className='h-[40vh] w-full object-contain'
+                      className='h-[45vh] w-8/12 mr-auto ml-auto object-contain border-solid border-2 border-black'
                       />
                     </div>
                   </div>

@@ -45,7 +45,6 @@ export function LabListResults({ img }) {
       headerName: 'Actions',
       width: 100,
       cellClassName: 'actions',
-
       getActions: (params) => [
         <EditData selectedRow={params.row} />,
         <DeleteData selectedRow={params.row} />,
