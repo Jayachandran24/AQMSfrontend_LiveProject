@@ -221,7 +221,7 @@ function LabGridComponent(props) {
 
   return (
     <>
-      <Card className={'h-[50vh] sm:h-[40vh] xl:h-[38vh]'} sx={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
+      <Card className={'h-[50vh] sm:h-[40vh] xl:h-[35vh]'} sx={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
         <Paper elevation={3} className={'h-full'} sx={{ boxShadow: 'none' }}>
           <CardHeader
             title={
@@ -379,7 +379,7 @@ function LabGridComponent(props) {
             }
             sx={{ paddingBottom: 0 }}
           />
-          <CardContent className='h-[82%] sm:h-[100%]' style={{padding:'15px'}}>
+          <CardContent className='h-[82%] sm:h-[100%]' >
             <DataGrid
             
               rows={dataList}
@@ -391,7 +391,7 @@ function LabGridComponent(props) {
               sx={{
                 // maxHeight: `${80}%`,
                 border: 'none',
-                paddingBottom: '30px',
+                paddingBottom: '50px',
                 fontFamily:'customfont'
               }}
             />

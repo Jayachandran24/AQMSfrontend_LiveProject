@@ -404,19 +404,19 @@ function UserModal({
       <DialogTitle sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '1px', textAlign: 'center' }}>
         {isAddButton ? 'Add User' : 'Edit User'}
       </DialogTitle>
-      <DialogContent style={{paddingRight:'15+px'}} >
-        <form className={'space-y-0'} onSubmit={handleSubmit}>
+      <DialogContent>
+        <form className={'space-y-6'} onSubmit={handleSubmit}>
           <div className={'rounded-md  -space-y-px'}>
             {isSuperAdmin ? ''
               : (
                 <Grid container spacing={2} sx={{ mt: 0, mb: 2 }}>
-                  <Grid sx={{ mt: 0, padding: 0 }} gap={1} item xs={12} sm={12} md={4} lg={4} xl={4}>
+                  <Grid sx={{ mt: 0, padding: 0 }} item xs={12} sm={12} md={4} lg={4} xl={4}>
                     <div className="rounded-md -space-y-px">
                       <FormControl fullWidth>
                         {/* <InputLabel id="demo-simple-select-standard-label">Location</InputLabel> */}
                         <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-black'>Location</label>
                         <Select
-                          className='text-left px-2 py-1 bg-[#f9f9f9] ' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                          className='text-left px-2 py-1 bg-[#f9f9f9] mr-4' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
                           size='small'
                           displayEmpty
                           value={location_id}
@@ -441,7 +441,7 @@ function UserModal({
                         {/* <InputLabel id="demo-simple-select-standard-label">Branch</InputLabel> */}
                         <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-black'>Branch</label>
                         <Select
-                          className='text-left px-2 py-1 bg-[#f9f9f9] ' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                          className='text-left px-2 py-1 bg-[#f9f9f9] mr-4' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
                           size='small'
                           displayEmpty
                           value={branch_id}
@@ -466,7 +466,7 @@ function UserModal({
                         {/* <InputLabel id="demo-simple-select-standard-label">Facility</InputLabel> */}
                         <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-black'>Facility</label>
                         <Select
-                          className='text-left px-2 py-1 bg-[#f9f9f9] ' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                          className='text-left px-2 py-1 bg-[#f9f9f9] mr-4' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
                           size='small'
                           displayEmpty
                           value={facility_id}
@@ -491,7 +491,7 @@ function UserModal({
                         {/* <InputLabel id="demo-simple-select-standard-label">Building</InputLabel> */}
                         <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-black'>Building</label>
                         <Select
-                          className='text-left px-2 py-1 bg-[#f9f9f9] ' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                          className='text-left px-2 py-1 bg-[#f9f9f9] mr-4' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
                           size='small'
                           displayEmpty
                           value={building_id}
@@ -516,7 +516,7 @@ function UserModal({
                         {/* <InputLabel id="demo-simple-select-standard-label">Floor</InputLabel> */}
                         <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-black'>Floor</label>
                         <Select
-                          className='text-left px-2 py-1 bg-[#f9f9f9] ' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                          className='text-left px-2 py-1 bg-[#f9f9f9] mr-4' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
                           size='small'
                           displayEmpty
                           value={floor_id}
@@ -541,7 +541,7 @@ function UserModal({
                         {/* <InputLabel id="demo-simple-select-standard-label">Lab</InputLabel> */}
                         <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-black'>Zone</label>
                         <Select
-                          className='text-left px-2 py-1 bg-[#f9f9f9] ' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                          className='text-left px-2 py-1 bg-[#f9f9f9] mr-4' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
                           size='small'
                           displayEmpty
                           value={lab_id}
@@ -562,8 +562,8 @@ function UserModal({
                   </Grid>
                 </Grid>
               )}
-            <div className='flex gap-5 items-center justify-center flex-col sm:flex-row'>
-              <div className="rounded-md -space-y-px mb-2 w-full ">
+            <div className='flex items-center justify-center min-[320px]:flex-col min-[768px]:flex-row'>
+              <div className="rounded-md -space-y-px mb-2 w-full mr-5">
                 <TextField
                   fullWidth
                   sx={{ mb: 2, mt: 2, fontFamily: 'customfont' }}
@@ -593,7 +593,7 @@ function UserModal({
                 />
               </div>
               {/* <div className="rounded-md -space-y-px"> */}
-              <div className="mt-2 w-full ">
+              <div className="mt-2 w-full mr-4">
                 <TextField
                   fullWidth
                   sx={{ mb: 2 }}
@@ -623,8 +623,8 @@ function UserModal({
               </div>
               {/* </div> */}
             </div>
-            <div className='flex gap-5 items-center justify-center flex-col sm:flex-row'>
-              <div className="rounded-md -space-y-px w-full">
+            <div className='flex items-center justify-center min-[320px]:flex-col min-[768px]:flex-row'>
+              <div className="rounded-md -space-y-px w-full mr-5">
                 <div className="mb-2">
                   <TextField
                     sx={{ mb: 2 }}
@@ -654,7 +654,7 @@ function UserModal({
                   />
                 </div>
               </div>
-              <div className="rounded-md -space-y-px w-full">
+              <div className="rounded-md -space-y-px w-full mr-4">
                 <div className="mb-2">
                   <TextField
                     sx={{ mb: 2, fontFamily: 'customfont' }}
@@ -683,8 +683,8 @@ function UserModal({
                 </div>
               </div>
             </div>
-            <div className='flex gap-5 items-center justify-center flex-col sm:flex-row'>
-              <div className="rounded-md -space-y-px w-full">
+            <div className='flex items-center justify-center min-[320px]:flex-col min-[768px]:flex-row'>
+              <div className="rounded-md -space-y-px w-full mr-6">
                 <div className="mb-2">
                   <FormControl sx={{ mb: 2 }} fullWidth>
                     <InputLabel id="demo-simple-select-label">Role</InputLabel>
@@ -751,7 +751,7 @@ function UserModal({
                 </div>
               }
             </div>
-            <div className=" float-right flex mt-3 flex-col sm:flex-row">
+            <div className=" float-right flex mt-3 min-[320px]:flex-col min-[768px]:flex-row">
               <div className='mt-3 min-[320px]:mb-5 min-[768px]:mb-5  min-[320px]:mr-0 min-[768px]:mr-7' >
                 {isAddButton ? ''
                   : (

@@ -228,7 +228,7 @@ function LocationGridComponent(props) {
 
   return (
     <>
-      <Card className={'h-[40vh] xl:h-[38vh]'}
+      <Card className={'h-[40vh] xl:h-[35vh]'}
         sx={{
           boxShadow: 'none',
           borderRadius: '12px',
@@ -246,7 +246,7 @@ function LocationGridComponent(props) {
             }
             sx={{ paddingBottom: 0 }}
           />
-          <CardContent className={'h-[93%]'} style={{color:'black'}}>
+          <CardContent className={'h-[90%]'} style={{color:'black'}}>
             <DataGrid
               rows={dataList}
               columns={columns}

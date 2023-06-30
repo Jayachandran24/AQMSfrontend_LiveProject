@@ -212,7 +212,7 @@ function FacilityGridComponent(props) {
 
   return (
     <>
-      <Card className={'h-[48vh] sm:h-[40vh] xl:h-[38vh]'} sx={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
+      <Card className={'h-[48vh] sm:h-[40vh] xl:h-[35vh]'} sx={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
         <Paper elevation={3} className={'h-full'} style={{ boxShadow: 'none' }}>
           <CardHeader
             title={
@@ -296,7 +296,7 @@ function FacilityGridComponent(props) {
             }
             sx={{ paddingBottom: 0 }}
           />
-          <CardContent className={'h-[81%] sm:h-[93%]'}>
+          <CardContent className={'h-[81%] sm:h-[90%]'}>
             <DataGrid
               sx={{ fontFamily: 'customfont' }}
               rows={dataList}

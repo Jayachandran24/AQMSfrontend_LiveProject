@@ -184,7 +184,7 @@ function LoginPage() {
   // }
   return (
     <div className="grid grid-flow-row-dense h-screen w-full grid-cols-1 gap-y-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 items-center ">
-      <div className="min-h-full flex items-center justify-center lg:px-1 ml-auto mr-auto w-full bg-white h-full">
+      <div className="min-h-full flex items-center justify-center lg:px-1 ml-auto mr-auto w-9/12 bg-white h-full">
         <div className=" w-full space-y-0">
           <div className="left-1 top-3">
             <img

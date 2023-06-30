@@ -57,7 +57,7 @@ const EVENT_LOG = ({ deviceList, siteId }) => {
         {
           field: 'date',
           headerName: 'Date',
-          minWidth: 100,
+          minWidth: 50,
           flex: 1,
           align: 'center',
           headerAlign: 'center',
@@ -65,7 +65,7 @@ const EVENT_LOG = ({ deviceList, siteId }) => {
         {
           field: 'time',
           headerName: 'Time',
-          minWidth: 100,
+          minWidth: 50,
           flex: 1,
           align: 'center',
           headerAlign: 'center',
@@ -89,7 +89,7 @@ const EVENT_LOG = ({ deviceList, siteId }) => {
         {
           field: 'eventDetails',
           headerName: 'Event Details',
-          minWidth: 490,
+          minWidth: 600,
           flex: 1,
           overflow: 'auto',
           align: 'center',

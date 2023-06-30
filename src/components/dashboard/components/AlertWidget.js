@@ -199,7 +199,7 @@ function AlertWidget({
   return (
     <>
       <Card
-        className={'w-full h-[45vh] sm:h-[41vh] lg:h-[40vh] xl:h-[40vh]'}
+        className={'w-full h-[45vh] sm:h-[41vh] lg:h-[40vh] xl:h-[35vh]'}
         sx={{
           borderRadius: '12px',
           boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',

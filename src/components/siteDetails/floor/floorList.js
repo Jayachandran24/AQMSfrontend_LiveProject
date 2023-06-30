@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import { PlayArrow, Edit, DeleteOutlined } from '@mui/icons-material';
-import { Breadcrumbs, Card, CardContent, Stack, Typography } from '@mui/material';
+import { Breadcrumbs, Stack, Typography } from '@mui/material';
 import { FloorDeleteService, FloorfetchService } from '../../../services/LoginPageService';
 import { FloorListToolbar } from './floor-list-toolbars';
 import FloorModal from './FloorModalComponent';
@@ -181,7 +181,8 @@ export function FloorListResults({ img }) {
     return (path);
   });
   return (
-    <Card className='h-[50vh] sm:h-[41vh]' style={{ height: '50vh', width: '95%', paddingBottom: '0', marginTop: '0px', overflow: 'hidden', boxShadow:'none' }}
+    <div style={{ height: '50vh', width: '95%', paddingBottom: '0', marginTop: '0px', overflow: 'hidden' }}
+    className='p-2 sm:p-5'
     >
       <Stack style={{
         // padding: '0 10px'
@@ -297,7 +298,7 @@ export function FloorListResults({ img }) {
         setEditData={setEditData}
         userAccess={moduleAccess}
       />
-    <CardContent className='h-[310px] sm:h-[85%] lg:h-[90%] xl:h-[90%]'>
+
       <DataGrid
       className='mt-5 sm:mt-0'
         sx={{ border: 'none', fontFamily: 'customfont', color: 'black'}}
@@ -307,6 +308,16 @@ export function FloorListResults({ img }) {
         loading={isLoading}
         rowsPerPageOptions={[3]}
         disableSelectionOnClick
+        style={{
+          // maxHeight: `${80}%`,
+          // height: '37vh'
+
+          height: '300px',
+          // minHeight: '57vh',
+          // height: '78%',
+          // minHeight: '250px',
+          // maxHeight: '70vh'
+        }}
       />
 
       <FloorModal
@@ -335,7 +346,6 @@ export function FloorListResults({ img }) {
         handleSuccess={deletehandleSuccess}
         handleException={deletehandleException}
       />
-      </CardContent>
-    </Card>
+    </div>
   );
 }

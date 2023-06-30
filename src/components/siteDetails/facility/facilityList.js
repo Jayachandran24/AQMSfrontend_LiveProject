@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { DeleteOutlined, Edit } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
-import { Breadcrumbs, Card, Typography, CardContent, CardHeader, Divider } from '@mui/material';
+import { Breadcrumbs, Typography } from '@mui/material';
 import { FacilityDeleteService, FetchFacilitiyService } from '../../../services/LoginPageService';
 import { FacilityListToolbar } from './facility-list-toolbars';
 import FacilityModal from './FacilityModalComponent';
@@ -11,7 +11,6 @@ import { useUserAccess } from '../../../context/UserAccessProvider';
 import DeleteConfirmationDailog from '../../../utils/confirmDeletion';
 import ApplicationStore from '../../../utils/localStorageUtil';
 import { MdLocationPin } from 'react-icons/md';
-
 
 export function FacilityListResults(props) {
   const branchColumns = [
@@ -180,7 +179,7 @@ export function FacilityListResults(props) {
     return (path);
   });
   return (
-    <Card className='h-[50vh] sm:h-[41vh]' style={{ width: '100%', padding: '20px', paddingBottom: '0', marginTop: '0px', boxShadow:'none' }}>
+    <div style={{ width: '100%', padding: '20px', paddingBottom: '0', marginTop: '0px' }}>
       <Breadcrumbs aria-label="breadcrumb" separator="›" style={{
         // height: '2vh',
         minHeight: '15px',
@@ -238,10 +237,8 @@ export function FacilityListResults(props) {
         setEditData={setEditData}
         userAccess={moduleAccess}
       />
-      <CardContent className='h-[320px] sm:h-[80%] lg:h-[80%]'>
       <DataGrid
-        sx={{ border: 'none', fontFamily: 'customfont', color: 'black',}}
-        className='mt-7 sm:mt-0  '
+        sx={{ border: 'none', fontFamily: 'customfont', color: 'black', marginTop: '0px' }}
         rows={dataList}
         columns={branchColumns}
         pageSize={3}
@@ -255,7 +252,7 @@ export function FacilityListResults(props) {
           // // minHeight: '31vh',
           // minHeight: '230px',
           // maxHeight: '36vh'
-          // height: '260px',
+          height: '230px',
         }}
       />
 
@@ -284,7 +281,6 @@ export function FacilityListResults(props) {
         handleSuccess={deletehandleSuccess}
         handleException={deletehandleException}
       />
-      </CardContent>
-    </Card>
+    </div>
   );
 }

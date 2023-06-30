@@ -1,4 +1,4 @@
-import './navbar.scss';
+// import './navbar.scss';
 import {
   ChatBubbleOutlineOutlined,
   AccountCircle,
@@ -225,31 +225,26 @@ function Navbar(props) {
       <div className="wrapper w-full m-0 flex items-center justify-end">
         <div
           className="wrapper text-center float-left w-full"
-          // style={{
-          //   display:'flex',
-          //   textAlign:'center',
-          //   justifyContent: 'flex-end'
-          // }}
-          // style={{display: props.mobileMenu ? 'block' : 'none'}}
-        
+          style={{
+            display:'flex',
+            textAlign:'center',
+            justifyContent: 'flex-end'
+          }}
         >
-          <div className='flex items-center heading'>
+          <div className='flex items-center'>
             {/* <GiLifeTap className='rounded-xl py-2 mr-1 ml-0 bg-white text-[42px]' /> */}
-            <Typography variant="h4" fontSize={"24px"} color={"black"} width={"320px"} borderRadius={"16px"} padding={"15px 0px"} fontFamily={"customfont"} fontWeight={'700'} letterSpacing={'1px'} textAlign={'left'} 
-            >
+            <Typography variant="h4" fontSize={"24px"} color={"black"} width={"320px"} borderRadius={"16px"} padding={"15px 0px"} fontFamily={"customfont"} fontWeight={'700'} letterSpacing={'1px'} textAlign={'left'}>
               {customerDisplayName}
-              {/* {props.mobileMenu ? customerDisplayName : ''} */}
-              
             </Typography>
           </div>
         </div>
         <div className="items flex items-cente w-full justify-end">
           {userDetails.userRole !== 'superAdmin' &&
             <>
-              <div className="item text-xs text-black mt-3 px-0 font-semibold font-[inherit] mr-0 sm:mr-5">
-                {userDisplayName}
-                {/* <p className='text-xs font-thin'>Type</p> */}
-              </div>
+              <div className="item text-xs text-black mt-3 px-0 font-semibold font-[inherit] mr-4 min-[320px]:mr-0 min-[768px]:mr-5">
+              {userDisplayName}
+              {/* <p className='text-xs font-thin'>Type</p> */}
+            </div>
               <Tooltip title="Notifications" placement="bottom" TransitionComponent={Zoom} arrow>
                 <div className="notification item flex items-center mr-5 relative ">
                   <IoMdNotificationsOutline className=' icon rounded-xl py-2  mr-2 bg-white text-[44px] cursor-pointer' onClick={handleNotificationMenu} style={{boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'}} />
@@ -259,7 +254,6 @@ function Navbar(props) {
                 </div>
               </Tooltip>
               <Menu
-              className='notification'
                 id="menu-appbar1"
                 anchorEl={props.anchorElNotification}
                 anchorOrigin={{
@@ -273,8 +267,8 @@ function Navbar(props) {
                 }}
                 open={Boolean(props.anchorElNotification)}
                 onClose={handleClose}
-                sx={{ height: 'auto', maxHeight: '60vh' }}
-                style={{ overflow: 'none', marginTop: 44, width: '100%', marginRight:'150px' }}
+                sx={{ height: 'auto', maxHeight: '60vh', width: '100%' }}
+                style={{ overflow: 'none', marginTop: 36 }}
                 PaperProps={{
                   elevation: 0,
                   sx: {
@@ -282,7 +276,7 @@ function Navbar(props) {
                     filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                     mt: 1.5,
                     '& .MuiAvatar-root': {
-                      width: 44,
+                      width: 32,
                       height: 32,
                       ml: -0.5,
                       mr: 1,
@@ -293,7 +287,7 @@ function Navbar(props) {
                       position: 'absolute',
                       top: 0,
                       // right: 145,
-                      right: 150,
+                      left: 20,
                       width: 10,
                       height: 10,
                       bgcolor: 'background.paper',

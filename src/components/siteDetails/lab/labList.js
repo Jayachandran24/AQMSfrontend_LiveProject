@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Edit, DeleteOutlined } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
-import { Breadcrumbs, Card, CardContent, Stack, Typography } from '@mui/material';
+import { Breadcrumbs, Stack, Typography } from '@mui/material';
 import { LabDeleteService, LabfetchService } from '../../../services/LoginPageService';
 import { LabListToolbar } from './lab-list-toolbars';
 import LabModal from './LabModalComponent';
@@ -180,7 +180,8 @@ export function LabListResults({ img }) {
   });
 
   return (
-    <Card className='h-[50vh] sm:h-[41vh]' style={{ height: 'auto', width: '95%', paddingBottom: '0', marginTop: '0px', boxShadow:'none' }}
+    <div style={{ height: 'auto', width: '95%', paddingBottom: '0', marginTop: '0px' }}
+    className='p-2 sm:p-5 '
     >
       <Stack style={{
         // overflowX:'auto',
@@ -321,7 +322,7 @@ export function LabListResults({ img }) {
         setEditData={setEditData}
         userAccess={moduleAccess}
       />
-      <CardContent className='h-[320px] sm:h-[370px] lg:h-[450px] xl:h-[500px]'>
+
       <DataGrid
         sx={{ border: 'none', fontFamily: 'customfont', color: 'black', marginTop: '0px' }}
         rows={dataList}
@@ -336,7 +337,7 @@ export function LabListResults({ img }) {
 
           // height: 'auto',
           // minHeight: '57vh',
-          // height: '350px',
+          height: '350px',
         }}
       />
 
@@ -367,7 +368,6 @@ export function LabListResults({ img }) {
         handleSuccess={deletehandleSuccess}
         handleException={deletehandleException}
       />
-      </CardContent>
-    </Card>
+    </div>
   );
 }

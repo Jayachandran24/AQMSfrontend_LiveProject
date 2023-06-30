@@ -287,7 +287,7 @@ export default function UserLogForm() {
   )
 
   return (
-    <div className='h-[60vh] overflow-auto ' >
+    <div className='h-[60vh] overflow-auto' >
       <form onSubmit={handleSubmit} className='border-b-[1px]'>
         <Grid container spacing={1} className='mb-0'>
           <Grid sx={{ mt: 1 }} item xs={12} sm={6} md={4} lg={4} xl={4}>
@@ -296,7 +296,7 @@ export default function UserLogForm() {
                 {/* <InputLabel id="demo-simple-select-label" style={{fontFamily:'customfont'}}>Location</InputLabel> */}
                 <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500'>Location :</label>
                 <Select
-                  className='text-left px-2 py-1 bg-[#f9f9f9] mr-3 sm:mr-4'
+                  className='text-left px-2 py-1 bg-[#f9f9f9] mr-4 min-[320px]:mr-2 min-[768px]:mr-4'
                   sx={{ fontFamily: 'customfont', fontSize: '15px' }}
                   size='small'
                   displayEmpty
@@ -325,7 +325,7 @@ export default function UserLogForm() {
               {/* <InputLabel id="demo-simple-select-label" style={{fontFamily:'customfont'}} >Branch</InputLabel> */}
               <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500'>Branch :</label>
               <Select
-                className='text-left px-2 py-1 bg-[#f9f9f9] mr-0 sm:mr-4'
+                className='text-left px-2 py-1 bg-[#f9f9f9] mr-0 min-[320px]:mr-0 min-[768px]:mr-4'
                 sx={{ fontFamily: 'customfont', fontSize: '15px' }}
                 size='small'
                 displayEmpty
@@ -382,7 +382,7 @@ export default function UserLogForm() {
                 {/* <InputLabel id="demo-simple-select-standard-label" style={{fontFamily:'customfont'}}>Building</InputLabel> */}
                 <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500'>Building :</label>
                 <Select
-                  className='text-left px-2 py-1 bg-[#f9f9f9] mr-0 sm:mr-4'
+                  className='text-left px-2 py-1 bg-[#f9f9f9] mr-4 min-[320px]:mr-0 min-[768px]:mr-4'
                   sx={{ fontFamily: 'customfont', fontSize: '15px' }}
                   size='small'
                   displayEmpty
@@ -408,7 +408,7 @@ export default function UserLogForm() {
                 {/* <InputLabel id="demo-simple-select-standard-label" style={{fontFamily:'customfont'}}>Floor</InputLabel> */}
                 <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500'>Floor :</label>
                 <Select
-                  className='text-left px-2 py-1 bg-[#f9f9f9] mr-0 sm:mr-4'
+                  className='text-left px-2 py-1 bg-[#f9f9f9]'
                   sx={{ fontFamily: 'customfont', fontSize: '15px' }}
                   size='small'
                   displayEmpty
@@ -434,7 +434,7 @@ export default function UserLogForm() {
                 {/* <InputLabel id="demo-simple-select-standard-label" style={{fontFamily:'customfont'}}>Lab</InputLabel> */}
                 <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500'>Lab :</label>
                 <Select
-                  className='text-left px-2 py-1 bg-[#f9f9f9]  mr-0 sm:mr-0'
+                  className='text-left px-2 py-1 bg-[#f9f9f9]  mr-4 min-[320px]:mr-0 min-[768px]:mr-0'
                   style={{ fontFamily: 'customfont', fontSize: '15px' }}
                   size='small'
                   displayEmpty
@@ -459,7 +459,7 @@ export default function UserLogForm() {
               {/* <InputLabel id="demo-simple-select-label" style={{fontFamily:'customfont'}}>User</InputLabel> */}
               <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500'>User :</label>
               <Select
-                className='text-left px-2 py-1 bg-[#f9f9f9] mr-0 sm:mr-4'
+                className='text-left px-2 py-1 bg-[#f9f9f9] mr-4  mr-4 min-[320px]:mr-0 min-[768px]:mr-4'
                 sx={{ fontFamily: 'customfont', fontSize: '15px' }}
                 size='small'
                 displayEmpty

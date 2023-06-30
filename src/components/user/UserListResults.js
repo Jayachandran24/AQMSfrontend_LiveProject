@@ -240,7 +240,7 @@ export default function UserListResults() {
             />
           </div>
         </TabPanel>
-        <TabPanel value={value} index={1} >
+        <TabPanel value={value} index={1}>
           <UserLogForm />
         </TabPanel>
       </CardContent>
