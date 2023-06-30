@@ -145,11 +145,10 @@ span.otpSeparator {
   opacity: 0 !important;
 }
 
-.css-i4bv87-MuiSvgIcon-root{
+
+.MuiDataGrid-actionsCell svg {
   cursor: pointer !important;
 }
-
-
 .css-145v6pe-MuiButtonBase-root-MuiTabScrollButton-root{
   display: none !important;
 }
