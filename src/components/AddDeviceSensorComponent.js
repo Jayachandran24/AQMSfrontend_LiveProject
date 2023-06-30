@@ -72,17 +72,19 @@ function DeviceListResults() {
   return (
     <div className="" style={{ marginTop: 0, padding: 0, height: 'auto', }}>
       <Container maxWidth={false}
+      className='p-5 sm:p-0'
         style={{
           height: 'auto',
           width: '100%',
-          paddingLeft: '24px',
-          paddingRight: '12px',
+          // paddingLeft: '24px',
+          // paddingRight: '12px',
           marginTop: '16px'
 
         }}>
         <Box sx={{
-          height: '80vh', marginBottom:'30px', width: '100%', background: 'white', borderRadius: '12px', boxShadow: 'none', padding: '16px', overflowX:'hidden'
+          height: '80vh', marginBottom:'30px', width: '100%', background: 'white', borderRadius: '12px', boxShadow: 'none',  overflowX:'hidden'
         }}
+        className='p-0 sm:p-3'
         >
           <Stack style={{
             // overflow: 'auto',

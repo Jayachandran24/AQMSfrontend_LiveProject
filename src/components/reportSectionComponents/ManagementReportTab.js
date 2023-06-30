@@ -252,7 +252,7 @@ export default function ManagementReportTab() {
 
     return (
         <>
-            <div className={'px-5 pt-0 w-full '}>
+            <div className={'px-5 py-2 pt-0 w-full '}>
                 <Card sx={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
                     <CardHeader
                         title={
@@ -382,13 +382,13 @@ export default function ManagementReportTab() {
                 </Card>
                 <Card className={'mt-5 mb-5'}
                     sx={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
-                    <CardContent >
+                    <CardContent  className='h-[71vh]'>
                         {/* <Grid container spacing={1} xs={12} item className={' overflow-hidden'}> */}
                             <Box width='100%' className='px-0 sm:px-0 '>
                                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"
                                     // scrollButtons="off"
                                     variant='scrollable'
-                                    visibleScrollbar={true}
+                                    // visibleScrollbar={true}
                                     allowScrollButtonsMobile
                                     sx={{
                                         display:'grid',
@@ -397,17 +397,17 @@ export default function ManagementReportTab() {
                                     }}
 
                                 >
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.8px' }} label="Air Quality Index" {...a11yProps(0)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.8px' }} label="Sensor Status" {...a11yProps(1)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.8px' }} label="Alarms" {...a11yProps(2)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.8px' }} label="Limit Edit Logs" {...a11yProps(3)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.8px' }} label="Server Utilization" {...a11yProps(4)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.8px' }} label="Application version" {...a11yProps(5)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.8px' }} label="Firmware Version" {...a11yProps(6)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.8px' }} label="H/W Model No" {...a11yProps(7)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.8px' }} label="BumpTest" {...a11yProps(8)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.8px' }} label="Calibration" {...a11yProps(9)} /> 
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.8px' }} label="EVENT LOG" {...a11yProps(10)} />        
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Air Quality Index" {...a11yProps(0)} />
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Sensor Status" {...a11yProps(1)} />
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Alarms" {...a11yProps(2)} />
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Limit Edit Logs" {...a11yProps(3)} />
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Server Utilization" {...a11yProps(4)} />
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Application version" {...a11yProps(5)} />
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Firmware Version" {...a11yProps(6)} />
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="H/W Model No" {...a11yProps(7)} />
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="BumpTest" {...a11yProps(8)} />
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Calibration" {...a11yProps(9)} /> 
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="EVENT LOG" {...a11yProps(10)} />        
                                 </Tabs>
                             </Box>
                             <TabPanel value={value} index={0}>

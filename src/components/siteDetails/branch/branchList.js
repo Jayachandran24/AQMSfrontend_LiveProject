@@ -174,7 +174,7 @@ export function BranchListResults(props) {
   };
   const pathname = routeStateObject.pathname.split('/').filter((x) => x);
   return (
-    <div style={{ width: '100%', padding: '20px', paddingBottom: '0', marginTop: '0px' }}>
+    <Card className='h-[50vh] sm:h-[41vh]' style={{ width: '100%', padding: '20px', paddingBottom: '0', marginTop: '0px', boxShadow:'none' }}>
       <Breadcrumbs aria-label="breadcrumb" separator="›" style={{
         // height: '2vh',
         minHeight: '15px',
@@ -211,6 +211,7 @@ export function BranchListResults(props) {
         setEditData={setEditData}
         userAccess={moduleAccess}
       />
+      <CardContent className='h-[300px] sm:h-[85%] lg:h-[85%] xl:h-[80%]'>
       <DataGrid
         sx={{ border: 'none', fontFamily: 'customfont', color: 'black', marginTop: '0px' }}
         rows={dataList}
@@ -221,7 +222,7 @@ export function BranchListResults(props) {
         disableSelectionOnClick
         style={{
         //   // maxHeight: `${80}%`,
-          height: '225px',
+          // height: '280px',
         //   minHeight: '180px'
         }}
 
@@ -250,6 +251,7 @@ export function BranchListResults(props) {
         handleSuccess={deletehandleSuccess}
         handleException={deletehandleException}
       />
-    </div>
+      </CardContent>
+    </Card>
   );
 }

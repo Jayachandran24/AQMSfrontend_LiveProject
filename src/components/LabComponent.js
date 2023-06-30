@@ -14,7 +14,7 @@ function Lab() {
  // const imgSrc = `https://localhost/backend/blog/public/${imageFloorURL || floorMap}`;
  const imgSrc = `${process.env.REACT_APP_API_ENDPOINT}blog/public/${imageFloorURL || floorMap}`; 
  return (
-    <Container maxWidth={false} style={{ marginTop: '16px', height: 'auto', paddingLeft: '24px', paddingRight: '35px' }}>
+    <Container maxWidth={false} className='p-5 sm:p-7' style={{ marginTop: '0px', height: 'auto' }}>
     <Grid
       container
       spacing={2}

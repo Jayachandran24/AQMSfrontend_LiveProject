@@ -360,7 +360,7 @@ function HomePageComponent() {
           />
          
          
-          <div className={'h-[91vh] w-full overflow-auto lg:overflow-hidden'}>
+          <div className={'h-[91vh] mobile-h-100 w-full overflow-auto lg:overflow-hidden'}>
             <UserAccessProvider>
               <Outlet />
               

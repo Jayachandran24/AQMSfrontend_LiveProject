@@ -155,7 +155,7 @@ const EmailConfig = () => {
   }
 
   return (
-    <Grid container className='h-[auto] sm:h-[87vh] bg-white mt-4  rounded-xl ml-auto mr-auto  p-3 sm:p-10' style={{ width: '90%',boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px' }}>
+    <Grid container className='h-[auto] sm:h-[85vh] bg-white mt-4  rounded-xl ml-auto mr-auto  p-3 sm:p-10' style={{ width: '90%',boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px' }}>
     <Box className='w-11/12 ml-auto mr-auto '>
       <Box>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" className='w-full' sx={{ width: 'auto', }}
@@ -930,7 +930,7 @@ const EmailConfig = () => {
     </TabPanel> */}
     {value === 0 && <>
       {/* <EmailConfigToolBar isEdit={isEdit} setisEdit={setisEdit} /> */}
-      <form onSubmit={onSubmit} className=' py-5 bg-white w-full rounded-xl ml-auto mr-auto overflow-auto h-[60vh] px-0 sm:px-10'>
+      <form onSubmit={onSubmit} className=' py-2 bg-white w-full rounded-xl ml-auto mr-auto overflow-auto h-[55vh] px-0 sm:px-10'>
         {/* <EmailConfigToolBar isEdit={isEdit} setisEdit={setisEdit} /> */}
         <Grid container className='mt-0'>
           <Grid container spacing={1} className='p-1 min-[320px]:flex-col' sx={{ justifyContent: 'center' }}>
@@ -1229,7 +1229,7 @@ const EmailConfig = () => {
         </Grid>
 
       </form>
-      <Grid container className='w-10/12 ml-auto mr-auto' style={{ display: 'block', width: '90%' }}>
+      <Grid container className='w-10/12 ml-auto mr-auto mt-5' style={{ display: 'block', width: '90%' }}>
         <Grid item className={'float-right'}>
           <Button
             type="submit"

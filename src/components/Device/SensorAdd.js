@@ -557,7 +557,7 @@ function DeviceAdd({
   }
   return (
     <div className="w-full" style={{ marginTop: 0}}>
-      <form className="mt-0 p-10 w-full" onSubmit={handleSubmit} >
+      <form className="mt-0 p-0 sm:px-5 w-full " onSubmit={handleSubmit} >
         <DialogContent
           sx={{ px: 0, p: isUpdate ? '10px' : '0px' }}
           style={{
@@ -1240,10 +1240,24 @@ function DeviceAdd({
                 />
               )}
 
-          <div className="float-right">
+          <div className="float-right mt-7">
             {
                userDetails.userRole !== 'systemSpecialist' &&
           <Button
+          style={{
+            background: 'rgb(19 60 129)',}}
+          sx={{
+            height: '0',
+            color: 'white',
+            padding: "10px 19px",
+            fontSize: '13px',
+            borderRadius: '10px',
+            fontWeight: '600',
+            fontFamily: 'customfont',
+            letterSpacing: '1px',
+            boxShadow: 'none',
+            marginRight:'20px'
+          }}
               size="large"
               onClick={GetSensorRefValues}
             >

@@ -441,7 +441,9 @@ function AddDeviceListResults(props) {
   const getHoverBackgroundColor = (color, mode) => (mode === 'dark' ? darken(color, 0.5) : lighten(color, 0.5));
 
   return (
-    <div style={{ height: 300, width: '100%', padding: 0 }}>
+    <div style={{ width: '100%', padding: 0 }}
+    className='h-[50vh] sm:h-[41vh]'
+    >
       <Grid container spacing={1}>
         <Grid
           item

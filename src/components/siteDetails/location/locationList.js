@@ -161,7 +161,7 @@ export function LocationListResults({ setLocationCoordinationList, centerLat, ce
 
   return (
     <>
-      <Card className='h-[50vh] sm:h-[42vh]'
+      <Card className='h-[50vh] sm:h-[41vh]'
         sx={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
         <CardHeader
           sx={{ padding: '16px', paddingBottom: '0', }}

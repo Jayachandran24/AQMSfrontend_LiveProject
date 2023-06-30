@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Edit, DeleteOutlined } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
-import { Breadcrumbs, Typography } from '@mui/material';
+import { Breadcrumbs, Card, CardContent, Typography } from '@mui/material';
 import { BuildingDeleteService, BuildingFetchService } from '../../../services/LoginPageService';
 import { BuildingListToolbar } from './building-list-toolbars';
 import BuildingModal from './BuildingModalComponent';
@@ -203,8 +203,7 @@ export function BuildingListResults(props) {
   });
 
   return (
-    <div style={{  width: '100%', paddingBottom: '0px', marginTop: '0px' }}
-    className='p-2 sm:p-5'
+    <Card  className='h-[50vh] sm:h-[41vh] ' style={{  width: '100%', paddingBottom: '0px', marginTop: '0px', boxShadow:'none' }}
     >
       <Breadcrumbs aria-label="breadcrumb" separator="›" style={{
         // height: '2vh',
@@ -288,6 +287,7 @@ export function BuildingListResults(props) {
         setEditData={setEditData}
         userAccess={moduleAccess}
       />
+      <CardContent className='h-[85%] sm:h-[89%] lg:h-[85%] xl:h-[85%]' style={{padding:'15px'}}>
       <DataGrid
         sx={{ border: 'none', fontFamily: 'customfont', color: 'black'}}
         rows={dataList}
@@ -301,7 +301,7 @@ export function BuildingListResults(props) {
           // height: '100%',
           // minHeight: '31vh',
           // minHeight: '330px',  
-          height: '273px'
+          // height: '273px'
         }}
       />
 
@@ -331,6 +331,7 @@ export function BuildingListResults(props) {
         handleSuccess={deletehandleSuccess}
         handleException={deletehandleException}
       />
-    </div>
+      </CardContent>
+    </Card>
   );
 }

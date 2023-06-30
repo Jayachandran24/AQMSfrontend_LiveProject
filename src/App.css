@@ -3,6 +3,9 @@
   background: rgb(185, 192, 197);
   border-radius: 10px;
 }
+body {
+  background: #f3f3f3;
+}
 .App {
   text-align: center;
 }
@@ -140,4 +143,37 @@ span.otpSeparator {
 }
 .is_mobile_menu .sidebarMenu .sidebarListItem span {
   opacity: 0 !important;
+}
+
+
+
+
+.css-145v6pe-MuiButtonBase-root-MuiTabScrollButton-root{
+  display: none !important;
+}
+
+
+/* Custom Css 29-06-2023 */
+.notification .css-1rofkq4-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
+  position: absolute !important;
+  left: auto !important;
+  right: 20px !important;
+}
+
+@media (max-width : 500px) {
+  .navbar .wrapper .wrapper .heading {
+    display: none;
+  }
+  .css-bhp9pd-MuiPaper-root-MuiCard-root {
+    width: 100% !important;
+  }
+  .css-ypiqx9-MuiDialogContent-root{
+    padding: 0 !important;
+  }
+  .widgets{
+    flex-direction: column !important;
+  }
+}
+.mobile-h-100 {
+  /* height: 100% !important; */
 }

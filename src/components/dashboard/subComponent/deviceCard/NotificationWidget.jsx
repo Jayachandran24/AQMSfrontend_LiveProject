@@ -146,7 +146,7 @@ function NotificationWidget({ type, figure, handleClick, userRole, testHooter, a
 
   return (
     <div
-      className="widget"
+      className="widget h-auto bg-white overflow-auto"
       onClick={() => {
         type === 'alerts' && handleClick();
       }}
@@ -158,7 +158,7 @@ function NotificationWidget({ type, figure, handleClick, userRole, testHooter, a
     }}
     >
       { type !== 'hooterStatus' ? 
-        <div>
+        <div >
           <div className="left">
             <span className="title" style={{minWidth: type === 'disconnectedDevice' ? '150px' : '120px'}}>{data.title}</span>
             <span className="counter" style={{minWidth: type === 'disconnectedDevice' ? '150px' : '120px', alignSelf: type === 'aqi' && 'center'}}>

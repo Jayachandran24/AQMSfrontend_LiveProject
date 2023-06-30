@@ -342,12 +342,12 @@ function Dashboard() {
                 locationAlerts={locationAlerts}
               />
             </Grid>
-            <Grid item xs={12} sm={12} md={4} lg={4} className={' h-[45vh] p-6 xl:h-[40vh]'} >
+            <Grid item xs={12} sm={12} md={4} lg={4} className={' h-[45vh] p-6 xl:h-[43vh]'} >
               {/* eslint-disable-next-line */}
               {isGeoMap === true ? <GeoLocationWidget locationCoordination={locationCoordinationList} zoomLevel={zoomLevel} centerLatitude={centerLatitude} centerLongitude={centerLongitude} />
-                : <ImageMarkerList labImage={imgSrc} deviceCoordsList={deviceCoordsList} height="h-[40vh]" />}
+                : <ImageMarkerList labImage={imgSrc} deviceCoordsList={deviceCoordsList} height="h-[38vh]" />}
             </Grid>
-            <Grid item xs={12} sm={12} md={12} className={'p-6 h-[40vh] pt-5 xl:h-[35vh]'}>
+            <Grid item xs={12} sm={12} md={12} className={'p-6 h-[40vh] pt-5 xl:h-[40vh]'}>
               <AlertWidget dataList={alertList} setAlertList={setAlertList} setNotification={setNotification} />
             </Grid>
           </Grid>

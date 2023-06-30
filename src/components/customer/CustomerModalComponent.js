@@ -159,9 +159,9 @@ function CustomerModal({
       </DialogTitle>
       <DialogContent>
         <form className="mt-2 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md  -space-y-px px-10 ">
+          <div className="rounded-md  -space-y-px px-5 sm:px-10 ">
             <Grid container spacing={2}>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px mb-2">
                   <TextField
                     sx={{ mb: 1 }}
@@ -188,7 +188,7 @@ function CustomerModal({
                   />
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -223,7 +223,7 @@ function CustomerModal({
                   <label style={{fontFamily:'customfont', fontWeight:'600'}}>System Generated Communication</label>
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -253,7 +253,7 @@ function CustomerModal({
                 </div>
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                   <TextField
@@ -294,7 +294,7 @@ function CustomerModal({
               </Grid>
 
             
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -323,7 +323,7 @@ function CustomerModal({
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -352,7 +352,7 @@ function CustomerModal({
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -382,7 +382,7 @@ function CustomerModal({
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={5} spacing={2} style={{display:'flex',justifyContent: 'space-between'}}>
+              <Grid item xs={12} sm={4} spacing={2}>
                 <div className="col-span-12 sm:col-span-8 lg:col-span-8">
                   <div className="mb-2 block">
                     <TextField
@@ -413,7 +413,8 @@ function CustomerModal({
                     />
                   </div>
                 </div>
-             
+                </Grid>
+                <Grid item xs={12} sm={2}>
                 <div className="col-span-12 sm:col-span-2 lg:col-span-2">
                   <div className="mb-2 block">
                     <Box
@@ -430,7 +431,7 @@ function CustomerModal({
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -459,7 +460,7 @@ function CustomerModal({
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -488,7 +489,7 @@ function CustomerModal({
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -517,7 +518,7 @@ function CustomerModal({
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -546,7 +547,7 @@ function CustomerModal({
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -575,7 +576,7 @@ function CustomerModal({
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -604,7 +605,7 @@ function CustomerModal({
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={12} sm={6}>
                 <div className="col-span-12 sm:col-span-8 lg:col-span-8">
                   <div className="mb-2 block">
                     <TextField

@@ -10,7 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 export function BranchListToolbar(props) {
   return (
     <Box 
-    className='mt-6 sm:mt-0 '
+    className='mt-3 sm:mt-0 '
       sx={{
         alignItems: 'center',
         display: 'flex',

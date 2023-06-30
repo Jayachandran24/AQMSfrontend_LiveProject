@@ -126,7 +126,7 @@ function AqiSitesReportForm({ siteId, deviceList }) {
     {
       field: 'AqiValue',
       headerName: 'AQI Value',
-      minWidth: 50,
+      minWidth: 100,
       flex: 1,
       headerAlign: 'center',
       align: 'center',

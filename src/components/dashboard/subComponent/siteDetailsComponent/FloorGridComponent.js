@@ -222,7 +222,7 @@ function FloorGridComponent(props) {
 
   return (
     <>
-      <Card className={'h-[48vh] sm:h-[40vh] xl:h-[35vh]'} sx={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
+      <Card className={'h-[48vh] sm:h-[40vh] xl:h-[38vh]'} sx={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
         <Paper elevation={3} className={'h-full'} style={{ boxShadow: 'none' }}>
           <CardHeader
             title={
@@ -356,7 +356,7 @@ function FloorGridComponent(props) {
             }
             sx={{ paddingBottom: 0 }}
           />
-          <CardContent className='h-[81%] sm:h-[100%]'>
+          <CardContent className='h-[81%] sm:h-[100%]' style={{padding:'15px'}}>
             <DataGrid
 
               rows={dataList}
