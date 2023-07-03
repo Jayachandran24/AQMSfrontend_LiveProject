@@ -20,11 +20,12 @@ const ApplicationStore = () => {
     localStorage.setItem('customerImage', image);
   }
   function getDynamicLogo(){
-    return localStorage.getItem('loginLogo') != null ? `${process.env.REACT_APP_API_LOGO}`+localStorage.getItem('loginLogo') : null;
+    return (localStorage.getItem('loginLogo') != null && localStorage.getItem('loginLogo') != "") && (localStorage.getItem('loginLogo') != "null") ? `https://wisething.in/aideaLabs/blog/public/` +localStorage.getItem('loginLogo') : null;
+    // `${process.env.REACT_APP_API_LOGO}`+localStorage.getItem('loginLogo') : null;
   }
 
   function getCompanyName(){
-    return localStorage.getItem('companyName') != null ? localStorage.getItem('companyName') : 'Ai-DEA Labs Pvt. Ltd';
+    return (localStorage.getItem('companyName') != null && localStorage.getItem('companyName') != "" ) && (localStorage.getItem('companyName') !="null") ? localStorage.getItem('companyName') : 'Ai-DEA Labs Pvt. Ltd';
   }
   function getCustomerImage(){
     return (localStorage.getItem('customerImage') != null && localStorage.getItem('customerImage') != ""  ) && (localStorage.getItem('customerImage') != "null")  ? `https://wisething.in/aideaLabs/blog/public/`+localStorage.getItem('customerImage') : null;

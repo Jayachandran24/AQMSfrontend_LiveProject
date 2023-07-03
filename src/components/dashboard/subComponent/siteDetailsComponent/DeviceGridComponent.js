@@ -211,8 +211,8 @@ function DeviceGridComponent(props) {
   };`
   `
  return (
-  <div className={'h-full w-full mt-2.5  pl-1.5 pt-1.5'} sx={{ boxshadow: 'none' }}>
-      <Card sx={{  boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px' }}>
+  <div className={'h-full w-full mt-2.5  p-5'} style={{borderRadius:'12px'}} >
+      <Card sx={{  boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px', }}>
         <CardHeader
           title={
             <Breadcrumbs aria-label="breadcrumb" separator="›" fontSize='20px' fontWeight='600'>

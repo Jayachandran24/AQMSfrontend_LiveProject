@@ -189,7 +189,7 @@ function LoginPage() {
           <div className="left-1 top-3">
             <img
               className="mx-auto h-12"
-              src={DynamicLogo != null ? DynamicLogo : Logo1}
+              src={DynamicLogo != null && DynamicLogo != '' ? DynamicLogo : Logo1}
               alt="Workflow"
             />
           </div>
@@ -335,13 +335,6 @@ function LoginPage() {
           />
         </div>
         <div className="absolute bottom-5 left-auto right-auto px-5 text-left text-5xl text-white font-bold leading-tight">
-          {/* <p>
-            <span>"</span>A smile
-          </p>
-          <p> is a welcomed sight</p>
-          <p>
-            that invites people in.<span>"</span>
-          </p> */}
         </div>
       </div>
       <NotificationBar

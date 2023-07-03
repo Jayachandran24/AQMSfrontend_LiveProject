@@ -272,8 +272,8 @@ function Navbar(props) {
                 }}
                 open={Boolean(props.anchorElNotification)}
                 onClose={handleClose}
-                sx={{ height: 'auto', maxHeight: '60vh' }}
-                style={{ overflow: 'none', marginTop: 44, width: '100%', marginRight:'150px' }}
+                sx={{ height:'auto', maxHeight: '63vh' }}
+                style={{ overflow: 'none', marginTop: 44, width: '100%' }}
                 PaperProps={{
                   elevation: 0,
                   sx: {

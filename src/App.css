@@ -155,12 +155,13 @@ span.otpSeparator {
 
 
 /* Custom Css 29-06-2023 */
-.notification .css-1rofkq4-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
+.notification .MuiPopover-paper {
   position: absolute !important;
   left: auto !important;
-  right: 20px !important;
+  right: 9px !important;
 }
 
+/* css-1471zg4-MuiPaper-root-MuiPopover-paper-MuiMenu-paper */
 @media (max-width : 500px) {
   .navbar .wrapper .wrapper .heading {
     display: none;
