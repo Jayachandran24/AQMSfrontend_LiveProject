@@ -668,249 +668,346 @@ function SensorStatus({ deviceList, siteId }) {
   }
   return (
     <Grid item>
-      <form onSubmit={handleSubmit} className='w-full'>
-        <Grid container spacing={2}>
-              <Grid item 
-                  xs={12}
-                  sm={4}
-                  md={4}
-                  lg={4}
-                  xl={4}
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={1}>
+          <Grid
+            item
+            xs={6}
+            sm={6}
+            md={4}
+            lg={2}
+            xl={2.5}
+          >
+            <TextField
+              fullWidth
+              label="From Date"
+              type="date"
+              value={fromDate}
+              variant="outlined"
+              required
+              onChange={(e) => {
+                setFromDate(e.target.value);
+              }}
+              autoComplete="off"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              inputProps={{
+                max: currentDateValidator()
+              }}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sm={6}
+            md={4}
+            lg={2}
+            xl={2.5}
+          >
+            <TextField
+              fullWidth
+              label="To Date"
+              type="date"
+              value={toDate}
+              variant="outlined"
+              required
+              onChange={(e) => {
+                setToDate(e.target.value);
+              }}
+              autoComplete="off"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              inputProps={{
+                max: currentDateValidator()
+              }}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={4}
+            lg={2}
+            xl={3}
+          >
+            <FormControl fullWidth>
+              <InputLabel>Devices</InputLabel>
+              <Select
+                value={deviceId}
+                label="Devices"
+                onChange={(e) => {
+                  HandleDeviceChange(e.target.value);
+                }}
               >
-                <TextField
-                  sx={{ width: '100%' }}
-                  fullWidth
-                  label="From Date"
-                  type="date"
-                  value={fromDate}
-                  variant="standard"
-                  required
-                  onChange={(e) => {
-                    setFromDate(e.target.value);
-                  }}
-                  autoComplete="off"
-                  InputLabelProps={{
-                    shrink: true,
-                    style: { fontFamily: 'customfont' }
-                  }}
-                  inputProps={{
-                    max: currentDateValidator()
-                  }}
-                />
-              </Grid>
-              <Grid item 
-                  xs={12}
-                  sm={4}
-                  md={4}
-                  lg={4}
-                  xl={4}
+                <MenuItem value="" key={0}>
+                  <em style={{ fontWeight: 'bold' }}>All</em>
+                </MenuItem>
+                {deviceList?.map((data, index) => (
+                  <MenuItem value={data.id} key={index + 1}>{data.deviceName}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sm={3}
+            md={3}
+            lg={1.5}
+            xl={1}
+            style={{
+              alignSelf: 'center',
+            }}
+          >
+            <FormControl fullWidth>
+              <Button size="medium" variant="contained" autoFocus type="submit">
+                Submit
+              </Button>
+            </FormControl>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sm={3}
+            md={3}
+            lg={1.5}
+            xl={1}
+            style={{
+              alignSelf: 'center',
+            }}
+          >
+            <FormControl fullWidth>
+              <Button size="medium" variant="contained" autoFocus onClick={handleCancel}>
+                Cancel
+              </Button>
+            </FormControl>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sm={3}
+            md={3}
+            lg={1.5}
+            xl={1}
+            style={{
+              alignSelf: 'center',
+            }}
+          >
+            <FormControl fullWidth>
+              <Button
+                size="medium"
+                variant="contained"
+                autoFocus
+                disabled={enableDownload}
+                endIcon={enableDownload === true ? <CircularProgress style={{ height: '25px', width: '25px',}}/> : <DownloadIcon />}
+                onClick={() => {
+                  DownloadCsv();
+                }}
               >
-                <TextField
-                  fullWidth
-                  label="To Date"
-                  type="date"
-                  value={toDate}
-                  variant="standard"
-                  required
-                  onChange={(e) => {
-                    setToDate(e.target.value);
-                  }}
-                  autoComplete="off"
-                  InputLabelProps={{
-                    shrink: true,
-                    style: { fontFamily: 'customfont' }
-                  }}
-                  inputProps={{
-                    max: currentDateValidator(),
-                  }}
-                />
-              </Grid>
-              <Grid item 
-                  xs={12}
-                  sm={4}
-                  md={4}
-                  lg={4}
-                  xl={4}
+                Download
+              </Button>
+            </FormControl>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sm={3}
+            md={3}
+            lg={1.5}
+            xl={1}
+            style={{
+              alignSelf: 'center',
+            }}
+          >
+            <FormControl fullWidth>
+              <Button
+                variant="contained"
+                onClick={sendEmail}
+                disabled={enableSend}
+                endIcon={enableSend === true ? <CircularProgress style={{ height: '25px', width: '25px',}}/> : <SendIcon />}
               >
-                <FormControl fullWidth>
-                  <InputLabel sx={{ fontFamily: 'customfont', color: 'black' }}>Devices</InputLabel>
-                  <Select
-                    value={deviceId}
-                    label="Devices"
-                    variant="standard"
-                    onChange={(e) => {
-                      HandleDeviceChange(e.target.value);
-                    }}
-                  >
-                    <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
-                      <em style={{ fontWeight: 'bold' }}>All</em>
-                    </MenuItem>
-                    {deviceList?.map((data, index) => (
-                      <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.deviceName}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-                <Grid item 
-                  xs={12}
-                  sm={3}
-                  md={3}
-                  lg={3}
-                  xl={3}
-                 className={'self-center'}>
-                  <FormControl fullWidth>
-                    <Button
-                      sx={{
-                        height: '40px',
-                        padding: "10px 19px",
-                        color: 'white',
-                        marginTop: '20px',
-                        marginBottom: '15px',
-                        fontSize: '13px',
-                        borderRadius: '10px',
-                        fontWeight: '600',
-                        fontFamily: 'customfont',
-                        letterSpacing: '1px'
-                      }}
-                      style={{
-                        background: 'rgb(120 53 15)',}}
-                      autoFocus type="submit">Submit</Button>
-                  </FormControl>
-                </Grid>
-                <Grid item 
-                  xs={12}
-                  sm={3}
-                  md={3}
-                  lg={3}
-                  xl={3}
-                 className={'self-center'}>
-                  <FormControl fullWidth>
-                    <Button
-                      sx={{
-                        height: '40px',
-                        padding: "10px 19px",
-                        color: 'white',
-                        marginTop: '20px',
-                        marginBottom: '15px',
-                        fontSize: '13px',
-                        borderRadius: '10px',
-                        fontWeight: '600',
-                        fontFamily: 'customfont',
-                        letterSpacing: '1px'
-                      }}
-                      style={{
-                        background: 'rgb(120 53 15)',}}
-                      autoFocus onClick={handleCancel}>Cancel</Button>
-                  </FormControl>
-                </Grid>
-                <Grid item 
-                  xs={12}
-                  sm={3}
-                  md={3}
-                  lg={3}
-                  xl={3}
-                 className={'self-center'}>
-                  <FormControl fullWidth>
-                    <Button
-                      sx={{
-                        height: '40px',
-                        padding: "9px 19px",
-                        color: 'white',
-                        marginTop: '20px',
-                        marginBottom: '15px',
-                        fontSize: '13px',
-                        borderRadius: '10px',
-                        fontWeight: '600',
-                        fontFamily: 'customfont',
-                        letterSpacing: '1px'
-                      }}
-                      style={{
-                        background: 'rgb(19, 60, 129)',}}
-                      autoFocus
-                      disabled={enableDownload}
-                      endIcon={enableDownload === true ? <CircularProgress className={'h-6 w-6'} /> : <DownloadIcon />}
-                      onClick={() => {
-                        DownloadCsv();
-                      }}
-                    >
-                      Download
-                    </Button>
-                  </FormControl>
-                </Grid>
-                <Grid item 
-                  xs={12}
-                  sm={3}
-                  md={3}
-                  lg={3}
-                  xl={3}
-                 className={'self-center'}>
-                  <FormControl fullWidth>
-                    <Button
-                      sx={{
-                        height: '40px',
-                        padding: "9px 19px",
-                        color: 'white',
-                        marginTop: '20px',
-                        marginBottom: '15px',
-                        fontSize: '13px',
-                        borderRadius: '10px',
-                        fontWeight: '600',
-                        fontFamily: 'customfont',
-                        letterSpacing: '1px'
-                      }}
-                      style={{
-                        background: 'rgb(19, 60, 129)',}}
-                      onClick={sendEmail}
-                      disabled={enableSend}
-                      endIcon={enableSend === true ? <CircularProgress className={'h-6 w-6'} /> : <SendIcon />}
-                    >
-                      Send
-                    </Button>
-                  </FormControl>
-                </Grid>
+                Send
+              </Button>
+            </FormControl>
+          </Grid>
         </Grid>
-        <Stack className={'w-full h-auto overflow-auto'}>
-          <table className={'w-full mt-7 border-spacing-0 border-collapse border border-solid border-black'}>
-            <tr className={'border border-solid border-black'}>
-              {tableLoader === false && (
-                tableHeaderList.length > 0 && (
-                  <th className={'border border-solid border-black whitespace-nowrap'} colSpan={2}>Date</th>
-                )
-              )}
-              {tableLoader === false && (
-                tableHeaderList?.map((data) => {
+        <Stack
+          width={{
+            xs: '90vw',
+            md: '80vw',
+            // lg: '70vw'
+          }}
+          overflow={{
+            xs: 'auto',
+          }}
+        >
+          
+          <table
+            style={{
+              borderCollapse: 'collapse',
+              borderSpacing: '0',
+              width: '100%',
+              border: '1px solid black',
+              marginTop: '5px',
+            }}
+          >
+            <tr style={{
+              borderBottom: '1px solid black',
+            }}
+            >
+              {tableLoader === false
+                && (tableHeaderList.length > 0
+                  && (
+                    <th
+                      style={{
+                        borderRight: '1px solid black',
+                        whiteSpace: 'nowrap',
+                      }}
+                      colSpan={2}
+                    >
+                      Date
+                    </th>
+                  )
+                )}
+              {tableLoader === false
+                && (tableHeaderList?.map((data) => {
                   return (
-                    <th className={'border border-solid border-black whitespace-nowrap px-2.5 py-1.5 min-w-[100px]'}>{data}</th>
+                    <th style={{
+                      borderRight: '1px solid black',
+                      whiteSpace: 'nowrap',
+                      padding: '5px',
+                      paddingRight: '10px',
+                      paddingLeft: '10px',
+                      minWidth: '100px',
+                    }}
+                    >
+                      {data}
+                    </th>
                   );
                 })
-              )}
+                )}
             </tr>
-            {tableLoader === false && (tableDateList?.map((data) => {
+            {tableLoader === false
+            && (tableDateList?.map((data) => {
               return (
-                <tbody className={'border border-solid border-black'}>
-                  <tr>
-                    <th className={'border border-solid border-black whitespace-nowrap px-2.5 py-1.5'} rowSpan="4">{dateFormat(data)}</th>
-                    <td className={'border border-solid border-black px-2.5'}>MIN</td>
+                <tbody style={{
+                  borderBottom: '1px solid black',
+                }}
+                >
+                  <tr style={{
+                    // border: "1px solid red",
+                  }}
+                  >
+                    <th
+                      style={{
+                        borderRight: '1px solid black',
+                        whiteSpace: 'nowrap',
+                        padding: '5px',
+                        paddingRight: '10px',
+                        paddingLeft: '10px',
+                      }}
+                      rowSpan="4"
+                    >
+                      {dateFormat(data)}
+                    </th>
+                    <td style={{
+                      borderRight: '1px solid black',
+                      paddingRight: '10px',
+                      paddingLeft: '10px',
+                    }}
+                    >
+                      MIN
+                    </td>
                     {rawDataSet?.data[data]?.min?.map((data) => {
-                      return (<td className={'border border-solid border-black'}>{data}</td>);
+                      return (
+                        <td style={{
+                          borderRight: '1px solid black',
+                        }}
+                        >
+                          {data}
+                        </td>
+                      );
                     })}
                   </tr>
-                  <tr>
-                    <td className={'border border-solid border-black px-2.5'}>MAX</td>
+                  <tr style={{
+                    // border: "1px solid red",
+                  }}
+                  >
+                    <td style={{
+                      borderRight: '1px solid black',
+                      paddingRight: '10px',
+                      paddingLeft: '10px',
+                    }}
+                    >
+                      MAX
+                    </td>
                     {rawDataSet?.data[data]?.max?.map((data) => {
-                      return (<td className={'border border-solid border-black px-2.5'}>{data}</td>);
+                      return (
+                        <td style={{
+                          borderRight: '1px solid black',
+                          paddingRight: '10px',
+                          paddingLeft: '10px',
+                        }}
+                        >
+                          {data}
+                        </td>
+                      );
                     })}
                   </tr>
-                  <tr>
-                    <td className={'border border-solid border-black px-2.5'}>AVG</td>
+                  <tr style={{
+                    // border: "1px solid red",
+                  }}
+                  >
+                    <td style={{
+                      borderRight: '1px solid black',
+                      paddingRight: '10px',
+                      paddingLeft: '10px',
+                    }}
+                    >
+                      AVG
+                    </td>
                     {rawDataSet?.data[data]?.avg?.map((data) => {
-                      return (<td className={'border border-solid border-black px-2.5'}>{data}</td>);
+                      return (
+                        <td style={{
+                          borderRight: '1px solid black',
+                          paddingRight: '10px',
+                          paddingLeft: '10px',
+                        }}
+                        >
+                          {data}
+                        </td>
+                      );
                     })}
                   </tr>
-                  <tr>
-                    <td className={'border border-solid border-black px-2.5'}>Status</td>
+                  <tr style={{
+                    // border: "1px solid red",
+                  }}
+                  >
+                    <td style={{
+                      borderRight: '1px solid black',
+                      borderTop: '1px solid black',
+                      paddingRight: '10px',
+                      paddingLeft: '10px',
+                    }}
+                    >
+                      Status
+                    </td>
                     {rawDataSet?.data[data]?.status?.map((data) => {
-                      return (<td className={'border border-solid border-black px-2.5 whitespace-nowrap'} style={{ color: data.alertColor }}>{data.alertType}</td>);
+                      return (
+                        <td style={{
+                          borderRight: '1px solid black',
+                          borderTop: '1px solid black',
+                          whiteSpace: 'nowrap',
+                          paddingRight: '10px',
+                          paddingLeft: '10px',
+                          color: data.alertColor,
+                        }}
+                        >
+                          {data.alertType}
+                        </td>
+                      );
                     })}
                   </tr>
                 </tbody>

@@ -19,14 +19,7 @@ export function LabListToolbar(props) {
       }}
     >
       <Typography
-        sx={{
-          m: 1,
-          fontSize: '16px',
-          fontFamily: 'customfont',
-          fontWeight: '600',
-          letterSpacing: '1px',
-          color: '#8f8f8f'
-        }}
+        sx={{ m: 1 }}
         variant="h5"
       >
         Zone
@@ -41,21 +34,7 @@ export function LabListToolbar(props) {
           }}
         >
           <Stack direction="row" spacing={2}>
-            <Fab style={{
-                background: 'rgb(19 60 129)',}}
-              sx={{
-                height: '0',
-                width:'100%',
-                color: 'white',
-                padding: "10px 15px",
-                fontSize: '13px',
-                borderRadius: '10px',
-                fontWeight: '600',
-                fontFamily: 'customfont',
-                letterSpacing: '1px',
-                boxShadow: 'none',
-                float: 'right'
-              }}>
+            <Fab variant="extended" size="medium" color="primary" aria-label="add">
               <AddIcon sx={{ mr: 1 }} />
               Add Zone
             </Fab>

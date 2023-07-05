@@ -70,45 +70,29 @@ function DeviceListResults() {
     return (path);
   });
   return (
-    <div className="" style={{ marginTop: 0, padding: 0, height: 'auto', }}>
-      <Container maxWidth={false}
-      className='p-5 sm:p-0'
-        style={{
-          height: 'auto',
-          width: '100%',
-          // paddingLeft: '24px',
-          // paddingRight: '12px',
-          marginTop: '16px'
-
-        }}>
+    <div className="" style={{ marginTop: 0, padding: 0, height: '94vh', }}>
+      <Container maxWidth={false} style={{ padding: 0, height: '94vh' }}>
         <Box sx={{
-          height: '80vh', marginBottom:'30px', width: '100%', background: 'white', borderRadius: '12px', boxShadow: 'none',  overflowX:'hidden'
+          width: '100%', marginBottom: '0', marginTop: 0, padding: 0, height: '94vh'
         }}
-        className='p-0 sm:p-3'
         >
           <Stack style={{
-            // overflow: 'auto',
-            
-            padding:'15px 0px'
+            overflow: 'auto'
           }}
-            // width={{
-            //   xs: '100vw',
-            //   sm: '100vw',
-            //   md: '80vw',
-            //   lg: '80vw',
-            //   xl: '80vw'
-            // }}
+          width = {{
+            xs: '100vw',
+            sm: '100vw',
+            md: '80vw',
+            lg: '80vw',
+            xl: '80vw'
+          }}
           >
-            <Breadcrumbs aria-label="breadcrumb" separator="›" style={{
-              // height: '2vh',
+            <Breadcrumbs aria-label="breadcrumb" separator="›" style={{ 
+              paddingTop: '1px', 
+              paddingLeft: '4px',
+              // height: '2vh', 
               minHeight: '15px',
-              fontFamily: 'customfont',
-              fontWeight: '600',
-              color: 'black',
-              fontSize: '16px',
-              letterSpacing: '1px',
-              padding: ' 0 20px',
-              // marginBottom: '18px'
+              minWidth: 'max-content'
             }}>
               {locationLabel ? (
                 <Typography
@@ -166,95 +150,87 @@ function DeviceListResults() {
                   </Link>
                 )}
               {buildingLabel ? (
-                <Typography
-                  underline="hover"
-                  color="inherit"
-                >
-                  {pathname[3]}
-                </Typography>
-              ) : (
-                <Link
-                  underline="hover"
-                  color="inherit"
-                  to={`/Location/${pathname[1]}/${pathname[2]}/${pathname[3]}`}
-                  state={{
-                    location_id,
-                    branch_id,
-                    facility_id,
-                  }}
-                >
-                  {pathname[3]}
-                </Link>
-              )}
+                  <Typography
+                    underline="hover"
+                    color="inherit"
+                  >
+                    {pathname[3]}
+                  </Typography>
+                ) : (
+                  <Link
+                    underline="hover"
+                    color="inherit"
+                    to={`/Location/${pathname[1]}/${pathname[2]}/${pathname[3]}`}
+                    state={{
+                      location_id,
+                      branch_id,
+                      facility_id,
+                    }}
+                  >
+                    {pathname[3]}
+                  </Link>
+                )}
               {floorLabel ? (
-                <Typography
-                  underline="hover"
-                  color="inherit"
-                >
-                  {pathname[4]}
-                </Typography>
-              ) : (
-                <Link
-                  underline="hover"
-                  color="inherit"
-                  to={`/Location/${pathname[1]}/${pathname[2]}/${pathname[3]}/${pathname[4]}`}
-                  state={{
-                    location_id,
-                    branch_id,
-                    facility_id,
-                    building_id,
-                    buildingImg,
-                  }}
-                >
-                  {pathname[4]}
-                </Link>
-              )}
-              {labLabel ? (
-                <Typography
-                  underline="hover"
-                  color="inherit"
-                >
-                  {pathname[5]}
-                </Typography>
-              ) : (
-                <Link
-                  underline="hover"
-                  color="inherit"
-                  to={`/Location/${pathname[1]}/${pathname[2]}/${pathname[3]}/${pathname[4]}/${pathname[5]}`}
-                  state={{
-                    location_id,
-                    branch_id,
-                    facility_id,
-                    building_id,
-                    floor_id,
-                    buildingImg,
-                    floorMap,
-                  }}
-                >
-                  {pathname[5]}
-                </Link>
-              )}
+                  <Typography
+                    underline="hover"
+                    color="inherit"
+                  >
+                    {pathname[4]}
+                  </Typography>
+                ) : (
+                  <Link
+                    underline="hover"
+                    color="inherit"
+                    to={`/Location/${pathname[1]}/${pathname[2]}/${pathname[3]}/${pathname[4]}`}
+                    state={{
+                      location_id,
+                      branch_id,
+                      facility_id,
+                      building_id,
+                      buildingImg,
+                    }}
+                  >
+                    {pathname[4]}
+                  </Link>
+                )}
+                {labLabel ? (
+                  <Typography
+                    underline="hover"
+                    color="inherit"
+                  >
+                    {pathname[5]}
+                  </Typography>
+                ) : (
+                  <Link
+                    underline="hover"
+                    color="inherit"
+                    to={`/Location/${pathname[1]}/${pathname[2]}/${pathname[3]}/${pathname[4]}/${pathname[5]}`}
+                    state={{
+                      location_id,
+                      branch_id,
+                      facility_id,
+                      building_id,
+                      floor_id,
+                      buildingImg,
+                      floorMap,
+                    }}
+                  >
+                    {pathname[5]}
+                  </Link>
+                )}
               <Typography
                 underline="hover"
                 color="inherit"
-                sx={{ fontFamily: 'customfont', fontWeight: '600' }}
               >
                 {pathname[6]}
               </Typography>
             </Breadcrumbs>
           </Stack>
-          <Box>
-            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"
-            variant='scrollable'
-                visibleScrollbar={true}
-                sx={{
-                  // overflow: 'auto',
-                  // width: 'auto',
-                  marginLeft: '15px'
-                }}>
-              <Tab label="Devices" {...a11yProps(0)} sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '1px' }} {...a11yProps(0)} />
-              {moduleAccess.add && <Tab label="Add Devices" {...a11yProps(1)} sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '1px' }} {...a11yProps(0)} />}
-              {moduleAccess.add && <Tab label="Add Sensors" {...a11yProps(2)} sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '1px' }} {...a11yProps(0)} />}
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+              <Tab label="Devices" {...a11yProps(0)} />
+              {moduleAccess.add && <Tab label="Add Devices" {...a11yProps(1)} /> }
+              {moduleAccess.add && <Tab label="Add Sensors" {...a11yProps(2)} /> }
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>

@@ -96,14 +96,11 @@ function CategoryModel({
       open={open}
     >
       <form onSubmit={handleSubmit}>
-        <DialogTitle
-          sx={{ textAlign: 'center', fontFamily: 'customfont', fontWeight: '600', marginTop: '8px', marginBottom: '15px' }}>
+        <DialogTitle>
           {isAddButton ? 'Add Category' : 'Edit Category'}
         </DialogTitle>
         <DialogContent>
-
           <TextField
-            sx={{ marginBottom: '25px' }}
             margin="dense"
             id="outlined-required"
             label="Category Name"
@@ -116,9 +113,6 @@ function CategoryModel({
             autoComplete="off"
             error={errorObject?.categoryName?.errorStatus}
             helperText={errorObject?.categoryName?.helperText}
-            InputLabelProps={{
-              shrink: true,
-            }}
           />
           <TextField
             id="dense"
@@ -134,9 +128,6 @@ function CategoryModel({
             autoComplete="off"
             error={errorObject?.categoryDescription?.errorStatus}
             helperText={errorObject?.categoryDescription?.helperText}
-            InputLabelProps={{
-              shrink: true,
-            }}
           />
         </DialogContent>
         <DialogActions sx={{ margin: '10px' }}>
@@ -148,19 +139,6 @@ function CategoryModel({
               setErrorObject({});
               loadData();
             }}
-            style={{
-              background: 'rgb(19 60 129)',}}
-            sx={{
-              color: 'white',
-              padding: "8px 19px",
-              marginRight: '10px',
-              marginBottom: '35px',
-              fontSize: '13px',
-              borderRadius: '10px',
-              fontWeight: '600',
-              fontFamily: 'customfont',
-              letterSpacing: '1px',
-            }}
           >
             Cancel
           </Button>
@@ -168,23 +146,6 @@ function CategoryModel({
             disabled={errorObject?.categoryName?.errorStatus || errorObject?.categoryDescription?.errorStatus}
             size="large"
             type="submit"
-            style={{
-              background: 'rgb(19 60 129)',}}
-            sx={{
-              color: 'white',
-              padding: "8px 19px",
-              marginRight: '10px',
-              marginBottom: '35px',
-              fontSize: '13px',
-              borderRadius: '10px',
-              fontWeight: '600',
-              fontFamily: 'customfont',
-              letterSpacing: '1px',
-              "&.Mui-disabled": {
-                background: "#eaeaea",
-                color: "#c0c0c0"
-              }
-            }}
           >
             {' '}
             {isAddButton ? 'Add' : 'Update'}

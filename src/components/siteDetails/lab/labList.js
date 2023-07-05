@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Edit, DeleteOutlined } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
-import { Breadcrumbs, Card, CardContent, Stack, Typography } from '@mui/material';
+import { Breadcrumbs, Stack, Typography } from '@mui/material';
 import { LabDeleteService, LabfetchService } from '../../../services/LoginPageService';
 import { LabListToolbar } from './lab-list-toolbars';
 import LabModal from './LabModalComponent';
@@ -10,7 +10,6 @@ import NotificationBar from '../../notification/ServiceNotificationBar';
 import { useUserAccess } from '../../../context/UserAccessProvider';
 import ApplicationStore from '../../../utils/localStorageUtil';
 import DeleteConfirmationDailog from '../../../utils/confirmDeletion';
-import { MdLocationPin } from 'react-icons/md';
 
 export function LabListResults({ img }) {
   const dataColumns = [
@@ -19,22 +18,6 @@ export function LabListResults({ img }) {
       headerName: 'Zone Name',
       width: 270,
       type: 'actions',
-      renderCell: ((params) => {
-        return (
-          <>
-            <div className='flex w-full justify-between'>
-              <div>
-              <MdLocationPin className='text-[18px] w-full' />
-              </div>
-              <div className='w-full'>
-              <LinkTo selectedRow={params.row} />
-              </div>
-              
-            </div>
-
-          </>
-        )
-      }),
       getActions: (params) => [
         <LinkTo selectedRow={params.row} />,
       ],
@@ -45,6 +28,7 @@ export function LabListResults({ img }) {
       headerName: 'Actions',
       width: 100,
       cellClassName: 'actions',
+
       getActions: (params) => [
         <EditData selectedRow={params.row} />,
         <DeleteData selectedRow={params.row} />,
@@ -179,31 +163,22 @@ export function LabListResults({ img }) {
   });
 
   return (
-    <Card className='h-[50vh] sm:h-[41vh]' style={{ height: 'auto', width: '95%', paddingBottom: '0', marginTop: '0px', boxShadow:'none' }}
-    >
+    <div style={{ height: '70vh', width: '100%' }}>
       <Stack style={{
-        // overflowX:'auto',
-        // height:'5vh',
-        // width:'100%',
-        // padding:'0 10px'
+        overflow: 'auto'
       }}
-        // width={{
-        //   xs: '100vw',
-        //   sm: '100vw',
-        //   md: '54vw',
-        //   lg: '54vw',
-        //   xl: '56vw'
-        // }}
+      width = {{
+        xs: '100vw',
+        sm: '100vw',
+        md: '54vw',
+        lg: '54vw',
+        xl: '56vw'
+      }}
       >
         <Breadcrumbs aria-label="breadcrumb" separator="›" style={{
           // height: '2vh',
-          // minHeight: '15px',
-          fontFamily: 'customfont',
-          fontWeight: '600',
-          color: 'black',
-          fontSize: '16px',
-          letterSpacing: '1px',
-          // minWidth: 'max-content'  // enable for scroll bar
+          minHeight: '15px',
+          minWidth: 'max-content'
         }}>
           {locationLabel ? (
             <Typography
@@ -268,18 +243,18 @@ export function LabListResults({ img }) {
               {pathname[3]}
             </Typography>
           ) : (
-            <Link
-              underline="hover"
-              color="inherit"
-              to={`/Location/${pathname[1]}/${pathname[2]}/${pathname[3]}`}
-              state={{
-                location_id,
-                branch_id,
-                facility_id,
-              }}
-            >
-              {pathname[3]}
-            </Link>
+              <Link
+                underline="hover"
+                color="inherit"
+                to={`/Location/${pathname[1]}/${pathname[2]}/${pathname[3]}`}
+                state={{
+                  location_id,
+                  branch_id,
+                  facility_id,
+                }}
+              >
+                {pathname[3]}
+              </Link>
           )}
           {floorLabel ? (
             <Typography
@@ -289,25 +264,24 @@ export function LabListResults({ img }) {
               {pathname[4]}
             </Typography>
           ) : (
-            <Link
-              underline="hover"
-              color="inherit"
-              to={`/Location/${pathname[1]}/${pathname[2]}/${pathname[3]}/${pathname[4]}`}
-              state={{
-                location_id,
-                branch_id,
-                facility_id,
-                building_id,
-                buildingImg,
-              }}
-            >
-              {pathname[4]}
-            </Link>
+              <Link
+                underline="hover"
+                color="inherit"
+                to={`/Location/${pathname[1]}/${pathname[2]}/${pathname[3]}/${pathname[4]}`}
+                state={{
+                  location_id,
+                  branch_id,
+                  facility_id,
+                  building_id,
+                  buildingImg,
+                }}
+              >
+                {pathname[4]}
+              </Link>
           )}
           <Typography
             underline="hover"
             color="inherit"
-            sx={{ fontFamily: 'customfont', fontWeight: '600' }}
           >
             {pathname[5]}
           </Typography>
@@ -320,22 +294,24 @@ export function LabListResults({ img }) {
         setEditData={setEditData}
         userAccess={moduleAccess}
       />
-      <CardContent className='h-[320px] sm:h-[370px] lg:h-[450px] xl:h-[500px]'>
+
       <DataGrid
-        sx={{ border: 'none', fontFamily: 'customfont', color: 'black', marginTop: '0px' }}
         rows={dataList}
         columns={dataColumns}
-        pageSize={3}
+        pageSize={5}
         loading={isLoading}
-        rowsPerPageOptions={[3]}
+        rowsPerPageOptions={[5]}
         disableSelectionOnClick
-        style={{
+        style={{ 
           // maxHeight: `${80}%`,
           // height: '37vh'
 
           // height: 'auto',
           // minHeight: '57vh',
-          // height: '350px',
+          
+          height: '85%',
+          minHeight: '250px',
+          maxHeight: '70vh'
         }}
       />
 
@@ -366,7 +342,6 @@ export function LabListResults({ img }) {
         handleSuccess={deletehandleSuccess}
         handleException={deletehandleException}
       />
-      </CardContent>
-    </Card>
+    </div>
   );
 }

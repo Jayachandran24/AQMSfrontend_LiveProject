@@ -40,8 +40,7 @@ function FloorModal({
     setFloorId(editData.id || '');
     setFloorStage(editData.floorStage || '');
     setFloorCords(editData.floorCords || '');
-    //setPreviewFloor(editData.floorMap ? `https://localhost/backend/blog/public/${editData.floorMap}` : previewImage);
-    setPreviewFloor(editData.floorMap ? `${process.env.REACT_APP_API_ENDPOINT}blog/public/${editData.floorMap}` : previewImage);
+    setPreviewFloor(editData.floorMap ? `https://wisething.in/aideaLabs/blog/public/${editData.floorMap}` : previewImage);
     // setFloorMap(editData.floorMap || '');
     // setFloorCords(editData.floorCords || []);
   };
@@ -139,12 +138,11 @@ function FloorModal({
 
   return (
     <Dialog
-      sx={{ '& .MuiDialog-paper': { minWidth: '80%' },  }}
+      sx={{ '& .MuiDialog-paper': { minWidth: '80%' } }}
       maxWidth="sm"
       open={open}
     >
-      <DialogTitle
-        sx={{ fontFamily: 'customfont', fontSize: '20px', textAlign: 'center', fontWeight: '600', margin: '10px 0', letterSpacing: '1px' }}>
+      <DialogTitle>
         {isAddButton ? 'Add Floor' : 'Edit Floor'}
       </DialogTitle>
       <DialogContent>
@@ -154,9 +152,9 @@ function FloorModal({
 
                     </div> */}
             <div className="container mx-auto outline-black">
-              <div className="flex flex-col w-full">
-                <div className="w-full flex  gap-3 mb-5 min-[320px]:flex-col min-[768px]:flex-row">
-                  <div className="rounded-md -space-y-px mb-2 w-full">
+              <div className="inline">
+                <div className="w-full sm:float-left lg:w-2/5  pr-3 pl-3">
+                  <div className="rounded-md -space-y-px mb-2">
                     <TextField
                       fullWidth
                       sx={{ mb: 1 }}
@@ -164,7 +162,7 @@ function FloorModal({
                       type="text"
                       value={floorName}
                       variant="outlined"
-                      // placeholder="Please enter Floor name"
+                      placeholder="Please enter Floor name"
                       className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
                       required
                       onBlur={() => validateForNullValue(floorName, 'buildingName')}
@@ -172,14 +170,10 @@ function FloorModal({
                       autoComplete="off"
                       error={errorObject?.buildingName?.errorStatus}
                       helperText={errorObject?.buildingName?.helperText}
-                      InputLabelProps={{
-                        shrink: true,
-                        style: { fontFamily: 'customfont' }
-                      }}
                     />
                   </div>
 
-                  <div className="rounded-md -space-y-px mb-2 w-full">
+                  <div className="rounded-md -space-y-px mb-2">
                     <TextField
                       fullWidth
                       sx={{ mb: 1 }}
@@ -187,7 +181,7 @@ function FloorModal({
                       type="number"
                       value={floorStage}
                       variant="outlined"
-                      // placeholder="Please enter Floor number"
+                      placeholder="Please enter Floor number"
                       className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
                       required
                       onBlur={() => validateForNullValue(floorStage, 'buildingTotalFloors')}
@@ -195,63 +189,54 @@ function FloorModal({
                       autoComplete="off"
                       error={errorObject?.buildingTotalFloors?.errorStatus}
                       helperText={errorObject?.buildingTotalFloors?.helperText}
-                      InputLabelProps={{
-                        shrink: true,
-                        style: { fontFamily: 'customfont' }
-                      }}
+                      // InputLabelProps={{
+                      //     shrink: true,
+                      // }}
                     />
                   </div>
 
-                </div>
-                <div className='flex  w-full gap-5 min-[320px]:flex-col min-[768px]:flex-row-reverse mb-5' >
-                  <div className='w-[80%] h- min-[320px]:w-[100%] min-[768px]:w-[80%]'>
-                    <div className="rounded-md -space-y-px mb-7 w-full ">
-                      <TextField
-                        fullWidth
-                        label="Floor Image"
-                        required={!!isAddButton}
-                        onBlur={() => {
-                          validateForNullValue(floorMap, 'buildingImg');
-                        }}
-                        onChange={(e) => {
-                          // setCustomerLogo(e.target.files);
-                          if (e.target.files && e.target.files.length > 0) {
-                            setFloorMap(e.target.files[0]);
-                            processImageFile(e.target.files[0]);
-                            // const reader = new FileReader();
-                            // reader.readAsDataURL(e.target.files[0]);
-                            const reader = new FileReader();
-                            reader.onload = () => {
-                              if (reader.readyState === 2) {
-                                setFloorMap(reader.result);
-                                setPreviewFloor(reader.result);
-                                // setImgdata(reader.result);
-                              }
-                            };
-                            reader.readAsDataURL(e.target.files[0]);
-                          }
-                        }}
-                        InputLabelProps={{ shrink: true }}
-                        type="file"
-                        inputProps={{
-                          accept: 'image/png, image/jpeg',
-                        }}
-                        error={errorObject?.buildingImg?.errorStatus}
-                        helperText={errorObject?.buildingImg?.helperText}
-                      />
-                    </div>
-                    <div className="rounded-md -space-y-px mb-2" 
-                    // style={{ border: '1px solid #b7b7b7' }}
-                    >
-                      <img src={previewFloor || previewImage} 
-                      // style={{ width: '-webkit-fill-available' }} 
-                      className='h-[45vh] w-8/12 mr-auto ml-auto object-contain border-solid border-2 border-black'
-                      />
-                    </div>
+                  <div className="rounded-md -space-y-px mb-2">
+                    <TextField
+                      fullWidth
+                      label="Floor Image"
+                      required={!!isAddButton}
+                      onBlur={() => {
+                        validateForNullValue(floorMap, 'buildingImg');
+                      }}
+                      onChange={(e) => {
+                        // setCustomerLogo(e.target.files);
+                        if (e.target.files && e.target.files.length > 0) {
+                          setFloorMap(e.target.files[0]);
+                          processImageFile(e.target.files[0]);
+                          // const reader = new FileReader();
+                          // reader.readAsDataURL(e.target.files[0]);
+                          const reader = new FileReader();
+                          reader.onload = () => {
+                            if (reader.readyState === 2) {
+                              setFloorMap(reader.result);
+                              setPreviewFloor(reader.result);
+                              // setImgdata(reader.result);
+                            }
+                          };
+                          reader.readAsDataURL(e.target.files[0]);
+                        }
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      type="file"
+                      inputProps={{
+                        accept: 'image/png, image/jpeg',
+                      }}
+                      error={errorObject?.buildingImg?.errorStatus}
+                      helperText={errorObject?.buildingImg?.helperText}
+                    />
                   </div>
-                  <div className="w-5/12  pr-1 min-[320px]:w-full min-[768px]:w-5/12">
-                    <Grid item xs={4} sm={4} md={4} lg={4} />
-                    {/* <MapsComponent
+                  <div className="rounded-md -space-y-px mb-2" style={{ border: '2px black solid' }}>
+                    <img src={previewFloor || previewImage} style={{ width: '-webkit-fill-available' }} />
+                  </div>
+                </div>
+                <div className="w-full sm:float-right lg:float-left lg:w-3/5 pr-1">
+                  <Grid item xs={4} sm={4} md={4} lg={4} />
+                  {/* <MapsComponent
                                     height = '70vh'
                                     width = '100%'
                                     onMarkerDrop={onMapClick}
@@ -260,70 +245,40 @@ function FloorModal({
                                     stateName ={editData.buildingName}
                                 /> */}
 
-                    <ImageMarkerComponent
-                      src={src}
-                      width="500px"
-                      setFloorCoordinations={setFloorCoordinations}
-                      floorCords={floorCords}
-                      isAddButton={isAddButton}
-                    />
+                  <ImageMarkerComponent
+                    src={src}
+                    width="500px"
+                    setFloorCoordinations={setFloorCoordinations}
+                    floorCords={floorCords}
+                    isAddButton={isAddButton}
+                  />
 
-                  </div>
                 </div>
 
               </div>
             </div>
-          </div>
-          <div className="float-right py-5" style={{ marginTop: '-15px' }}>
-            <div className="min-[320px]:mb-10">
-              <Button
-                style={{
-                  background: 'rgb(19 60 129)',}}
-                sx={{
-                  m: 1,
-                  color: 'white',
-                  padding: "8px 30px",
-                  marginRight: '30px',
-                  fontSize: '13px',
-                  borderRadius: '10px',
-                  fontWeight: '600',
-                  fontFamily: 'customfont',
-                  letterSpacing: '1px',
-                  boxShadow: 'none',
-                  "&.Mui-disabled": {
-                    background: "#eaeaea",
-                    color: "#c0c0c0"
-                  }
-                }}
-                type="submit"
-                size="large"
-                disabled={errorObject?.buildingName?.errorStatus || errorObject?.buildingTotalFloors?.errorStatus}
-              >
-                {isAddButton ? 'Add' : 'Update'}
-              </Button>
-              <Button
-                style={{
-                  background: 'rgb(19 60 129)',}}
-                sx={{
-                  m: 1,
-                  color: 'white',
-                  padding: "8px 19px",
-                  fontSize: '13px',
-                  borderRadius: '10px',
-                  fontWeight: '600',
-                  fontFamily: 'customfont',
-                  letterSpacing: '1px',
-                  boxShadow: 'none'
-                }}
-                size="large"
-                onClick={(e) => {
-                  setOpen(false);
-                  setErrorObject({});
-                  loaddata();
-                }}
-              >
-                Cancel
-              </Button>
+            <div className="float-right">
+              <div className="rounded-md -space-y-px">
+                <Button
+                  sx={{ m:1 }}
+                  type="submit"
+                  size="large"
+                  disabled={errorObject?.buildingName?.errorStatus || errorObject?.buildingTotalFloors?.errorStatus}
+                >
+                  {isAddButton ? 'Add' : 'Update'}
+                </Button>
+                <Button
+                  sx={{ m:1 }}
+                  size="large"
+                  onClick={(e) => {
+                    setOpen(false);
+                    setErrorObject({});
+                    loaddata();
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           </div>
         </form>
@@ -334,7 +289,7 @@ function FloorModal({
         openNotification={openNotification.status}
         type={openNotification.type}
       />
-    </Dialog >
+    </Dialog>
   );
 }
 

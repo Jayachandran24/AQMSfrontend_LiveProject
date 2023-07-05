@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { DeleteOutlined, Edit } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
-import { Breadcrumbs, Card, Typography, CardContent, CardHeader, Divider } from '@mui/material';
+import { Breadcrumbs, Typography } from '@mui/material';
 import { FacilityDeleteService, FetchFacilitiyService } from '../../../services/LoginPageService';
 import { FacilityListToolbar } from './facility-list-toolbars';
 import FacilityModal from './FacilityModalComponent';
@@ -10,8 +10,6 @@ import NotificationBar from '../../notification/ServiceNotificationBar';
 import { useUserAccess } from '../../../context/UserAccessProvider';
 import DeleteConfirmationDailog from '../../../utils/confirmDeletion';
 import ApplicationStore from '../../../utils/localStorageUtil';
-import { MdLocationPin } from 'react-icons/md';
-
 
 export function FacilityListResults(props) {
   const branchColumns = [
@@ -20,21 +18,6 @@ export function FacilityListResults(props) {
       headerName: 'Branch Name',
       width: 270,
       type: 'actions',
-      renderCell: ((params) => {
-        return (
-          <>
-            <div className='flex w-full justify-between'>
-              <div>
-              <MdLocationPin className='text-[18px] text-left' />
-              </div>
-              <div className='w-full'>
-              <LinkTo selectedRow={params.row} />
-              </div>
-            </div>
-
-          </>
-        )
-      }),
       getActions: (params) => [
         <LinkTo selectedRow={params.row} />,
       ],
@@ -180,21 +163,15 @@ export function FacilityListResults(props) {
     return (path);
   });
   return (
-    <Card className='h-[50vh] sm:h-[41vh]' style={{ width: '100%', padding: '20px', paddingBottom: '0', marginTop: '0px', boxShadow:'none' }}>
+    <div style={{ height: '46vh', width: '100%' }}>
       <Breadcrumbs aria-label="breadcrumb" separator="›" style={{
         // height: '2vh',
-        minHeight: '15px',
-        fontFamily: 'customfont',
-        fontWeight: '600',
-        color: 'black',
-        fontSize: '16px',
-        letterSpacing: '1px'
+        minHeight: '15px'
       }}>
         {locationLabel ? (
           <Typography
             underline="hover"
             color="inherit"
-            sx={{ fontFamily: 'customfont', fontWeight: '600' }}
           >
             Location
           </Typography>
@@ -207,7 +184,6 @@ export function FacilityListResults(props) {
           <Typography
             underline="hover"
             color="inherit"
-            sx={{ fontFamily: 'customfont', fontWeight: '600', fontSize: '16px', letterSpacing: '1px' }}
           >
             {pathname[1]}
           </Typography>
@@ -216,7 +192,6 @@ export function FacilityListResults(props) {
             underline="hover"
             color="inherit"
             to={`/Location/${pathname[1]}`}
-            sx={{ fontFamily: 'customfont', fontWeight: '600', fontSize: '16px', letterSpacing: '1px' }}
             state={{
               location_id,
             }}
@@ -227,7 +202,6 @@ export function FacilityListResults(props) {
         <Typography
           underline="hover"
           color="inherit"
-          sx={{ fontFamily: 'customfont', fontWeight: '600', fontSize: '16px', letterSpacing: '1px' }}
         >
           {pathname[2]}
         </Typography>
@@ -238,25 +212,21 @@ export function FacilityListResults(props) {
         setEditData={setEditData}
         userAccess={moduleAccess}
       />
-      <CardContent className='h-[320px] sm:h-[80%] lg:h-[80%]'>
       <DataGrid
-        sx={{ border: 'none', fontFamily: 'customfont', color: 'black',}}
-        className='mt-7 sm:mt-0  '
         rows={dataList}
         columns={branchColumns}
-        pageSize={3}
+        pageSize={5}
         loading={isLoading}
-        rowsPerPageOptions={[3]}
+        rowsPerPageOptions={[5]}
         disableSelectionOnClick
-        style={{
+        style={{ 
           // maxHeight: `${80}%`,
           // height: '37vh' 
-          // height: '100%',
-          // // minHeight: '31vh',
-          // minHeight: '230px',
-          // maxHeight: '36vh'
-          // height: '260px',
-        }}
+          height: '100%',
+          // minHeight: '31vh',
+          minHeight: '230px',
+          maxHeight: '36vh'
+      }}
       />
 
       <FacilityModal
@@ -284,7 +254,6 @@ export function FacilityListResults(props) {
         handleSuccess={deletehandleSuccess}
         handleException={deletehandleException}
       />
-      </CardContent>
-    </Card>
+    </div>
   );
 }

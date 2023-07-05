@@ -1,6 +1,6 @@
 import { Delete } from '@mui/icons-material';
 import {
-  Button, Dialog, DialogContent, DialogTitle, TextField, Typography, Stack, Breadcrumbs, Card, CardHeader, CardContent, Chip, Paper
+  Button, Dialog, DialogContent, DialogTitle, TextField, Typography, Stack, Chip,
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useState } from 'react';
@@ -8,7 +8,7 @@ import { useUserAccess } from '../../../context/UserAccessProvider';
 import { SensorIdAlertUpdate } from '../../../services/LoginPageService';
 import ApplicationStore from '../../../utils/localStorageUtil';
 import { setAlertPriorityStatus } from '../../../utils/helperFunctions';
-import { styled } from '@mui/styles';
+
 /* eslint-disable no-unused-vars */
 function AlertWidget({
   dataList, setRefreshData, maxHeight, setAlertList, setNotification, alertOpen
@@ -28,9 +28,7 @@ function AlertWidget({
     {
       field: 'a_date',
       headerName: 'Date',
-      minwidth: 100,
-      flex:1,
-      align: 'center',
+      width: 100,
       headerAlign: 'center',
       renderCell: (params) => (
         <Typography>
@@ -43,34 +41,26 @@ function AlertWidget({
     {
       field: 'a_time',
       headerName: 'Time',
-      minwidth: 100,
-      flex:1,
-      align: 'center',
+      width: 100,
       headerAlign: 'center'
     },
     {
       field: 'sensorTag',
       headerName: 'Sensor/ Device Tag',
-      minwidth: 160,
-      flex:1,
-      align: 'center',
+      width: 160,
       headerAlign: 'center'
     },
     {
       field: 'value',
       headerName: 'Value',
-      minwidth: 100,
-      flex:1,
-      align: 'center',
+      width: 100,
       headerAlign: 'center'
     },
    
     {
       field: 'msg',
       headerName: 'Message',
-      minwidth: 300,
-      flex:1,
-      align: 'center',
+      width: 300,
       headerAlign: 'center'
     },
     // {
@@ -82,7 +72,7 @@ function AlertWidget({
     {
       field: 'alertType',
       headerName: 'Status',
-      minWidth: 130,
+      minWidth: 100,
       maxWidth:250,
       flex: 1,
       align: 'center',
@@ -97,14 +87,11 @@ function AlertWidget({
     
         return (
           <Chip
-          className='w-[130px] font-[customfont] font-normal text-sm'
             variant="outlined"
             label={element.alertLabel}
             style={{
-              fontWeight:'600',
-              color: 'white',
+              color: element.alertColor,
               borderColor: element.alertColor,
-              background: element.alertColor,
             }}
           />
         );
@@ -128,23 +115,15 @@ function AlertWidget({
       selectedRow.alarmType === 'Latch'
         ? (
           <Button
-          style={{background:'green'}}
-          sx={{
-            color: 'white',
-            background: 'green',
-            boxShadow: 'none',
-            fontSize: '14px',
-            fontWeight: '600',
-            letterSpacing: '1px',
-            padding:'8px 15px'
-          }}
-          startIcon={<Delete />}
-          onClick={(e) => {
-            setSensorId(selectedRow.id);
-            setClearAlert(true);
-          }}
-        >
-          Clear
+            variant="contained"
+            color="success"
+            startIcon={<Delete />}
+            onClick={(e) => {
+              setSensorId(selectedRow.id);
+              setClearAlert(true);
+            }}
+          >
+            Clear
           </Button>
         )
         : ''
@@ -183,97 +162,46 @@ function AlertWidget({
     });
     setErrorObject({});
   };
-  const Buttons = styled(Button)(
-    () => ({
-      padding: "10px 25px",
-      marginTop: '20px',
-      marginBottom: '15px',
-      fontSize: '13px',
-      borderRadius: '10px',
-      fontWeight: '600',
-      fontFamily: 'customfont',
-      letterSpacing: '1px',
-      color: 'white'
-    }
-    ));
-  return (
-    <>
-      <Card
-        className={'w-full h-[45vh] sm:h-[41vh] lg:h-[40vh] xl:h-[40vh]'}
-        sx={{
-          borderRadius: '12px',
-          boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
 
+  return (
+    <div style={{ height: '47vh', width: '100%' }}>
+      <Typography
+        underline="hover"
+        color="inherit"
+        style={{
+          fontSize: '24px',
+          fontWeight: 'bold',
+          color: '#403f3e'
         }}
       >
-        <Paper elevation={3} className={'h-full '}>
-          <CardHeader
-            title={
-              <Typography
-                sx={{
-                  fontSize: '25px',
-                  fontFamily: 'customfont',
-                  fontWeight: '600',
-                  color: 'inherit',
-                  textAlign: 'left',
-                  letterSpacing: '1px',
-                  marginLeft: '10px'
-                }}
-                underline="hover"
-              >
-                Alerts
-              </Typography>
-            }
-            sx={{ paddingBottom: 0 }}
-          />
-          <CardContent
-            className={'w-full h-[93%] sm:h-[92%]'}
-            sx={{
-              paddingBottom: '16px',
-              borderRadius: '12px',
-            }}
-          >
-            <DataGrid
-              className='w-full'
-              rows={dataList || []}
-              columns={columns}
-              pageSize={3}
-              rowsPerPageOptions={[3]}
-              disableSelectionOnClick
-              sx={{
-                border: 'none',
-              }}
-              columnVisibilityModel={{
-                actions: moduleAccess.delete
-              }}
-            />
-          </CardContent>
-        </Paper>
-      </Card>
+        Alerts
+      </Typography>
+      <DataGrid
+        rows={dataList || []}
+        columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5]}
+        disableSelectionOnClick
+        style={{ 
+          maxHeight: maxHeight || '40vh',
+          minHeight:  '300px'
+        }}
+        columnVisibilityModel={{
+          actions : moduleAccess.delete
+        }}
+      />
       <Dialog
-        sx={{ '& .MuiDialog-paper': { minWidth: '40%', borderRadius: '12px', padding: '10px' } }}
+        sx={{ '& .MuiDialog-paper': { minWidth: '40%' } }}
         maxWidth="sm"
         open={clearAlert}
       >
-        <DialogTitle
-          className={'color-[#484848] text-center'}
-          sx={{
-            fontWeight: '600',
-            fontSize: '18px',
-            fontFamily: 'customfont',
-            letterSpacing: '1px'
-          }}
-        >
+        <DialogTitle>
           Clear alert with reason
         </DialogTitle>
         <DialogContent>
           <form className="mt-2 space-y-6" onSubmit={handleSubmit}>
-            <div
-              className="rounded-[12px] -space-y-px"
-              sx={{ textAlign: '-webkit-center' }}
-            >
+            <div className="rounded-md -space-y-px " style={{ textAlign: '-webkit-center' }}>
               <TextField
-                className={'text-center'}
                 id="outlined-name"
                 label="Reason"
                 value={clearAlertReason}
@@ -284,42 +212,33 @@ function AlertWidget({
                 onChange={(e) => {
                   setAlertReason(e.target.value);
                 }}
-                InputLabelProps={{
-                  shrink: true,
-                }}
               />
               <Stack
                 direction="row"
-                justifyContent="center"
+                justifyContent="flex-end"
                 alignItems="center"
-                textAlign={'center'}
                 spacing={3}
-                sx={{ marginTop: '20px' }}
-
+                style={{ marginTop: '30px' }}
               >
-                <Buttons type="submit"
-                    style={{
-                      background: 'rgb(19, 60, 129)',}}
-                 >
-
+                <Button
+                  type="submit"
+                >
                   Clear
-                </Buttons>
-                <Buttons
-                  style={{
-                    background: 'rgb(19, 60, 129)',}}
+                </Button>
+                <Button
                   onClick={() => {
                     setClearAlert(false);
                     setAlertReason('');
                   }}
                 >
                   Cancel
-                </Buttons>
+                </Button>
               </Stack>
             </div>
           </form>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 }
 

@@ -445,7 +445,7 @@ const BumptestValidate = (value, type, setErrorObject) => {
       if (!validate('number', value)) {
         status = {
           errorStatus: true,
-          helperText: 'please enter the gas concentration',
+          helperText: 'Enter value in sec',
         };
       } else {
         status = {

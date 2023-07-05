@@ -51,8 +51,8 @@ function SensorListResult() {
   };
 
   return (
-    <div className={'mt-0 w-full p-0'}>
-      <Container maxWidth={false} className={'mt-0 p-0'}>
+    <div style={{ marginTop: 0, padding: 0, width: '100%' }}>
+      <Container maxWidth={false} style={{ padding: 0, marginTop: 0 }}>
         <SensorCategoryManagement />
       </Container>
     </div>

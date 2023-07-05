@@ -157,24 +157,7 @@ const AQITrendModal = ({openTrend, setOpenTrend, id, type}) => {
                     minWidth: '500px',
                     textAlign: 'end'
                 }}>
-                    <Button 
-                    style={{
-                        background: 'rgb(19 60 129)',}}
-                        sx={{
-                          m: 1 ,
-                          textAlign: 'center',
-                          height: '40px',
-                          color: 'white',
-                          padding: "10px 19px",
-                          fontSize: '13px',
-                          borderRadius: '10px',
-                          fontWeight: '600',
-                          fontFamily: 'customfont',
-                          letterSpacing: '1px',
-                          boxShadow: 'none',
-                          marginRight:'20px'
-                        }}
-                    size="medium" onClick={onClose} >
+                    <Button size="medium" variant="contained"  onClick={onClose} >
                         Close
                     </Button>
                 </Grid>

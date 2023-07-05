@@ -65,25 +65,8 @@ function LandingPageComponent({ locationDetails, setIsDashBoard }) {
   return (
     <div style={{ textAlignLast: 'left' }}>
       <Button
-        style={{
-          background: 'rgb(19 60 129)',
-          marginLeft: '20px',
-          marginTop: '5px',
-          marginBottom:'15px'
-        }}
-          sx={{
-            textAlign: 'center',
-            height: '40px',
-            color: 'white',
-            padding: "10px 19px",
-            fontSize: '13px',
-            borderRadius: '10px',
-            fontWeight: '600',
-            fontFamily: 'customfont',
-            letterSpacing: '1px',
-            boxShadow: 'none',
-            marginRight:'20px'
-          }}
+        variant="outlined"
+        style={{ marginLeft: '10px', marginTop: '5px' }}
         startIcon={<ArrowBack />}
         onClick={() => {
           setIsDashBoard(2);
@@ -91,15 +74,15 @@ function LandingPageComponent({ locationDetails, setIsDashBoard }) {
       >
         Back to Data Logger
       </Button>
-      <div className="widgets" style={{ height: 'auto', padding: 10,  }}>
+      <div className="widgets" style={{ height: 'auto', backgroundColor: '#fafafa', padding: 10 }}>
         <div className="widgets" style={{ 
-          height: 'auto', padding: 10,
+          height: 'auto', backgroundColor: '#fafafa', padding: 10,
           display: 'flex',
           flexDirection: 'row',
           flexWrap: 'wrap',
-          width: '100%',
+          width: '100%'
         }}>
-          <Widget type="devices" totalSensors={totalSensors}/>
+          <Widget type="devices" totalSensors={totalSensors} />
           <Widget type="alerts" setAlertOpen={setAlertOpen} totalAlerts={totalAlerts} />
           <Widget type="aqi" setAlertOpen={setAQITrendOpen} aqi={aqiIndex}/>
           <Widget type="time"/>

@@ -3,8 +3,7 @@ import ApplicationStore from '../utils/localStorageUtil';
 
 const _fetchServiceDownloadCsvData = (PATH, serviceMethod, data, successCallback, errorCallBack, fileName, reportType) => {
   const { user_token, userDetails } = ApplicationStore().getStorage('userDetails');
- // const END_POINT = 'https://localhost/backend/api/';
-  const END_POINT = `${process.env.REACT_APP_API_ENDPOINT}api/`;
+  const END_POINT = 'https://wisething.in/aideaLabs/api/';
   const { emailId, userRole, companyCode } = userDetails;
 
   const headers = {

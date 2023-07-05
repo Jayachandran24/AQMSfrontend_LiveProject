@@ -17,15 +17,15 @@ function ImageMarkerList({ labImage, deviceCoordsList, height }) {
     );
   }
   return (
-    <div className='mt-24 sm:mt-0'>
-    <ImageMarker
-      src={labImage || building}
-      markers={deviceCoordsList}
-      onAddMarker={(marker) => { setFloorCoordinations(marker); setMarkers([...markers, marker]); }}
-      markerComponent={CustomMarker}
-      extraClass={height || "h-[55vh]"}
-    />
-  </div>
+    <div>
+      <ImageMarker
+        src={labImage || building}
+        markers={deviceCoordsList}
+        onAddMarker={(marker) => { setFloorCoordinations(marker); setMarkers([...markers, marker]); }}
+        markerComponent={CustomMarker}
+        extraClass={height || "h-96"}
+      />
+    </div>
 
   );
 }

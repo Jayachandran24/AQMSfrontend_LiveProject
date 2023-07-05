@@ -9,16 +9,20 @@ import AddIcon from '@mui/icons-material/Add';
 
 export function LocationListToolbar(props) {
   return (
-    <Box className={'h-[auto] min-h-[6px]'}
+    <Box
       sx={{
         alignItems: 'center',
         display: 'flex',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
       }}
+      style={{
+        height: '6vh',
+        minHeight: '60px'
+      }}
     >
       <Typography
-        sx={{ m: 1, fontSize: '20px', letterSpacing: '1px', fontWeight: '600', fontFamily: 'customfont' }}
+        sx={{ m: 1 }}
         variant="h5"
       >
         Location
@@ -33,21 +37,7 @@ export function LocationListToolbar(props) {
           }}
         >
           <Stack direction="row" spacing={2}>
-            <Fab variant="extended"
-              style={{ background: 'rgb(19 60 129)'}}
-              sx={{
-                height: '0',
-                color: 'white',
-                padding: "10px 19px",
-               
-                fontSize: '13px',
-                borderRadius: '10px',
-                fontWeight: '600',
-                fontFamily: 'customfont',
-                letterSpacing: '1px',
-                boxShadow: 'none'
-              }}
-            >
+            <Fab variant="extended" size="medium" color="primary" aria-label="add">
               <AddIcon sx={{ mr: 1 }} />
               Add Location
             </Fab>

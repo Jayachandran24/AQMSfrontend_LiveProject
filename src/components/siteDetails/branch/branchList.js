@@ -11,8 +11,6 @@ import NotificationBar from '../../notification/ServiceNotificationBar';
 import { useUserAccess } from '../../../context/UserAccessProvider';
 import DeleteConfirmationDailog from '../../../utils/confirmDeletion';
 import ApplicationStore from '../../../utils/localStorageUtil';
-import { Card, CardContent, CardHeader, Divider } from '@mui/material';
-import { MdLocationPin } from 'react-icons/md';
 
 export function BranchListResults(props) {
   const branchColumns = [
@@ -21,21 +19,6 @@ export function BranchListResults(props) {
       headerName: 'Branch Name',
       width: 270,
       type: 'actions',
-      renderCell: ((params) => {
-        return (
-          <>
-            <div className='flex w-full justify-between'>
-              <div>
-              <MdLocationPin className='text-[18px] text-left' />
-              </div>
-              <div className='w-full'>
-              <LinkTo selectedRow={params.row} />
-              </div>
-            </div>
-
-          </>
-        )
-      }),
       getActions: (params) => [
         <LinkTo selectedRow={params.row} />,
       ],
@@ -174,21 +157,15 @@ export function BranchListResults(props) {
   };
   const pathname = routeStateObject.pathname.split('/').filter((x) => x);
   return (
-    <Card className='h-[50vh] sm:h-[41vh]' style={{ width: '100%', padding: '20px', paddingBottom: '0', marginTop: '0px', boxShadow:'none' }}>
+    <div style={{ height: '46vh', width: '100%' }}>
       <Breadcrumbs aria-label="breadcrumb" separator="›" style={{
-        // height: '2vh',
-        minHeight: '15px',
-        fontFamily: 'customfont',
-        fontWeight: '600',
-        color: 'black',
-        fontSize: '16px',
-        letterSpacing: '1px'
+        height: '2vh',
+        minHeight: '15px'
       }}>
         {locationLabel ? (
           <Typography
             underline="hover"
             color="inherit"
-            sx={{ fontFamily: 'customfont', fontWeight: '600' }}
           >
             Location
           </Typography>
@@ -200,7 +177,6 @@ export function BranchListResults(props) {
         <Typography
           underline="hover"
           color="inherit"
-          sx={{ fontFamily: 'customfont', fontWeight: '600', fontSize: '16px', letterSpacing: '1px' }}
         >
           {pathname[1].replace(/%20/g, ' ')}
         </Typography>
@@ -211,21 +187,18 @@ export function BranchListResults(props) {
         setEditData={setEditData}
         userAccess={moduleAccess}
       />
-      <CardContent className='h-[300px] sm:h-[85%] lg:h-[85%] xl:h-[80%]'>
       <DataGrid
-        sx={{ border: 'none', fontFamily: 'customfont', color: 'black', marginTop: '0px' }}
         rows={dataList}
         columns={branchColumns}
-        pageSize={3}
+        pageSize={5}
         loading={isLoading}
-        rowsPerPageOptions={[3]}
+        rowsPerPageOptions={[5]}
         disableSelectionOnClick
-        style={{
-        //   // maxHeight: `${80}%`,
-          // height: '280px',
-        //   minHeight: '180px'
+        style={{ 
+          // maxHeight: `${80}%`,
+          height: '37vh',
+          minHeight: '230px'
         }}
-
       />
       <BranchModal
         isAddButton={isAddButton}
@@ -251,7 +224,6 @@ export function BranchListResults(props) {
         handleSuccess={deletehandleSuccess}
         handleException={deletehandleException}
       />
-      </CardContent>
-    </Card>
+    </div>
   );
 }

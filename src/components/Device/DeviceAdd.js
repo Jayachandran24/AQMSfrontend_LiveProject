@@ -136,11 +136,11 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
   };
   return (
     <>
-      <form className=" w-full h-auto overflow-auto " onSubmit={handleSubmit}>
-        <DialogContent sx={{ px: 0, p: 0 }} >
+      <form className="p-0 w-full" onSubmit={handleSubmit}>
+        <DialogContent sx={{ px: 0, p: 0 }}>
           <Grid
             container
-            spacing={2}
+            spacing={1}
           >
             <Grid
               sx={{ mt: 1 }}
@@ -153,11 +153,11 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
             >
               <Box sx={{ minWidth: 200 }}>
                 <FormControl fullWidth margin="normal" sx={{ marginTop: 0 }}>
-                  <InputLabel id="demo-simple-select-label" >
+                  <InputLabel id="demo-simple-select-label">
                     Device Category
                   </InputLabel>
                   <Select
-                    sx={{ minWidth: 200, fontFamily: 'customfont' }}
+                    sx={{ minWidth: 250 }}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={category_id}
@@ -170,7 +170,7 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
                     helperText={errorObject?.deviceCategory?.helperText}
                   >
                     {categoryList.map((data) => (
-                      <MenuItem value={data.id} sx={{ fontFamily: 'customfont' }}>{data.categoryName}</MenuItem>
+                      <MenuItem value={data.id}>{data.categoryName}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -186,7 +186,7 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
               xl={6}
             >
               <TextField
-                sx={{ marginTop: 0, fontFamily: 'customfont' }}
+                sx={{ marginTop: 0 }}
                 value={deviceName}
                 onBlur={() => validateForNullValue(deviceName, 'deviceName')}
                 onChange={(e) => {
@@ -200,11 +200,6 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
                 error={errorObject?.deviceName?.errorStatus}
                 helperText={errorObject?.deviceName?.helperText}
                 autoComplete="off"
-                InputProps={{
-                  style: {
-                    fontFamily: 'customfont'
-                  }
-                }}
               />
             </Grid>
             <Grid
@@ -217,7 +212,7 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
               xl={6}
             >
               <TextField
-                sx={{ marginTop: 0, fontFamily: 'customfont' }}
+                sx={{ marginTop: 0 }}
                 value={deviceTag}
                 onBlur={() => validateForNullValue(deviceTag, 'deviceTag')}
                 onChange={(e) => {
@@ -231,11 +226,6 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
                 fullWidth
                 error={errorObject?.deviceTag?.errorStatus}
                 helperText={errorObject?.deviceTag?.helperText}
-                InputProps={{
-                  style: {
-                    fontFamily: 'customfont'
-                  }
-                }}
               />
             </Grid>
             <Grid
@@ -248,7 +238,7 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
               xl={6}
             >
               <TextField
-                sx={{ marginTop: 0, fontFamily: 'customfont' }}
+                sx={{ marginTop: 0 }}
                 value={macAddress}
                 onBlur={() => validateForNullValue(macAddress, 'macAddress')}
                 onChange={(e) => {
@@ -262,11 +252,6 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
                 fullWidth
                 error={errorObject?.macAddress?.errorStatus}
                 helperText={errorObject?.macAddress?.helperText}
-                InputProps={{
-                  style: {
-                    fontFamily: 'customfont'
-                  }
-                }}
               />
             </Grid>
             <Grid
@@ -293,11 +278,6 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
                 fullWidth
                 error={errorObject?.firmwareVersion?.errorStatus}
                 helperText={errorObject?.firmwareVersion?.helperText}
-                InputProps={{
-                  style: {
-                    fontFamily: 'customfont'
-                  }
-                }}
               />
             </Grid>
             <Grid
@@ -324,11 +304,6 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
                 fullWidth
                 error={errorObject?.hardwareModelVersion?.errorStatus}
                 helperText={errorObject?.hardwareModelVersion?.helperText}
-                InputProps={{
-                  style: {
-                    fontFamily: 'customfont'
-                  }
-                }}
               />
             </Grid>
             <Grid
@@ -352,12 +327,12 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
                   if (e.target.files && e.target.files.length > 0) {
                     var fullPath = e.target.value;
                     if (fullPath) {
-                      var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
-                      var filename = fullPath.substring(startIndex);
-                      if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
-                        filename = filename.substring(1);
-                      }
-                      setBinFileName(filename);
+                        var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+                        var filename = fullPath.substring(startIndex);
+                        if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                            filename = filename.substring(1);
+                        }
+                        setBinFileName(filename);
                     }
                     setFirmwareBinFile(e.target.files[0]);
 
@@ -374,7 +349,6 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
                 type="file"
                 inputProps={{
                   accept: '.bin',
-                  style: { fontFamily: 'customfont' }
                 }}
                 error={errorObject?.deviceImage?.errorStatus}
                 helperText={errorObject?.deviceImage?.helperText}
@@ -423,10 +397,8 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
                 onChange={(e) => {
                   setPollingPriority(e.target.value);
                 }}
-                InputProps={{
-                  style: {
-                    fontFamily: 'customfont'
-                  }
+                InputLabelProps={{
+                  shrink: true,
                 }}
                 margin="normal"
                 required
@@ -456,10 +428,8 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
                 onChange={(e) => {
                   setNonPollingPriority(e.target.value);
                 }}
-                InputProps={{
-                  style: {
-                    fontFamily: 'customfont'
-                  }
+                InputLabelProps={{
+                  shrink: true,
                 }}
                 margin="normal"
                 required
@@ -487,21 +457,7 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
           >
             <div>
               <Button
-                style={{
-                  background: 'rgb(19 60 129)',}}
-                sx={{
-                  m: 2,
-                  height: '40px',
-                  color: 'white',
-                  padding: '8px 19px',
-                  marginTop: '10px',
-                  marginRight: '10px',
-                  // marginBottom: '35px',
-                  bordeRadius: '10px',
-                  fontWeight: '600',
-                  fontFamily: 'customfont',
-                  letterSpacing: '1px'
-                }}
+                sx={{ m: 2 }}
                 onClick={(e) => {
                   setOpenModel(true);
                 }}
@@ -521,21 +477,6 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
           >
             <div className="mt-0 ml-2 float-right">
               <Button
-                style={{
-                  background: 'rgb(19 60 129)',}}
-                sx={{
-                  m: 1,
-                  height: '40px',
-                  color: 'white',
-                  padding: '8px 19px',
-                  // marginTop: '10px',
-                  marginRight: '10px',
-                  // marginBottom: '35px',
-                  bordeRadius: '10px',
-                  fontWeight: '600',
-                  fontFamily: 'customfont',
-                  letterSpacing: '1px'
-                }}
                 size="large"
                 onClick={(e) => {
                   setErrorObject({});
@@ -545,26 +486,6 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
                 Cancel
               </Button>
               <Button
-                style={{
-                  background: 'rgb(19 60 129)',}}
-                sx={{
-                  m: 1,
-                  height: '40px',
-                  color: 'white',
-                  padding: '8px 19px',
-                  background: 'rgb(19 60 129)',
-                  // marginTop: '10px',
-                  marginRight: '10px',
-                  // marginBottom: '35px',
-                  bordeRadius: '10px',
-                  fontWeight: '600',
-                  fontFamily: 'customfont',
-                  letterSpacing: '1px',
-                  "&.Mui-disabled": {
-                    background: "#eaeaea",
-                    color: "#c0c0c0"
-                  }
-                }}
                 disabled={
                   errorObject?.deviceCategory?.errorStatus
                   || errorObject?.deviceName?.errorStatus
@@ -575,7 +496,7 @@ function DeviceAdd({ locationDetails, labMap, deviceData }) {
                   || errorObject?.pollingPriority?.errorStatus
                   || errorObject?.nonPollingPriority?.errorStatus
                 }
-
+                sx={{ m: 1 }}
                 size="large"
                 type="submit"
               >

@@ -137,173 +137,136 @@ function LocationModal({
 
   return (
     <Dialog
-    sx={{ '& .MuiDialog-paper': { minWidth: '80%' } }}
-    maxWidth="sm"
-    open={open}
-  >
-    <DialogTitle
-      sx={{ fontFamily: 'customfont', fontSize: '20px', textAlign: 'center', fontWeight: '600', margin: '20px 0', letterSpacing: '1px' }}>
-
-      {isAddButton ? 'Add Location' : 'Edit Location'}
-    </DialogTitle>
-    <DialogContent>
-      <form className="mt-2 space-y-6" onSubmit={handleSubmit}>
-        <div className="rounded-md  -space-y-px ">
-          <div className="container mx-auto outline-black">
-            <div className="flex flex-col w-full">
-              <div className="w-full flex sm:float-left gap-5 pr-3 pl-3 mb-5 min-[320px]:flex-col min-[768px]:flex-row">
-                <div className=" -space-y-px mb-2 w-full">
-                  <TextField
-                    fullWidth
-                    sx={{ mb: 1, width: '100%' }}
-                    label="Location Name"
-                    type="text"
-                    value={stateName}
-                    variant="outlined"
-                    placeholder="Please enter location name"
-                    className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300
-                    placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                    required
-                    onBlur={() => {
-                      validateForNullValue(stateName, 'stateName');
-                    }}
-                    onChange={(e) => {
-                      setStateName(e.target.value);
-                    }}
-                    autoComplete="off"
-                    error={errorObject?.stateName?.errorStatus}
-                    helperText={errorObject?.stateName?.helperText}
-                    InputLabelProps={{
-                      shrink: true,
-                      style: { fontFamily: 'customfont' }
-                    }}
+      sx={{ '& .MuiDialog-paper': { minWidth: '80%' } }}
+      maxWidth="sm"
+      open={open}
+    >
+      <DialogTitle>
+        {isAddButton ? 'Add Location' : 'Edit Location'}
+      </DialogTitle>
+      <DialogContent>
+        <form className="mt-2 space-y-6" onSubmit={handleSubmit}>
+          <div className="rounded-md  -space-y-px ">
+            <div className="container mx-auto outline-black">
+              <div className="inline">
+                <div className="w-full sm:float-left lg:w-2/5 pr-3 pl-3">
+                  <div className="rounded-md -space-y-px mb-2">
+                    <TextField
+                      fullWidth
+                      sx={{ mb: 1 }}
+                      label="Location Name"
+                      type="text"
+                      value={stateName}
+                      variant="outlined"
+                      placeholder="Please enter location name"
+                      className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300
+                      placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                      required
+                      onBlur={() => {
+                        validateForNullValue(stateName, 'stateName');
+                      }}
+                      onChange={(e) => {
+                        setStateName(e.target.value);
+                      }}
+                      autoComplete="off"
+                      error={errorObject?.stateName?.errorStatus}
+                      helperText={errorObject?.stateName?.helperText}
+                    />
+                  </div>
+                  <div className="rounded-md -space-y-px mb-2">
+                    <TextField
+                      fullWidth
+                      sx={{ mb: 1 }}
+                      label="Latitude"
+                      type="text"
+                      disabled
+                      value={latitude}
+                      variant="outlined"
+                      className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300
+                      placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                      required
+                      onChange={(e) => {
+                        setLatitude(e.target.value);
+                      }}
+                      autoComplete="off"
+                      error={errorObject?.coordinates?.errorStatus}
+                      helperText={errorObject?.coordinates?.helperText}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  </div>
+                  <div className="rounded-md -space-y-px mb-2">
+                    <TextField
+                      fullWidth
+                      sx={{ mb: 1 }}
+                      label="Longitude"
+                      type="text"
+                      disabled
+                      value={longitude}
+                      variant="outlined"
+                      className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300
+                      placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                      required
+                      onChange={(e) => {
+                        setLongitude(e.target.value);
+                      }}
+                      autoComplete="off"
+                      error={errorObject?.coordinates?.errorStatus}
+                      helperText={errorObject?.coordinates?.helperText}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="w-full sm:float-right lg:float-left lg:w-3/5 pr-1">
+                  <Grid item xs={4} sm={4} md={4} lg={4} />
+                  <MapsComponent
+                    onMarkerDrop={onMapClick}
+                    longitude={markerLng}
+                    latitude={markerLat}
+                    stateName={locationData.stateName}
+                    center={isAddButton ? { lat : Number(centerCoord.lat), lng : Number(centerCoord.lng)} :
+                    { lat: Number(latitude) || 80.500, lng: Number(longitude) || 23.500}}
+                    zoom={4}
+                    flagDistance={3}
                   />
                 </div>
-                <div className="rounded-md -space-y-px mb-2 w-full">
-                  <TextField
-                    fullWidth
-                    sx={{ mb: 1 }}
-                    label="Latitude"
-                    type="text"
-                    disabled
-                    value={latitude}
-                    variant="outlined"
-                    className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300
-                    placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                    required
-                    onChange={(e) => {
-                      setLatitude(e.target.value);
-                    }}
-                    autoComplete="off"
-                    error={errorObject?.coordinates?.errorStatus}
-                    helperText={errorObject?.coordinates?.helperText}
-                    InputLabelProps={{
-                      shrink: true,
-                      style: { fontFamily: 'customfont' }
-                    }}
-                  />
-                </div>
-                <div className="rounded-md -space-y-px mb-2 w-full">
-                  <TextField
-                    fullWidth
-                    sx={{ mb: 1 }}
-                    label="Longitude"
-                    type="text"
-                    disabled
-                    value={longitude}
-                    variant="outlined"
-                    className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300
-                    placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                    required
-                    onChange={(e) => {
-                      setLongitude(e.target.value);
-                    }}
-                    autoComplete="off"
-                    error={errorObject?.coordinates?.errorStatus}
-                    helperText={errorObject?.coordinates?.helperText}
-                    InputLabelProps={{
-                      shrink: true,
-                      style: { fontFamily: 'customfont' }
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="w-10/12 mr-auto ml-auto sm:float-right lg:float-left  pr-1 mb-7 min-[320px]:w-full min-[768px]:w-[80%] ">
-                <Grid item xs={4} sm={4} md={4} lg={4} />
-                <MapsComponent
-
-                  onMarkerDrop={onMapClick}
-                  longitude={markerLng}
-                  latitude={markerLat}
-                  stateName={locationData.stateName}
-                  center={isAddButton ? { lat: Number(centerCoord.lat), lng: Number(centerCoord.lng) } :
-                    { lat: Number(latitude) || 80.500, lng: Number(longitude) || 23.500 }}
-                  zoom={4}
-                  flagDistance={3}
-                />
               </div>
             </div>
-          </div>
-          <div className="float-right mb-10">
-            <div className="rounded-md -space-y-px mb-10 min-[320px]:mb-10 min-[768px]:mb-1">
-              <Button
-                type="submit"
-                style={{background: 'rgb(19 60 129)'}}
-                sx={{
-                  color: 'white',
-                  padding: "8px 30px",
-                  marginRight: '30px',
-                  fontSize: '13px',
-                  borderRadius: '10px',
-                  fontWeight: '600',
-                  fontFamily: 'customfont',
-                  letterSpacing: '1px',
-                  boxShadow: 'none',
-                  "&.Mui-disabled": {
-                    background: "#eaeaea",
-                    color: "#c0c0c0"
+            <div className="float-right">
+              <div className="rounded-md -space-y-px">
+                <Button
+                  type="submit"
+                  disabled={
+                    errorObject?.coordinates?.errorStatus
+                    || errorObject?.stateName?.errorStatus
                   }
-                }}
-                disabled={
-                  errorObject?.coordinates?.errorStatus
-                  || errorObject?.stateName?.errorStatus
-                }
-              >
-                {isAddButton ? 'Add' : 'Update'}
-              </Button>
-              <Button
-               style={{
-                background: 'rgb(19 60 129)',}}
-                sx={{
-                  color: 'white',
-                  padding: "8px 19px",
-                  fontSize: '13px',
-                  borderRadius: '10px',
-                  fontWeight: '600',
-                  fontFamily: 'customfont',
-                  letterSpacing: '1px',
-                  boxShadow: 'none'
-                }}
-                onClick={() => {
-                  setOpen(false);
-                  setErrorObject({});
-                  loaddata();
-                }}
-              >
-                Cancel
-              </Button>
+                >
+                  {isAddButton ? 'Add' : 'Update'}
+                </Button>
+                <Button
+                  onClick={() => {
+                    setOpen(false);
+                    setErrorObject({});
+                    loaddata();
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </form>
-    </DialogContent>
-    <NotificationBar
-      handleClose={handleClose}
-      notificationContent={openNotification.message}
-      openNotification={openNotification.status}
-      type={openNotification.type}
-    />
-  </Dialog>
+        </form>
+      </DialogContent>
+      <NotificationBar
+        handleClose={handleClose}
+        notificationContent={openNotification.message}
+        openNotification={openNotification.status}
+        type={openNotification.type}
+      />
+    </Dialog>
   );
 }
 

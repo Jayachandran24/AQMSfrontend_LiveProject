@@ -1,5 +1,5 @@
 import {
-  Box, Button, Card, CardContent, CardHeader, Dialog, DialogContent, DialogTitle, Grid, TextField, Typography,
+  Box, Button, Dialog, DialogContent, DialogTitle, Grid, TextField, Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { DataGrid, gridClasses } from '@mui/x-data-grid';
@@ -40,7 +40,6 @@ function AppVersion() {
       headerName: 'Summary',
       minWidth: 350,
       flex: 1,
-      align:'center',
       headerAlign: 'center',
     },
     {
@@ -229,207 +228,152 @@ function AppVersion() {
   };
 
   return (
-    <>
-      <Card className={'m-8'} style={{boxShadow:'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius:'12px'}}>
-        <CardHeader
-          title={
-            <Box
-              sx={{
-                mb: '10px',
-                alignItems: 'center',
-                display: 'flex',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                m: 3,
-              }}
-            >
-              <Typography variant="h5" 
-              sx={{ ml: 1,
-              fontFamily:'customfont', fontWeight:'600', letterSpacing:'1px' }}>
-                Application Version
-              </Typography>
+    <Grid>
+      <Box
+        sx={{
+          mb: '10px',
+          alignItems: 'center',
+          display: 'flex',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          m: 3,
+        }}
+      >
+        <Typography variant="h5" sx={{ ml: 1 }}>
+          Application Version
+        </Typography>
+        <Button
+          variant="contained"
+          size="medium"
+          color="primary"
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          <Add sx={{ mr: 1 }} />
+          Add version
+        </Button>
+      </Box>
+      <div
+        style={{
+          margin: 5,
+          minHeight: '300px',
+          height: '500px',
+          textAlign: 'justify'
+        }}
+      >
+        <DataGrid
+          rows={data}
+          columns={columns}
+          pageSize={5}
+          loading={isLoading}
+          rowsPerPageOptions={[5]}
+          disableSelectionOnClick
+          getRowHeight={() => 'auto'}
+          sx={{
+            [`& .${gridClasses.cell}`]: {
+              py: 1,
+            },
+          }}
+        />
+      </div>
+      <Dialog
+        sx={{ '& .MuiDialog-paper': { minWidth: '50%' } }}
+        maxWidth="sm"
+        open={open}
+      >
+        <DialogTitle>
+          {isAddButton ? 'Add version' : 'Edit version'}
+        </DialogTitle>
+        <DialogContent>
+          <form onSubmit={handleSubmit}>
+            <Grid container>
+              <Grid
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                xl={12}
+                item
+              >
+                <TextField
+                  fullWidth
+                  sx={{ mt: 2 }}
+                  label="Version Number"
+                  type="text"
+                  value={versionNumber}
+                  variant="outlined"
+                  // disabled={true}
+                  className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2
+                                border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md
+                                focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
+                  required
+                  onChange={(e) => { setVersionNumber(e.target.value); }}
+                  autoComplete="off"
+                />
+              </Grid>
+              <Grid
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                xl={12}
+                item
+              >
+                <TextField
+                  fullWidth
+                  label="Summary"
+                  value={summary}
+                  onChange={(e)=>{setSummary(e.target.value);}}
+                  sx={{ mt: 2 }}
+                  type="text"
+                  multiline
+                  rows={4}
+                  placeholder="Version Summary"
+                  required
+                  autoComplete="off"
+                  variant="outlined"
+                />
+              </Grid>
+            </Grid>
+            <div className="rounded-md -space-y-px float-right">
               <Button
-                sx={{
-                  height: '40px',
-                  padding: "10px 19px",
-                  color: 'white',
-                  marginTop: '20px',
-                  marginBottom: '15px',
-                  fontSize: '13px',
-                  borderRadius: '10px',
-                  fontWeight: '600',
-                  fontFamily: 'customfont',
-                  letterSpacing: '1px'
-                }}
-                style={{
-                  background: 'rgb(19, 60, 129)',}}
+                type="submit"
+              >
+                {isAddButton ? 'Add' : 'Update'}
+              </Button>
+              <Button
                 onClick={() => {
-                  setOpen(true);
+                  setSummary('');
+                  setVersionNumber('');
+                  setEditData({});
+                  setOpen(false);
                 }}
               >
-                <Add sx={{ mr: 1 }} />
-                Add version
+                Cancel
               </Button>
-            </Box>
-          }
-        />
-        <CardContent>
-          <div className={'m-0 min-h-[300px] h-[500px] text-justify'}>
-            <DataGrid
-              rows={data}
-              columns={columns}
-              pageSize={5}
-              loading={isLoading}
-              rowsPerPageOptions={[5]}
-              disableSelectionOnClick
-              getRowHeight={() => 'auto'}
-              style={{border:'none', fontFamily:'customfont'}}
-              sx={{
-                [`& .${gridClasses.cell}`]: {
-                  py: 1,
-                },
-              }}
-            />
-          </div>
-          <Dialog
-            sx={{ '& .MuiDialog-paper': { minWidth: '50%' } }}
-            maxWidth="sm"
-            open={open}
-          >
-            <DialogTitle sx={{fontFamily:'customfont', letterSpacing:'1px', fontWeight:'600'}}>
-              {isAddButton ? 'Add version' : 'Edit version'}
-            </DialogTitle>
-            <DialogContent>
-              <form onSubmit={handleSubmit}>
-                <Grid container>
-                  <Grid
-                    xs={12}
-                    sm={12}
-                    md={12}
-                    lg={12}
-                    xl={12}
-                    item
-                  >
-                    <TextField
-                      fullWidth
-                      sx={{ mt: 2 }}
-                      label="Version Number"
-                      type="text"
-                      value={versionNumber}
-                      variant="outlined"
-                      // disabled={true}
-                      className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2
-                                    border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md
-                                    focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
-                      required
-                      onChange={(e) => { setVersionNumber(e.target.value); }}
-                      autoComplete="off"
-                      InputLabelProps={{
-                        style:{fontFamily:'customfont'}
-                      }}
-                      InputProps={{
-                        style:{fontFamily:'customfont'}
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    xs={12}
-                    sm={12}
-                    md={12}
-                    lg={12}
-                    xl={12}
-                    item
-                  >
-                    <TextField
-                      fullWidth
-                      label="Summary"
-                      value={summary}
-                      onChange={(e)=>{setSummary(e.target.value);}}
-                      sx={{ mt: 2 }}
-                      type="text"
-                      multiline
-                      rows={4}
-                      placeholder="Version Summary"
-                      required
-                      autoComplete="off"
-                      variant="outlined"
-                      InputLabelProps={{
-                        style:{fontFamily:'customfont'}
-                      }}
-                      InputProps={{
-                        style:{fontFamily:'customfont'}
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-                <div className="rounded-md -space-y-px float-right mt-5">
-                  <Button
-                    type="submit"
-                    sx={{
-                      height: '40px',
-                      padding: "10px 19px",
-                      color: 'white',
-                      // marginTop: '20px',
-                      // marginBottom: '15px',
-                      marginRight:'20px',
-                      fontSize: '13px',
-                      borderRadius: '10px',
-                      fontWeight: '600',
-                      fontFamily: 'customfont',
-                      letterSpacing: '1px'
-                    }}
-                    style={{
-                      background: 'rgb(19, 60, 129)',}}
-                  >
-                    {isAddButton ? 'Add' : 'Update'}
-                  </Button>
-                  <Button
-                    sx={{
-                      height: '40px',
-                      padding: "10px 19px",
-                      color: 'white',
-                      marginTop: '20px',
-                      marginBottom: '15px',
-                      fontSize: '13px',
-                      borderRadius: '10px',
-                      fontWeight: '600',
-                      fontFamily: 'customfont',
-                      letterSpacing: '1px'
-                    }}
-                    style={{
-                      background: 'rgb(19, 60, 129)',}}
-                    onClick={() => {
-                      setSummary('');
-                      setVersionNumber('');
-                      setEditData({});
-                      setOpen(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
 
-          <NotificationBar
-            handleClose={handleClose}
-            notificationContent={openNotification.message}
-            openNotification={openNotification.status}
-            type={openNotification.type}
-          />
+      <NotificationBar
+        handleClose={handleClose}
+        notificationContent={openNotification.message}
+        openNotification={openNotification.status}
+        type={openNotification.type}
+      />
 
-          <DeleteConfirmationDailog
-            open={deleteDailogOpen}
-            setOpen={setDeleteDailogOpen}
-            deleteId={deleteId}
-            deleteService={AppVersionDeleteService}
-            handleSuccess={deletehandleSuccess}
-            handleException={deletehandleException}
-          />
-        </CardContent>
-      </Card>
-    </>
+      <DeleteConfirmationDailog
+        open={deleteDailogOpen}
+        setOpen={setDeleteDailogOpen}
+        deleteId={deleteId}
+        deleteService={AppVersionDeleteService}
+        handleSuccess={deletehandleSuccess}
+        handleException={deletehandleException}
+      />
+
+    </Grid>
 
     // <div style={{
     //   height: '100vh'

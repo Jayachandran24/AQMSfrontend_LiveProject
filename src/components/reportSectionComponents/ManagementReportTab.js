@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-    Tabs, Tab, Typography, Box, InputLabel, MenuItem, FormControl, Select, Stack, Grid, styled, Card, CardHeader, CardContent,
+    Tabs, Tab, Typography, Box, InputLabel, MenuItem, FormControl, Select, Stack, Grid, styled,
 } from '@mui/material';
 import AqiSitesReportForm from './AqiSitesReportForm';
 import Alarm from './Alarm';
@@ -251,214 +251,249 @@ export default function ManagementReportTab() {
     };
 
     return (
-        <>
-            <div className={'px-5 py-2 pt-0 w-full '}>
-                <Card sx={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
-                    <CardHeader
-                        title={
-                            <Grid container spacing={1} xs={12} className={'mt-0.5 ml-0 pl-1.5'}>
-                                <Grid item xs={12} sm={4} md={4} lg={3} xl={2}>
-                                    <FormControl fullWidth size="small">
-                                        <InputLabel sx={{ fontFamily: 'customfont' }}>Location</InputLabel>
-                                        <Select
-                                            value={location_id}
-                                            label="Location"
-                                            disabled={locationDetails?.location_id}
-                                            onChange={(e) => {
-                                                LocationChanged(e.target.value);
-                                            }}
-                                        >
-                                            <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
-                                                <em className={'font-bold'}>All</em>
-                                            </MenuItem>
-                                            {locationList.map((data, index) => (
-                                                <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.stateName}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={12} sm={4} md={4} lg={3} xl={2}>
-                                    <FormControl fullWidth size="small" >
-                                        <InputLabel sx={{ fontFamily: 'customfont' }}>Branch</InputLabel>
-                                        <Select
-                                            value={branch_id}
-                                            label="Branch"
-                                            disabled={locationDetails?.branch_id}
-                                            onChange={(e) => {
-                                                BranchChanged(e.target.value);
-                                            }}
-                                        >
-                                            <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
-                                                <em className={'font-bold'}>All</em>
-                                            </MenuItem>
-                                            {branchList.map((data, index) => (
-                                                <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.branchName}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={12} sm={4} md={4} lg={3} xl={2}>
-                                    <FormControl fullWidth size="small" >
-                                        <InputLabel sx={{ fontFamily: 'customfont' }}>Facility</InputLabel>
-                                        <Select
-                                            value={facility_id}
-                                            label="Facility"
-                                            disabled={locationDetails?.facility_id}
-                                            onChange={(e) => {
-                                                FacilityChanged(e.target.value);
-                                            }}
-                                        >
-                                            <MenuItem value="" key={0}>
-                                                <em className={'font-bold'} sx={{ fontFamily: 'customfont' }}>All</em>
-                                            </MenuItem>
-                                            {facilityList.map((data, index) => (
-                                                <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.facilityName}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={12} sm={4} md={4} lg={3} xl={2}>
-                                    <FormControl fullWidth size="small" >
-                                        <InputLabel sx={{ fontFamily: 'customfont' }}>Building</InputLabel>
-                                        <Select
-                                            value={building_id}
-                                            label="Building"
-                                            disabled={locationDetails?.building_id}
-                                            onChange={(e) => {
-                                                BuildingChanged(e.target.value);
-                                            }}
-                                        >
-                                            <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
-                                                <em className={'font-bold'}>All</em>
-                                            </MenuItem>
-                                            {buildingList.map((data, index) => (
-                                                <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.buildingName}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={12} sm={4} md={4} lg={3} xl={2}>
-                                    <FormControl fullWidth size="small" >
-                                        <InputLabel sx={{ fontFamily: 'customfont' }}>Floor</InputLabel>
-                                        <Select
-                                            value={floor_id}
-                                            label="Floor"
-                                            disabled={locationDetails?.floor_id}
-                                            onChange={(e) => {
-                                                FloorChanged(e.target.value);
-                                            }}
-                                        >
-                                            <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
-                                                <em className={'font-bold'}>All</em>
-                                            </MenuItem>
-                                            {floorList.map((data, index) => (
-                                                <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.floorName}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={12} sm={4} md={4} lg={3} xl={2}>
-                                    <FormControl fullWidth size="small" >
-                                        <InputLabel sx={{ fontFamily: 'customfont' }}>Zone</InputLabel>
-                                        <Select
-                                            value={lab_id}
-                                            label="Zone"
-                                            onChange={(e) => {
-                                                LabHandleChange(e.target.value);
-                                            }}
-                                        >
-                                            <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
-                                                <em className={'font-bold'}>All</em>
-                                            </MenuItem>
-                                            {labList.map((data, index) => (
-                                                <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.labDepName}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            </Grid>
-                        }
-                    />
-                </Card>
-                <Card className={'mt-5 mb-5'}
-                    sx={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
-                    <CardContent  className='h-[71vh] overflow-auto lg:overflow-hidden'>
-                        {/* <Grid container spacing={1} xs={12} item className={' overflow-hidden'}> */}
-                            <Box width='100%' className='px-0 sm:px-0 '>
-                                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"
-                                    // scrollButtons="off"
-                                    variant='scrollable'
-                                    // visibleScrollbar={true}
-                                    allowScrollButtonsMobile
-                                    sx={{
-                                        display:'grid',
-                                        padding: '0px 0',
-                                        width: '100%',
-                                    }}
-
-                                >
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Air Quality Index" {...a11yProps(0)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Sensor Status" {...a11yProps(1)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Alarms" {...a11yProps(2)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Limit Edit Logs" {...a11yProps(3)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Server Utilization" {...a11yProps(4)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Application version" {...a11yProps(5)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Firmware Version" {...a11yProps(6)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="H/W Model No" {...a11yProps(7)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="BumpTest" {...a11yProps(8)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Calibration" {...a11yProps(9)} /> 
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="EVENT LOG" {...a11yProps(10)} />        
-                                </Tabs>
-                            </Box>
-                            <TabPanel value={value} index={0}>
-                                <AqiSitesReportForm
-                                    siteId={{ location_id, branch_id, facility_id, building_id, floor_id, lab_id }}
-                                    deviceList={deviceList}
-                                />
-                            </TabPanel>
-                            <TabPanel value={value} index={1}>
-                                <SensorStatus
-                                    deviceList={deviceList}
-                                    siteId={{ location_id, branch_id, facility_id, building_id, floor_id, lab_id }}
-                                />
-                            </TabPanel>
-                            <TabPanel value={value} index={2}>
-                                <Alarm
-                                    siteId={{ location_id, branch_id, facility_id, building_id, floor_id, lab_id }}
-                                    deviceList={deviceList}
-                                />
-                            </TabPanel>
-                            <TabPanel value={value} index={3}>
-                                <DeviceLogs
-                                    deviceList={deviceList}
-                                    siteId={{ location_id, branch_id, facility_id, building_id, floor_id, lab_id }}
-                                />
-                            </TabPanel>
-                            <TabPanel value={value} index={4}>
-                                <ServerUtilization />
-                            </TabPanel>
-                            <TabPanel value={value} index={5}>
-                                <SoftwareVersion />
-                            </TabPanel>
-                            <TabPanel value={value} index={6}>
-                                <FirmwareVersion
-                                    deviceList={deviceList}
-                                    siteId={{ location_id, branch_id, facility_id, building_id, floor_id, lab_id }}
-                                />
-                            </TabPanel>
-                            <TabPanel value={value} index={7}>
-                                <HardwareModelVersion
-                                    deviceList={deviceList}
-                                    siteId={{ location_id, branch_id, facility_id, building_id, floor_id, lab_id }}
-                                />
-                            </TabPanel>
-                            <TabPanel value={value} index={8}>
-                                <BumpTest
-                                    deviceList={deviceList}
-                                    siteId={{ location_id, branch_id, facility_id, building_id, floor_id, lab_id }}
-                                />
-                            </TabPanel>
-                            <TabPanel value={value} index={9}>
+        <Grid container spacing={1} style={{ height: '94vh', width: '100%', padding: 2, marginLeft: '0px', marginTop: '0px' }}>
+            <div style={{
+                height: '94vh',
+                width: '100%',
+                overflow: 'auto'
+            }}>
+                <Grid container spacing={1} xs={12} style={{
+                    marginTop: 2,
+                    marginLeft: '0px',
+                    paddingLeft: '5px'
+                }}>
+                    <Grid item 
+                        xs={6}
+                        sm={4}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                    >
+                        <FormControl fullWidth size="small">
+                            <InputLabel>Location</InputLabel>
+                            <Select
+                                value={location_id}
+                                label="Location"
+                                disabled={locationDetails?.location_id}
+                                onChange={(e) => {
+                                    LocationChanged(e.target.value);
+                                }}
+                            >
+                                <MenuItem value="" key={0}>
+                                    <em style={{fontWeight: 'bold'}}>All</em>
+                                </MenuItem>
+                                {locationList.map((data, index) => (
+                                    <MenuItem value={data.id} key={index + 1}>{data.stateName}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item 
+                        xs={6}
+                        sm={4}
+                        md={4}
+                        lg={3}
+                        xl={2}>
+                        <FormControl fullWidth size="small" >
+                            <InputLabel>Branch</InputLabel>
+                            <Select
+                                value={branch_id}
+                                label="Branch"
+                                disabled={locationDetails?.branch_id}
+                                onChange={(e) => {
+                                    BranchChanged(e.target.value);
+                                }}
+                            >
+                                <MenuItem value="" key={0}>
+                                    <em style={{fontWeight: 'bold'}}>All</em>
+                                </MenuItem>
+                                {branchList.map((data, index) => (
+                                    <MenuItem value={data.id} key={index + 1}>{data.branchName}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item
+                        xs={6}
+                        sm={4}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                    >
+                        <FormControl fullWidth size="small" >
+                            <InputLabel>Facility</InputLabel>
+                            <Select
+                                value={facility_id}
+                                label="Facility"
+                                disabled={locationDetails?.facility_id}
+                                onChange={(e) => {
+                                    FacilityChanged(e.target.value);
+                                }}
+                            >
+                                <MenuItem value="" key={0}>
+                                    <em style={{fontWeight: 'bold'}}>All</em>
+                                </MenuItem>
+                                {facilityList.map((data, index) => (
+                                    <MenuItem value={data.id} key={index + 1}>{data.facilityName}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item 
+                        xs={6}
+                        sm={4}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                    >
+                        <FormControl fullWidth size="small" >
+                            <InputLabel>Building</InputLabel>
+                            <Select
+                                value={building_id}
+                                label="Building"
+                                disabled={locationDetails?.building_id}
+                                onChange={(e) => {
+                                    BuildingChanged(e.target.value);
+                                }}
+                            >
+                                <MenuItem value="" key={0}>
+                                    <em style={{fontWeight: 'bold'}}>All</em>
+                                </MenuItem>
+                                {buildingList.map((data, index) => (
+                                    <MenuItem value={data.id} key={index + 1}>{data.buildingName}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item
+                        xs={6}
+                        sm={4}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                    >
+                        <FormControl fullWidth size="small" >
+                            <InputLabel>Floor</InputLabel>
+                            <Select
+                                value={floor_id}
+                                label="Floor"
+                                disabled={locationDetails?.floor_id}
+                                onChange={(e) => {
+                                    FloorChanged(e.target.value);
+                                }}
+                            >
+                                <MenuItem value="" key={0}>
+                                    <em style={{fontWeight: 'bold'}}>All</em>
+                                </MenuItem>
+                                {floorList.map((data, index) => (
+                                    <MenuItem value={data.id} key={index + 1}>{data.floorName}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item
+                        xs={6}
+                        sm={4}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                    >
+                        <FormControl fullWidth size="small" >
+                            <InputLabel>Zone</InputLabel>
+                            <Select
+                                value={lab_id}
+                                label="Zone"
+                                onChange={(e) => {
+                                    LabHandleChange(e.target.value);
+                                }}
+                            >
+                                <MenuItem value="" key={0}>
+                                    <em style={{fontWeight: 'bold'}}>All</em>
+                                </MenuItem>
+                                {labList.map((data, index) => (
+                                    <MenuItem value={data.id} key={index + 1}>{data.labDepName}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                </Grid>
+                <Grid container >
+                    <Grid item style={{
+                        width: '100%',
+                        overflow: 'auto'
+                    }}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider', overflow: 'auto' }} >
+                            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"
+                                // scrollButtons="off"
+                                variant='scrollable'
+                                visibleScrollbar={true}
+                                allowScrollButtonsMobile
+                                style={{overflow: 'auto',
+                                    width:'82vw'
+                                }}
+                            >
+                                <Tab label="Air Quality Index" {...a11yProps(0)} />
+                                <Tab label="Sensor Status" {...a11yProps(1)} />
+                                <Tab label="Alarms" {...a11yProps(2)} />
+                                <Tab label="Limit Edit Logs" {...a11yProps(3)} />
+                                <Tab label="Server Utilization" {...a11yProps(4)} />
+                                <Tab label="Application version" {...a11yProps(5)} />
+                                <Tab label="Firmware Version" {...a11yProps(6)} />
+                                <Tab label="H/W Model No" {...a11yProps(7)} />
+                                <Tab label="BumpTest" {...a11yProps(8)} /> 
+                                <Tab label="Calibration" {...a11yProps(9)} /> 
+                                <Tab label="EVENT LOG" {...a11yProps(10)} />
+                            </Tabs>
+                        </Box>
+                        <TabPanel value={value} index={0}>
+                            <AqiSitesReportForm 
+                                siteId ={{location_id, branch_id, facility_id, building_id, floor_id, lab_id}}
+                                deviceList={deviceList}
+                            />
+                        </TabPanel>
+                        <TabPanel value={value} index={1}>
+                            <SensorStatus 
+                                deviceList={deviceList} 
+                                siteId ={{location_id, branch_id, facility_id, building_id, floor_id, lab_id}}
+                            />
+                        </TabPanel>
+                        <TabPanel value={value} index={2}>
+                            <Alarm 
+                                siteId ={{location_id, branch_id, facility_id, building_id, floor_id, lab_id}}
+                                deviceList={deviceList} 
+                            />
+                        </TabPanel>
+                        <TabPanel value={value} index={3}>
+                            <DeviceLogs 
+                                deviceList={deviceList}
+                                siteId ={{location_id, branch_id, facility_id, building_id, floor_id, lab_id}}
+                            />
+                        </TabPanel>
+                        <TabPanel value={value} index={4}>
+                            <ServerUtilization />
+                        </TabPanel>
+                        <TabPanel value={value} index={5}>
+                            <SoftwareVersion />
+                        </TabPanel>
+                        <TabPanel value={value} index={6}>
+                            <FirmwareVersion 
+                                deviceList={deviceList}
+                                siteId ={{location_id, branch_id, facility_id, building_id, floor_id, lab_id}}
+                            />
+                        </TabPanel>
+                        <TabPanel value={value} index={7}>
+                            <HardwareModelVersion 
+                                deviceList={deviceList}
+                                siteId ={{location_id, branch_id, facility_id, building_id, floor_id, lab_id}} /
+                            >
+                        </TabPanel>
+                        <TabPanel value={value} index={8}>
+                            <BumpTest 
+                                deviceList={deviceList} 
+                                siteId ={{location_id, branch_id, facility_id, building_id, floor_id, lab_id}}
+                            />
+                        </TabPanel>
+                        <TabPanel value={value} index={9}>
                             <CalibrationReport 
                                 deviceList={deviceList} 
                                 siteId ={{location_id, branch_id, facility_id, building_id, floor_id, lab_id}}
@@ -470,10 +505,9 @@ export default function ManagementReportTab() {
                                 siteId ={{location_id, branch_id, facility_id, building_id, floor_id, lab_id}}
                             />
                         </TabPanel>
-                        {/* </Grid> */}
-                    </CardContent>
-                </Card>
-            </div >
-        </>
+                    </Grid>
+                </Grid>
+            </div>
+        </Grid>
     );
 }

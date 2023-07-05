@@ -205,76 +205,61 @@ function SoftwareVersion() {
     <Grid item>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={1}>
-          <Grid container spacing={1} >
-              <Grid item
-                xs={12}
-                sm={3}
-                md={3}
-                lg={3}
-                xl={3} >
-                <FormControl fullWidth >
-                  <Button
-                    sx={{
-                      height: '40px',
-                      padding: "10px 19px",
-                      color: 'white',
-                      marginTop: '20px',
-                      marginBottom: '15px',
-                      fontSize: '13px',
-                      borderRadius: '10px',
-                      fontWeight: '600',
-                      fontFamily: 'customfont',
-                      letterSpacing: '1px',
-                    }}
-                    style={{
-                      background: 'rgb(19, 60, 129)',}}
-                    onClick={() => {
-                      DownloadCsv();
-                    }}
-                    endIcon={enableDownload === true ? <CircularProgress className={'h-6 w-6'} /> : <DownloadIcon />}
-                    disabled={enableDownload}
-                  >
-                    Download
-                  </Button>
-                </FormControl>
-              </Grid>
-              <Grid item                 
-              xs={12}
-                sm={3}
-                md={3}
-                lg={3}
-                xl={3}>
-                <FormControl fullWidth>
-                  <Button
-                    sx={{
-                      height: '40px',
-                      padding: "10px 39px",
-                      color: 'white',
-                      marginTop: '20px',
-                      marginBottom: '15px',
-                      fontSize: '13px',
-                      borderRadius: '10px',
-                      fontWeight: '600',
-                      fontFamily: 'customfont',
-                      letterSpacing: '1px'
-                    }}
-                    style={{
-                      background: 'rgb(19, 60, 129)',}}
-                    onClick={() => {
-                      SendEmail();
-                    }}
-                    endIcon={enableSend === true ? <CircularProgress className={'h-6 w-6'} /> : <SendIcon />}
-                    disabled={enableSend}
-                  >
-                    Send
-                  </Button>
-                </FormControl>
-              </Grid>
-
+          <Grid
+            container
+            spacing={1}
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+            }}
+          >
+            <Grid
+              item
+              xs={6}
+              sm={3}
+              md={2}
+              lg={1.5}
+              xl={1}
+            >
+              <FormControl fullWidth>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    DownloadCsv();
+                  }}
+                  endIcon={enableDownload === true ? <CircularProgress style={{ height: '25px', width: '25px' }} /> : <DownloadIcon />}
+                  disabled={enableDownload}
+                >
+                  Download
+                </Button>
+              </FormControl>
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              sm={3}
+              md={2}
+              lg={1.5}
+              xl={1}
+            >
+              <FormControl fullWidth>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    SendEmail();
+                  }}
+                  endIcon={enableSend === true ? <CircularProgress style={{ height: '25px', width: '25px' }} /> : <SendIcon />}
+                  disabled={enableSend}
+                >
+                  Send
+                </Button>
+              </FormControl>
+            </Grid>
           </Grid>
-          <div className={'w-full h-[40vh] mt-1 px-0 sm:px-10'}>
+          <div style={{ height: '620px', width: '100%', marginTop: 15 }}>
             <DataGrid
-              sx={{ border: 'none', fontFamily: 'customfont' }}
               rows={AppVersionReportList}
               rowCount={rowCountState}
               loading={isLoading}

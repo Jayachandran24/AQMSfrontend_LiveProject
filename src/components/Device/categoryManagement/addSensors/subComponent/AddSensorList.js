@@ -8,7 +8,6 @@ import AddSensorModal from './AddSensorModal';
 import NotificationBar from '../../../../notification/ServiceNotificationBar';
 import { useUserAccess } from '../../../../../context/UserAccessProvider';
 import DeleteConfirmationDailog from '../../../../../utils/confirmDeletion';
-import { Card, CardContent, CardHeader, Divider } from '@mui/material';
 
 export function AddSensorList() {
   const columns = [
@@ -132,53 +131,43 @@ export function AddSensorList() {
     });
   };
   return (
-    <>
-    <Card style={{ boxShadow: 'none' }}>
-      <CardHeader
-      style={{padding:'0 20px'}}
-        title={
-          <AddSensorCategoryToolbar
-            setIsAddButton={setIsAddButton}
-            setEditCategory={setEditCategory}
-            setOpen={setOpen}
-            userAccess={moduleAccess}
-          />
-        }
+    <div style={{ height: 400, width: '100%', padding: 0 }}>
+      <AddSensorCategoryToolbar
+        setIsAddButton={setIsAddButton}
+        setEditCategory={setEditCategory}
+        setOpen={setOpen}
+        userAccess={moduleAccess}
       />
-      <CardContent className={'w-full p-0 h-[450px]'}>
-        <DataGrid
-          sx={{ border: 'none', fontFamily: 'customfont', color: 'black' }}
-          rows={CategoryList}
-          columns={columns}
-          pageSize={5}
-          loading={isLoading}
-          rowsPerPageOptions={[5]}
-          disableSelectionOnClick
-        />
-        <AddSensorModal
-          isAddButton={isAddButton}
-          categoryData={editCategory}
-          open={open}
-          setOpen={setOpen}
-          CategoryList={CategoryList}
-          setRefreshData={setRefreshData}
-        />
-        <NotificationBar
-          handleClose={handleClose}
-          notificationContent={openNotification.message}
-          openNotification={openNotification.status}
-          type={openNotification.type}
-        />
-        <DeleteConfirmationDailog
-          open={deleteDailogOpen}
-          setOpen={setDeleteDailogOpen}
-          deleteId={deleteId}
-          deleteService={SensorDeleteService}
-          handleSuccess={deletehandleSuccess}
-          handleException={deletehandleException}
-        />
-      </CardContent>
-    </Card>
-  </>
+      <DataGrid
+        rows={CategoryList}
+        columns={columns}
+        pageSize={5}
+        loading={isLoading}
+        rowsPerPageOptions={[5]}
+        disableSelectionOnClick
+      />
+      <AddSensorModal
+        isAddButton={isAddButton}
+        categoryData={editCategory}
+        open={open}
+        setOpen={setOpen}
+        CategoryList={CategoryList}
+        setRefreshData={setRefreshData}
+      />
+      <NotificationBar
+        handleClose={handleClose}
+        notificationContent={openNotification.message}
+        openNotification={openNotification.status}
+        type={openNotification.type}
+      />
+      <DeleteConfirmationDailog
+        open={deleteDailogOpen}
+        setOpen={setDeleteDailogOpen}
+        deleteId={deleteId}
+        deleteService={SensorDeleteService}
+        handleSuccess={deletehandleSuccess}
+        handleException={deletehandleException}
+      />
+    </div>
   );
 }

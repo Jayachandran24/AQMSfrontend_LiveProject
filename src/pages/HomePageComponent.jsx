@@ -338,7 +338,7 @@ function HomePageComponent() {
   }
 
   return (
-    <div className="home bg-[#f3f3f3]">
+    <div className="home">
       <Sidebar handleDrawerToggle={handleDrawerToggle} mobileMenu={mobileMenu} />
       <div className="homeContainer">
         <LatestAlertProvider >
@@ -360,7 +360,10 @@ function HomePageComponent() {
           />
          
          
-          <div className={'h-[91vh] mobile-h-100 w-full overflow-auto lg:overflow-hidden'}>
+          <div style={{
+            height: '86vh',
+            width: '100%',
+          }}>
             <UserAccessProvider>
               <Outlet />
               

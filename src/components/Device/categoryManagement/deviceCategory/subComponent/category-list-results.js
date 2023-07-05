@@ -8,7 +8,6 @@ import { CategoryFetchService, CategoryDeleteService } from '../../../../../serv
 import NotificationBar from '../../../../notification/ServiceNotificationBar';
 import { useUserAccess } from '../../../../../context/UserAccessProvider';
 import DeleteConfirmationDailog from '../../../../../utils/confirmDeletion';
-import { Card, CardContent, CardHeader, Divider } from '@mui/material';
 
 export function CategoryListResults() {
   const columns = [
@@ -17,7 +16,7 @@ export function CategoryListResults() {
       headerName: 'Category Name',
       minWidth: 200,
       align: 'center',
-      flex: 1,
+      flex : 1,
       headerAlign: 'center'
     },
     {
@@ -25,7 +24,7 @@ export function CategoryListResults() {
       headerName: 'Category Description',
       minWidth: 300,
       align: 'center',
-      flex: 1,
+      flex : 1,
       headerAlign: 'center'
     },
     {
@@ -34,7 +33,7 @@ export function CategoryListResults() {
       headerName: 'Actions',
       minWidth: 100,
       align: 'center',
-      flex: 1,
+      flex : 1,
       cellClassName: 'actions',
       getActions: (params) => [
         <EditData selectedRow={params.row} />, <DeleteData selectedRow={params.row} />,
@@ -128,56 +127,45 @@ export function CategoryListResults() {
     });
   };
   return (
-    <>
-    <Card style={{ boxShadow: 'none' }}>
-      <CardHeader
-        className='mt-0'
-        style={{padding:'0 15px'}}
-        title={
-          <CategoryListToolbar
-            setIsAddButton={setIsAddButton}
-            setEditCategory={setEditCategory}
-            setOpen={setOpen}
-            userAccess={moduleAccess}
-          />
-        }
+    <div style={{ height: 400, width: '100%', padding: 0 }}>
+      <CategoryListToolbar
+        setIsAddButton={setIsAddButton}
+        setEditCategory={setEditCategory}
+        setOpen={setOpen}
+        userAccess={moduleAccess}
       />
-      <CardContent className={'w-full p-0 h-[450px]'}>
-        <DataGrid
-          sx={{ border: 'none', fontFamily: 'customfont', color: 'black', letterSpacing: '1px' }}
-          rows={CategoryList}
-          columns={columns}
-          pageSize={5}
-          loading={isLoading}
-          rowsPerPageOptions={[5]}
-          disableSelectionOnClick
-        />
-        <CategoryModel
-          isAddButton={isAddButton}
-          categoryData={editCategory}
-          open={open}
-          setOpen={setOpen}
-          setRefreshData={setRefreshData}
-          handleClose={handleClose}
-          openNotification={openNotification}
-          setNotification={setNotification}
-        />
-        <NotificationBar
-          handleClose={handleClose}
-          notificationContent={openNotification.message}
-          openNotification={openNotification.status}
-          type={openNotification.type}
-        />
-        <DeleteConfirmationDailog
-          open={deleteDailogOpen}
-          setOpen={setDeleteDailogOpen}
-          deleteId={deleteId}
-          deleteService={CategoryDeleteService}
-          handleSuccess={deletehandleSuccess}
-          handleException={deletehandleException}
-        />
-      </CardContent>
-    </Card>
-  </>
+      <DataGrid
+        rows={CategoryList}
+        columns={columns}
+        pageSize={5}
+        loading={isLoading}
+        rowsPerPageOptions={[5]}
+        disableSelectionOnClick
+      />
+      <CategoryModel
+        isAddButton={isAddButton}
+        categoryData={editCategory}
+        open={open}
+        setOpen={setOpen}
+        setRefreshData={setRefreshData}
+        handleClose={handleClose}
+        openNotification={openNotification}
+        setNotification={setNotification}
+      />
+      <NotificationBar
+        handleClose={handleClose}
+        notificationContent={openNotification.message}
+        openNotification={openNotification.status}
+        type={openNotification.type}
+      />
+      <DeleteConfirmationDailog
+        open={deleteDailogOpen}
+        setOpen={setDeleteDailogOpen}
+        deleteId={deleteId}
+        deleteService={CategoryDeleteService}
+        handleSuccess={deletehandleSuccess}
+        handleException={deletehandleException}
+      />
+    </div>
   );
 }

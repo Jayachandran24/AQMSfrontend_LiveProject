@@ -106,7 +106,7 @@ function StelTWA({
         sx={{
           mt: 0,
           padding: 1,
-          border: '1px solid #133C81',
+          border: '1px solid black',
           display: isStel ? 'block' : 'none',
         }}
         container
@@ -124,7 +124,7 @@ function StelTWA({
           md={12}
           lg={12}
           xl={12}
-          spacing={2}
+          spacing={1}
         >
           <Grid
             sx={{ padding: 0, textAlign: 'center', alignSelf: 'center' }}
@@ -308,7 +308,7 @@ function StelTWA({
           md={12}
           lg={12}
           xl={12}
-          spacing={2}
+          spacing={1}
         >
           <Grid
             sx={{ padding: 0, textAlign: 'center', alignSelf: 'center' }}
@@ -486,7 +486,7 @@ function StelTWA({
           </Grid>
         </Grid>
       </Grid>
-      <Grid container spacing={2}>
+      <Grid container spacing={1}>
         <Grid
           sx={{ mt: 0, padding: 0 }}
           item
@@ -523,7 +523,7 @@ function StelTWA({
           md={12}
           lg={12}
           xl={12}
-          spacing={2}
+          spacing={1}
         >
           <Grid
             sx={{ padding: 0, textAlign: 'center', alignSelf: 'center' }}
@@ -605,7 +605,7 @@ function StelTWA({
           md={12}
           lg={12}
           xl={12}
-          spacing={2}
+          spacing={1}
         >
           <Grid
             sx={{ padding: 0, textAlign: 'center', alignSelf: 'center' }}
@@ -687,7 +687,7 @@ function StelTWA({
           md={12}
           lg={12}
           xl={12}
-          spacing={2}
+          spacing={1}
         >
           <Grid
             sx={{ padding: 0, textAlign: 'center', alignSelf: 'center' }}

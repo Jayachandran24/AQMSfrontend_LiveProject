@@ -6,34 +6,32 @@ import {
 import Stack from '@mui/material/Stack';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 export function FloorListToolbar(props) {
   return (
     <Box
-      sx={{
-        alignItems: 'center',
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-      }}
+  
       style={{
         height: '6vh',
         minHeight: '60px',
+        alignItems: 'center',
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent:'space-between',
       }}
     >
       <Typography
-        sx={{
-          m: 1,
-          fontSize: '16px',
-          fontFamily: 'customfont',
-          fontWeight: '600',
-          letterSpacing: '1px',
-          color: '#8f8f8f'
-        }}
+        sx={{ m: 1 }}
         variant="h5"
       >
         Floor
       </Typography>
+    
+      <div style={{display:'flex'}}>  
+
+     
+
       {props.userAccess.add && (
         <Box
           sx={{ m: 1 }}
@@ -44,30 +42,16 @@ export function FloorListToolbar(props) {
           }}
         >
           <Stack direction="row" spacing={2}>
-            <Fab
-              style={{
-                background: 'rgb(19 60 129)'
-              }}
-              sx={{
-                width:'100%',
-                height: '0',
-                color: 'white',
-                padding: "10px 15px",
-                fontSize: '13px',
-                borderRadius: '10px',
-                fontWeight: '600',
-                fontFamily: 'customfont',
-                letterSpacing: '1px',
-                boxShadow: 'none',
-                float: 'right'
-              }}
-            >
+            <Fab variant="extended" size="medium" color="primary" aria-label="add">
               <AddIcon sx={{ mr: 1 }} />
               Add Floor
             </Fab>
           </Stack>
         </Box>
       )}
+       
+      </div>
+     
     </Box>
   );
 }

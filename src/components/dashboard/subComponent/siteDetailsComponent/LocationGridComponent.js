@@ -1,4 +1,4 @@
-import { Box, Breadcrumbs, Card, CardContent, CardHeader, Chip, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Breadcrumbs, Chip } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { darken, lighten } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
@@ -6,8 +6,6 @@ import { FetchLocationService } from '../../../../services/LoginPageService';
 import ApplicationStore from '../../../../utils/localStorageUtil';
 import { setAlertPriorityAndType, setAQIColor, setAQILabel } from '../../../../utils/helperFunctions';
 import { LatestAlertAccess } from '../../../../context/UserAccessProvider';
-import { MdLocationPin } from 'react-icons/md';
-import './LocationGridComponent.css';
 
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -24,29 +22,12 @@ function LocationGridComponent(props) {
   const [isLoading, setGridLoading] = useState(true);
   const {alertStatus, setAlertStatus} = LatestAlertAccess();
   const columns = [
-
     {
       field: 'stateName',
       headerName: 'Location Name',
-
       minWidth: 200,
       flex: 1,
       type: 'actions',
-      renderCell: ((params) => {
-        return (
-          <>
-            <div className='flex w-full justify-between'>
-              <div>
-              <MdLocationPin className='text-[18px] text-left w-full' />
-              </div>
-              <div className='w-full'>
-              <LinkTo selectedRow={params.row} />
-              </div>
-            </div>
-
-          </>
-        )
-      }),
       getActions: (params) => [
         <LinkTo selectedRow={params.row} />,
       ],
@@ -54,8 +35,7 @@ function LocationGridComponent(props) {
     {
       field: 'id',
       headerName: 'Status',
-      minWidth: 130,
-
+      minWidth: 100,
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -74,63 +54,51 @@ function LocationGridComponent(props) {
         });
 
         return (
-          <>
-            <Chip
-              className='w-[130px] font-[customfont] font-normal text-sm'
-              variant="outlined"
-              label={element.alertLabel}
-              sx={{
-                // color: element.alertColor,
-                color: 'white',
-                fontWeight:'600',
-                borderColor: element.alertColor,
-                background: element.alertColor,
-              }}
-            />
-          </>
+          <Chip
+            variant="outlined"
+            label={element.alertLabel}
+            style={{
+              color: element.alertColor,
+              borderColor: element.alertColor,
+            }}
+          />
         );
       }),
     },
     {
       field: 'aqiIndex',
       headerName: 'AQI Value',
-      minWidth: 120,
+      minWidth: 100,
       flex: 1,
       align: 'center',
       headerAlign: 'center',
       renderCell: ((params) => {
-        return (
-          <Chip
-            className='w-[120px] font-[customfont] font-normal text-sm'
-            variant="outlined"
-            label={setAQILabel(params.row.aqiIndex.replaceAll(",", ""))}
-            sx={{
-              color: setAQIColor(params.row.aqiIndex),
-              borderColor: setAQIColor(params.row.aqiIndex),
-
+        return(
+          <span
+            style={{
+              color: setAQIColor(params.row.aqiIndex)
             }}
-          />
+          >
+            {params.row.aqiIndex}
+          </span>
         )
       }),
     },
     {
       // field: 'aqiIndex',
-      headerName: 'AQI Category',
-      minWidth: 120,
+      headerName: 'AQI Index',
+      minWidth: 100,
       flex: 1,
       align: 'center',
       headerAlign: 'center',
       renderCell: ((params) => {
-        return (
+        return(
           <Chip
-            className='w-[120px] font-[customfont] font-normal text-sm'
             variant="outlined"
             label={setAQILabel(params.row.aqiIndex.replaceAll(",", ""))}
-            sx={{
-              color: 'white',
+            style={{
+              color: setAQIColor(params.row.aqiIndex),
               borderColor: setAQIColor(params.row.aqiIndex),
-              background: setAQIColor(params.row.aqiIndex),
-
             }}
           />
         )
@@ -145,15 +113,15 @@ function LocationGridComponent(props) {
 
     setProgressState((oldValue) => {
       let newValue = 0;
-      if (locationDetails.lab_id) {
+      if(locationDetails.lab_id){
         newValue = 6;
         locationAlerts({ lab_id: locationDetails.lab_id });
       }
-      else if (locationDetails.floor_id) {
+      else if(locationDetails.floor_id){
         newValue = 5;
         locationAlerts({ floor_id: locationDetails.floor_id });
       }
-      else if (locationDetails.building_id) {
+      else if(locationDetails.building_id){
         newValue = 4;
         locationAlerts({ building_id: locationDetails.building_id });
       }
@@ -180,7 +148,7 @@ function LocationGridComponent(props) {
     const { locationDetails } = ApplicationStore().getStorage('userDetails');
     return (
       <h3
-        className='text-sm font-[customfont] font-medium cursor-pointer'
+        style={{ cursor: 'pointer' }}
         onClick={() => {
           locationAlerts({ location_id: selectedRow.id });
           setLocationDetails((oldValue) => {
@@ -227,42 +195,95 @@ function LocationGridComponent(props) {
   const getHoverBackgroundColor = (color, mode) => (mode === 'dark' ? darken(color, 0.5) : lighten(color, 0.1));
 
   return (
-    <>
-      <Card className={'h-[40vh] xl:h-[38vh]'}
+    <div style={{ height: '100%', width: '100%', paddingRight: 2 }}>
+      <Breadcrumbs aria-label="breadcrumb" separator="›">
+        <h3>
+          Location
+        </h3>
+      </Breadcrumbs>
+      {/* <Box
         sx={{
-          boxShadow: 'none',
-          borderRadius: '12px',
-          boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'
-        }}
-      >
-        <Paper elevation={3} className={'h-full'} style={{ boxShadow: 'none' }}>
-          <CardHeader
-            title={
-              <Breadcrumbs aria-label="breadcrumb" separator="›" fontSize='20px' fontWeight='600' >
-                <h3 className='font-[customfont] font-semibold tracking-[1px] p-1 text-black text-[16px]'>
-                  Location
-                </h3>
-              </Breadcrumbs>
-            }
-            sx={{ paddingBottom: 0 }}
-          />
-          <CardContent className={'h-[93%]'} style={{color:'black'}}>
-            <DataGrid
-              rows={dataList}
-              columns={columns}
-              loading={isLoading}
-              pageSize={3}
-              rowsPerPageOptions={[3]}
-              // disableSelectionOnClick
-              style={{
-                // maxHeight: `${93}%`,
-                border: 'none',
-              }}
-            />
-          </CardContent>
-        </Paper>
-      </Card >
-    </>
+          height: 400,
+          '& .super-app-theme--red': {
+            color: 'maroon',
+            bgcolor: (theme) => getBackgroundColor('#FAE8FA', theme.palette.mode),
+            '&:hover': {
+              bgcolor: (theme) => getHoverBackgroundColor('#FAE8FA', theme.palette.mode),
+            },
+            ':hover': { backgroundColor: '#FAE8FA' },
+          },
+          '& .super-app-theme--orange': {
+            color: 'purple',
+            bgcolor: (theme) => getBackgroundColor('#9fa8da', theme.palette.mode),
+            '&:hover': {
+              bgcolor: (theme) => getHoverBackgroundColor(
+                '#9fa8da',
+                theme.palette.mode,
+              ),
+            },
+          },
+          '& .super-app-theme--disabled': {
+            bgcolor: (theme) => getBackgroundColor('#ffcdd2', theme.palette.mode),
+            '&:hover': {
+              bgcolor: (theme) => getHoverBackgroundColor(
+                '#ffcdd2',
+                theme.palette.mode,
+              ),
+            },
+          },
+          '& .super-app-theme--enabled': {
+            bgcolor: (theme) => getBackgroundColor('#A5D6A7', theme.palette.mode),
+            '&:hover': {
+              bgcolor: (theme) => getHoverBackgroundColor(
+                '#A5D6A7',
+                theme.palette.mode,
+              ),
+            },
+          },
+          '& .super-app-theme--outOfRange': {
+            color: 'darkgoldenrod',
+            bgcolor: (theme) => getBackgroundColor('#FFFCE3', theme.palette.mode),
+            '&:hover': {
+              bgcolor: (theme) => getHoverBackgroundColor('#FFFCE3', theme.palette.mode),
+            },
+          },
+          '& .super-app-theme--green': {
+            color: 'green',
+            bgcolor: (theme) => getBackgroundColor('#F2FFF2', theme.palette.mode),
+            '&:hover': {
+              bgcolor: (theme) => getHoverBackgroundColor('#F2FFF2', theme.palette.mode),
+            },
+          },
+          }}
+      > */}
+        <DataGrid
+          rows={dataList}
+          columns={columns}
+          loading={isLoading}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          disableSelectionOnClick
+          style={{ maxHeight: `${93}%` }}
+          // getCellClassName={(params) => {
+          //   let element = {
+          //     alertLabel: 'Good',
+          //     alertColor: 'green',
+          //     alertPriority: 4,
+          //   };
+          //   const alertObject = notificationStatus?.filter((alert) => {
+          //     return params.row.id === parseInt(alert.id);
+          //   });
+    
+          //   alertObject?.map((data) => {
+          //     element = setAlertPriorityAndType(element, data);
+          //   });
+          //   if (params.field === 'id') {
+          //     return `super-app-theme--${element.alertColor}`;
+          //   }
+          // }}
+        />
+      {/* </Box> */}
+    </div>
   );
 }
 

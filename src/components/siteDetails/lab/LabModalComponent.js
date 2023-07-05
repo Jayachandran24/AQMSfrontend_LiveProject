@@ -41,8 +41,7 @@ function LabModal({
     setLabDepName(editData.labDepName || '');
     setLabId(editData.id || '');
     setLabCords(editData.labCords || '');
-    //setPreviewLab(editData.labDepMap ? `https://localhost/backend/blog/public/${editData.labDepMap}` : previewImage);
-    setPreviewLab(editData.labDepMap ? `${process.env.REACT_APP_API_ENDPOINT}blog/public/${editData.labDepMap}` : previewImage);
+    setPreviewLab(editData.labDepMap ? `https://wisething.in/aideaLabs/blog/public/${editData.labDepMap}` : previewImage);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -132,23 +131,20 @@ function LabModal({
 
   return (
     <Dialog
-    sx={{ '& .MuiDialog-paper': { minWidth: '80%' } }}
-    maxWidth="sm"
-    open={open}
-  >
-    <DialogTitle
-      sx={{ fontFamily: 'customfont', fontSize: '20px', textAlign: 'center', fontWeight: '600', margin: '20px 0', letterSpacing: '1px' }}>
-
-      {isAddButton ? 'Add Zone' : 'Edit Zone'}
-    </DialogTitle>
-    <DialogContent>
-      <form className="mt-2 space-y-6" onSubmit={handleSubmit}>
-        <div className="rounded-md  -space-y-px ">
-          <div className="container mx-auto outline-black">
-            <div className="flex flex-row-reverse items-center w-full min-[320px]:flex-col min-[768px]:flex-row-reverse">
-              <div className="w-full sm:float-left lg:w-2/5  pr-3 pl-3">
-                <div className=''>
-                  <div className="rounded-md -space-y-px mb-2 w-full">
+      sx={{ '& .MuiDialog-paper': { minWidth: '80%' } }}
+      maxWidth="sm"
+      open={open}
+    >
+      <DialogTitle>
+        {isAddButton ? 'Add Zone' : 'Edit Zone'}
+      </DialogTitle>
+      <DialogContent>
+        <form className="mt-2 space-y-6" onSubmit={handleSubmit}>
+          <div className="rounded-md  -space-y-px ">
+            <div className="container mx-auto outline-black">
+              <div className="inline">
+                <div className="w-full sm:float-left lg:w-2/5  pr-3 pl-3">
+                  <div className="rounded-md -space-y-px mb-2">
                     <TextField
                       fullWidth
                       sx={{ mb: 1 }}
@@ -164,10 +160,6 @@ function LabModal({
                       autoComplete="off"
                       error={errorObject?.labDepName?.errorStatus}
                       helperText={errorObject?.labDepName?.helperText}
-                      InputLabelProps={{
-                        shrink: true,
-                        style: { fontFamily: 'customfont' }
-                      }}
                     />
                   </div>
                   <div className="rounded-md -space-y-px mb-2">
@@ -196,7 +188,7 @@ function LabModal({
                           reader.readAsDataURL(e.target.files[0]);
                         }
                       }}
-                      InputLabelProps={{ shrink: true, style: { fontFamily: 'customfont' } }}
+                      InputLabelProps={{ shrink: true }}
                       type="file"
                       inputProps={{
                         accept: 'image/png, image/jpeg',
@@ -205,85 +197,55 @@ function LabModal({
                       helperText={errorObject?.buildingImg?.helperText}
                     />
                   </div>
+                  <div className="rounded-md -space-y-px mb-2" style={{ border: '2px black solid' }}>
+                    <img src={previewLab} style={{ width: '-webkit-fill-available' }} />
+                  </div>
                 </div>
-                <div className="rounded-md -space-y-px mb-2" style={{ border: '1px solid #b7b7b7' }}>
-                  <img src={previewLab} style={{ width: '-webkit-fill-available' }} />
+                <div className="w-full sm:float-right lg:float-left lg:w-3/5 pr-1">
+                  <ImageMarkerComponent
+                    src={img}
+                    height="500px"
+                    width="500px"
+                    setFloorCoordinations={setFloorCoordinations}
+                    floorCords={labCoordinates}
+                    setLabCords={setLabCords}
+                  />
                 </div>
               </div>
-              <div className="w-full sm:float-right lg:float-left lg:w-3/5 pr-1">
-                <ImageMarkerComponent
-                  src={img}
-                  height="500px"
-                  width="500px"
-                  setFloorCoordinations={setFloorCoordinations}
-                  floorCords={labCoordinates}
-                  setLabCords={setLabCords}
-                />
+            </div>
+            <div className="float-right">
+              <div className="rounded-md -space-y-px">
+                <Button
+                  sx={{ m: 1 }}
+                  type="submit"
+                  size="large"
+                  disabled={errorObject?.labDepName?.errorStatus}
+                >
+                  {isAddButton ? 'Add' : 'Update'}
+                </Button>
+                <Button
+                  sx={{ m: 1 }}
+                  size="large"
+                  onClick={(e) => {
+                    setOpen(false);
+                    setErrorObject({});
+                    loaddata();
+                  }}
+                >
+                  Cancel
+                </Button>
               </div>
             </div>
           </div>
-          <div className="float-right py-5" sx={{ marginTop: '-20px' }}>
-            <div className="rounded-md -space-y-px">
-              <Button
-                style={{
-                  background: 'rgb(19 60 129)',}}
-                sx={{
-                  m: 1,
-                  color: 'white',
-                  padding: "8px 30px",
-                  marginRight: '30px',
-                  fontSize: '13px',
-                  borderRadius: '10px',
-                  fontWeight: '600',
-                  fontFamily: 'customfont',
-                  letterSpacing: '1px',
-                  boxShadow: 'none',
-                  "&.Mui-disabled": {
-                    background: "#eaeaea",
-                    color: "#c0c0c0"
-                  }
-                }}
-                type="submit"
-                size="large"
-                disabled={errorObject?.labDepName?.errorStatus}
-              >
-                {isAddButton ? 'Add' : 'Update'}
-              </Button>
-              <Button
-               style={{
-                background: 'rgb(19 60 129)',}}
-                sx={{
-                  m: 1,
-                  color: 'white',
-                  padding: "8px 19px",
-                  fontSize: '13px',
-                  borderRadius: '10px',
-                  fontWeight: '600',
-                  fontFamily: 'customfont',
-                  letterSpacing: '1px',
-                  boxShadow: 'none'
-                }}
-                size="large"
-                onClick={(e) => {
-                  setOpen(false);
-                  setErrorObject({});
-                  loaddata();
-                }}
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </DialogContent>
-    <NotificationBar
-      handleClose={handleClose}
-      notificationContent={openNotification.message}
-      openNotification={openNotification.status}
-      type={openNotification.type}
-    />
-  </Dialog>
+        </form>
+      </DialogContent>
+      <NotificationBar
+        handleClose={handleClose}
+        notificationContent={openNotification.message}
+        openNotification={openNotification.status}
+        type={openNotification.type}
+      />
+    </Dialog>
   );
 }
 

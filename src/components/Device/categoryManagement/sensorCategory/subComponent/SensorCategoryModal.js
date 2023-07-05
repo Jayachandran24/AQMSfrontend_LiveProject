@@ -171,153 +171,96 @@ function SensorCategoryModal({
       open={open}
     >
       <form onSubmit={handleSubmit}>
-        <DialogTitle
-          sx={{ textAlign: 'center', fontFamily: 'customfont', fontWeight: '600', marginTop: '8px', marginBottom: '15px', letterSpacing: '1px' }}>
+        <DialogTitle>
           {isAddButton ? 'Add Category' : 'Edit Category'}
         </DialogTitle>
-        <DialogContent
-          sx={{ padding: '0px 24px' }}
-          className='flex w-full gap-7 mt-5 min-[320px]:flex-col min-[768px]:flex-row'>
-          <div className='w-full'>
-            <TextField
-              margin="dense"
-              id="outlined-required"
-              label="Category Name"
-              defaultValue=""
-              fullWidth
-              value={sensorName}
-              required
-              onBlur={() => validateForNullValue(sensorName, 'categoryName')}
-              onChange={(e) => { setCategoryName(e.target.value); }}
-              autoComplete="off"
-              error={errorObject?.categoryName?.errorStatus}
-              helperText={errorObject?.categoryName?.helperText}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </div>
-          <div className='w-full'>
+        <DialogContent>
+          <TextField
+            margin="dense"
+            id="outlined-required"
+            label="Category Name"
+            defaultValue=""
+            fullWidth
+            value={sensorName}
+            required
+            onBlur={() => validateForNullValue(sensorName, 'categoryName')}
+            onChange={(e) => { setCategoryName(e.target.value); }}
+            autoComplete="off"
+            error={errorObject?.categoryName?.errorStatus}
+            helperText={errorObject?.categoryName?.helperText}
+          />
+          <TextField
+            id="dense"
+            label="Category Descriptions"
+            multiline
+            margin="dense"
+            maxRows={4}
+            fullWidth
+            value={sensorDescriptions}
+            required
+            onBlur={() => validateForNullValue(sensorDescriptions, 'categoryDescription')}
+            onChange={(e) => { setCategoryDescription(e.target.value); }}
+            autoComplete="off"
+            error={errorObject?.categoryDescription?.errorStatus}
+            helperText={errorObject?.categoryDescription?.helperText}
+          />
+        </DialogContent>
+        <DialogContent>
+          <div className="flex items-center justify-between gap-2">
             <TextField
               id="dense"
-              label="Category Descriptions"
+              label="Units label"
               multiline
               margin="dense"
               maxRows={4}
               fullWidth
-              value={sensorDescriptions}
-              required
-              onBlur={() => validateForNullValue(sensorDescriptions, 'categoryDescription')}
-              onChange={(e) => { setCategoryDescription(e.target.value); }}
+              value={unitLabel}
+              /* eslint-disable-next-line */
+              onBlur={() => validateForNullValue(unitLabel, 'unitLabel')}
+              onChange={(e) => { setUnitLabel(e.target.value); }}
               autoComplete="off"
-              error={errorObject?.categoryDescription?.errorStatus}
-              helperText={errorObject?.categoryDescription?.helperText}
-              InputLabelProps={{
-                shrink: true,
-              }}
+              error={errorObject?.unitLabel?.errorStatus}
+              helperText={errorObject?.unitLabel?.helperText}
             />
+            <TextField
+              id="dense"
+              multiline
+              label="Units Measure"
+              margin="dense"
+              maxRows={4}
+              fullWidth
+              value={unitMeasure}
+              onBlur={() => validateForNullValue(unitMeasure, 'unitMeasure')}
+              onChange={(e) => { setUnitMeasure(e.target.value); }}
+              autoComplete="off"
+              error={errorObject?.unitMeasure?.errorStatus}
+              helperText={errorObject?.unitMeasure?.helperText}
+            />
+            <Button
+              size="large"
+              autoFocus
+              disabled={errorObject?.unitLabel?.errorStatus || errorObject?.unitMeasure?.errorStatus}
+              onClick={addMeasureUnits}
+            >
+              {isAddUnit ? 'Add Unit' : 'Update Unit'}
+            </Button>
+            <Button
+              size="large"
+              autoFocus
+              onClick={clearMeasureUnits}
+            >
+              Cancel
+            </Button>
           </div>
-        </DialogContent>
-        <DialogContent style={{ overflow: 'hidden' }} >
-          <div className="flex items-center justify-between items-center gap-7 w-full min-[320px]:flex-col min-[768px]:flex-row">
-            <div className='w-full'>
-              <TextField
-                sx={{ marginBottom: '13px' }}
-                id="dense"
-                label="Units label"
-                multiline
-                margin="dense"
-                maxRows={4}
-                fullWidth
-                value={unitLabel}
-                /* eslint-disable-next-line */
-                onBlur={() => validateForNullValue(unitLabel, 'unitLabel')}
-                onChange={(e) => { setUnitLabel(e.target.value); }}
-                autoComplete="off"
-                error={errorObject?.unitLabel?.errorStatus}
-                helperText={errorObject?.unitLabel?.helperText}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <TextField
-                id="dense"
-                multiline
-                label="Units Measure"
-                margin="dense"
-                maxRows={4}
-                fullWidth
-                value={unitMeasure}
-                onBlur={() => validateForNullValue(unitMeasure, 'unitMeasure')}
-                onChange={(e) => { setUnitMeasure(e.target.value); }}
-                autoComplete="off"
-                error={errorObject?.unitMeasure?.errorStatus}
-                helperText={errorObject?.unitMeasure?.helperText}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </div>
-            <div className='flex flex-col w-full '>
-              <Button
-                style={{
-                  background: 'rgb(19 60 129)',}}
-                sx={{
-                  width: '120px',
-                  color: 'white',
-                  padding: "8px 19px",
-                  marginRight: 'auto',
-                  marginLeft: 'auto',
-                  marginBottom: '15px',
-                  fontSize: '13px',
-                  borderRadius: '10px',
-                  fontWeight: '600',
-                  fontFamily: 'customfont',
-                  letterSpacing: '1px',
-                }}
-                size="large"
-                autoFocus
-                disabled={errorObject?.unitLabel?.errorStatus || errorObject?.unitMeasure?.errorStatus}
-                onClick={addMeasureUnits}
-              >
-                {isAddUnit ? 'Add Unit' : 'Update Unit'}
-              </Button>
-              <Button
-                style={{
-                  background: 'rgb(19 60 129)',}}
-                sx={{
-                  width: '120px',
-                  color: 'white',
-                  padding: "8px 19px",
-                  marginRight: 'auto',
-                  marginLeft: 'auto',
-                  marginBottom: '1px',
-                  fontSize: '13px',
-                  borderRadius: '10px',
-                  fontWeight: '600',
-                  fontFamily: 'customfont',
-                  letterSpacing: '1px',
-                }}
-                size="large"
-                autoFocus
-                onClick={clearMeasureUnits}
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-          <div className="w-full mt-5 ">
-            <div className="todo-container mr-auto ml-auto w-full">
-              <div className="header" style={{
-                fontSize: '20px',
-                letterSpacing: '1px'
-              }}>Units Label and Measures</div>
-              <div className="tasks w-full">
+          <div className="flex items-center justify-between gap-3 mt-5">
+            <div className="todo-container">
+              <div className="header">Units Label and Measures</div>
+              <div className="tasks">
                 {
                   measureUnits.length > 0
                     ? measureUnits?.map((measureUnit, index) => (
                       /* eslint-disable-next-line */
-                      <MeasureUnit measureUnit={measureUnit} index={index} key={index}
+                      <MeasureUnit  measureUnit={measureUnit} index={index}   key={index}
                         removeMeasureUnits={removeMeasureUnits}
                         updateMeasureUnits={updateMeasureUnits}
                       />
@@ -328,7 +271,7 @@ function SensorCategoryModal({
           </div>
         </DialogContent>
 
-        <DialogActions sx={{ margin: '10px', justifyContent: 'center' }}>
+        <DialogActions sx={{ margin: '10px' }}>
           <Button
             size="large"
             autoFocus
@@ -338,41 +281,10 @@ function SensorCategoryModal({
               loadData();
               // setMeasureUnits([]);
             }}
-            style={{
-              background: 'rgb(19 60 129)',}}
-            sx={{
-              color: 'white',
-              padding: "8px 19px",
-              marginRight: '10px',
-              marginBottom: '35px',
-              fontSize: '13px',
-              borderRadius: '10px',
-              fontWeight: '600',
-              fontFamily: 'customfont',
-              letterSpacing: '1px',
-            }}
           >
             Cancel
           </Button>
           <Button
-            style={{
-              background: 'rgb(19 60 129)',}}
-            sx={{
-              color: 'white',
-              padding: "8px 30px",
-              marginRight: '10px',
-              marginBottom: '35px',
-              fontSize: '13px',
-              borderRadius: '10px',
-              fontWeight: '600',
-              fontFamily: 'customfont',
-              letterSpacing: '1px',
-              "&.Mui-disabled": {
-                background: "#eaeaea",
-                color: "#c0c0c0"
-              }
-            }}
-
             disabled={errorObject?.categoryName?.errorStatus || errorObject?.categoryDescription?.errorStatus}
             size="large"
             type="submit"

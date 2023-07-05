@@ -3,9 +3,6 @@
   background: rgb(185, 192, 197);
   border-radius: 10px;
 }
-body {
-  background: #f3f3f3;
-}
 .App {
   text-align: center;
 }
@@ -123,59 +120,6 @@ span.otpSeparator {
     color:rgb(6, 25, 136);
   }
 }
-.css-1jbbcbn-MuiDataGrid-columnHeaderTitle{
-  font-family: customfont;
-  font-weight: 900 !important;
-  letter-spacing: 1px;
-  color: rgb(66, 66, 66) !important;
-  font-size: 14px; 
-}
 
 
-.is_mobile_menu .sidebarMenu .sidebarTitle{
-  display: none !important;
-}
-.is_mobile_menu .sidebarMenu.mb-5  {
-  margin-bottom: 0 !important;
-}
-.is_mobile_menu .sidebarMenu .sidebarListItem {
-  padding: 20px 0px 0px 5px !important;
-}
-.is_mobile_menu .sidebarMenu .sidebarListItem span {
-  opacity: 0 !important;
-}
 
-
-.MuiDataGrid-actionsCell svg {
-  cursor: pointer !important;
-}
-.css-145v6pe-MuiButtonBase-root-MuiTabScrollButton-root{
-  display: none !important;
-}
-
-
-/* Custom Css 29-06-2023 */
-.notification .MuiPopover-paper {
-  position: absolute !important;
-  left: auto !important;
-  right: 9px !important;
-}
-
-/* css-1471zg4-MuiPaper-root-MuiPopover-paper-MuiMenu-paper */
-@media (max-width : 500px) {
-  .navbar .wrapper .wrapper .heading {
-    display: none;
-  }
-  .css-bhp9pd-MuiPaper-root-MuiCard-root {
-    width: 100% !important;
-  }
-  .css-ypiqx9-MuiDialogContent-root{
-    padding: 0 !important;
-  }
-  .widgets{
-    flex-direction: column !important;
-  }
-  .mobile-h-100 {
-    height: 100% !important;
-  }
-}

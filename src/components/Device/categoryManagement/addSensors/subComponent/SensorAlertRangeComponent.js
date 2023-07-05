@@ -35,8 +35,8 @@ function SensorAlertRange({
 
   return (
     <Grid sx={{ px: 0, p: 0 }}>
-      <Grid container spacing={2} sx={{ mt: 1 }} />
-      <Grid container spacing={2} sx={{ mt: 1 }}>
+      <Grid container spacing={1} sx={{ mt: 1 }} />
+      <Grid container spacing={1} sx={{ mt: 1 }}>
         <Grid
           sx={{ mt: 0, padding: 0 }}
           item
@@ -126,7 +126,7 @@ function SensorAlertRange({
           </div>
         </Grid>
       </Grid>
-      <Grid container spacing={2} sx={{ mt: 1 }}>
+      <Grid container spacing={1} sx={{ mt: 1 }}>
         <Grid
           sx={{ mt: 0, padding: 0 }}
           item
@@ -216,7 +216,7 @@ function SensorAlertRange({
           </div>
         </Grid>
       </Grid>
-      <Grid container spacing={2} sx={{ mt: 1 }}>
+      <Grid container spacing={1} sx={{ mt: 1 }}>
         <Grid
           sx={{ mt: 0, padding: 0 }}
           item

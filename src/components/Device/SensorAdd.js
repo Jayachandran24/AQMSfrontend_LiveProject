@@ -496,78 +496,47 @@ function DeviceAdd({
     SensorPropertiesGetSensorRefValues({id:id},handleGetSensorRefValuesSucess,handleGetSensorRefValuesException);
   }
   const handleGetSensorRefValuesSucess=(dataObject)=>{
-    if(sensorOutput === 'Analog')
-    {
-      setCriticalMinValue(criticalRefMinValue);           
-      setCriticalMaxValue(criticalRefMaxValue);
-  
-      setCriticalAlertType(dataObject?.data[0]?.criticalRefAlertType);     
-      setCriticalLowAlert(dataObject?.data[0]?.criticalRefLowMessage);
-      setCriticalHighAlert(dataObject?.data[0]?.criticalRefHighMessage);
-  
-      setWarningMinValue(warningRefMinValue);
-      setWarningMaxValue(warningRefMaxValue);
-  
-      setWarningAlertType(dataObject?.data[0]?.warningRefAlertType);    
-      setWarningLowAlert(dataObject?.data[0]?.warningRefLowMessage);
-      setWarningHighAlert(dataObject?.data[0]?.warningRefHighMessage);
-  
-      setOutofrangeMinValue(outofrangeRefMinValue);
-      setOutofrangeMaxValue(outofrangeRefMaxValue);
-  
-      setOutofrangeAlertType(dataObject?.data[0]?.outofrangeRefAlertType);
-      setOutofrangeLowAlert(dataObject?.data[0]?.outofrangeRefLowMessage); 
-      setOutofrangeHighAlert(dataObject?.data[0]?.outofrangeRefHighMessage);
-      
-      setAlarm(dataObject?.data[0]?.refAlarm);
-      setPollingIntervalType(dataObject?.data[0]?.refPollingIntervalType);
-    }
-    else if(sensorOutput === 'Modbus')
-    {
-      setPollingIntervalType(dataObject?.data[0]?.refPollingIntervalType || '')
-      setCriticalMinValue(criticalRefMinValue);           
-      setCriticalMaxValue(criticalRefMaxValue);
-  
-      setCriticalAlertType(dataObject?.data[0]?.criticalRefAlertType);     
-      setCriticalLowAlert(dataObject?.data[0]?.criticalRefLowMessage);
-      setCriticalHighAlert(dataObject?.data[0]?.criticalRefHighMessage);
-  
-      setWarningMinValue(warningRefMinValue);
-      setWarningMaxValue(warningRefMaxValue);
-  
-      setWarningAlertType(dataObject?.data[0]?.warningRefAlertType);    
-      setWarningLowAlert(dataObject?.data[0]?.warningRefLowMessage);
-      setWarningHighAlert(dataObject?.data[0]?.warningRefHighMessage);
-  
-      setOutofrangeMinValue(outofrangeRefMinValue);
-      setOutofrangeMaxValue(outofrangeRefMaxValue);
-  
-      setOutofrangeAlertType(dataObject?.data[0]?.outofrangeRefAlertType);
-      setOutofrangeLowAlert(dataObject?.data[0]?.outofrangeRefLowMessage); 
-      setOutofrangeHighAlert(dataObject?.data[0]?.outofrangeRefHighMessage);
-      
-      setAlarm(dataObject?.data[0]?.refAlarm);
+    setCriticalMinValue(criticalRefMinValue);           
+    setCriticalMaxValue(criticalRefMaxValue);
 
-    }
-   
+    setCriticalAlertType(dataObject?.data[0]?.criticalRefAlertType);     
+    setCriticalLowAlert(dataObject?.data[0]?.criticalRefLowMessage);
+    setCriticalHighAlert(dataObject?.data[0]?.criticalRefHighMessage);
+
+    setWarningMinValue(warningRefMinValue);
+    setWarningMaxValue(warningRefMaxValue);
+
+    setWarningAlertType(dataObject?.data[0]?.warningRefAlertType);    
+    setWarningLowAlert(dataObject?.data[0]?.warningRefLowMessage);
+    setWarningHighAlert(dataObject?.data[0]?.warningRefHighMessage);
+
+    setOutofrangeMinValue(outofrangeRefMinValue);
+    setOutofrangeMaxValue(outofrangeRefMaxValue);
+
+    setOutofrangeAlertType(dataObject?.data[0]?.outofrangeRefAlertType);
+    setOutofrangeLowAlert(dataObject?.data[0]?.outofrangeRefLowMessage); 
+    setOutofrangeHighAlert(dataObject?.data[0]?.outofrangeRefHighMessage);
+    
+    setAlarm(dataObject?.data[0]?.refAlarm);
+    setPollingIntervalType(dataObject?.data[0]?.refPollingIntervalType);
 
   }
   const handleGetSensorRefValuesException=(errorObject,errorMessage)=>{
 
   }
   return (
-    <div className="w-full" style={{ marginTop: 0}}>
-      <form className="mt-0 p-0 sm:px-5 w-full " onSubmit={handleSubmit} >
+    <div className="w-full" style={{ marginTop: 0, overflow: 'auto',}}>
+      <form className="mt-0 p-0 w-full" onSubmit={handleSubmit} >
         <DialogContent
           sx={{ px: 0, p: isUpdate ? '10px' : '0px' }}
           style={{
-            // height: '78vh',
+            height: '78vh',
           }}
         >
-          <DialogTitle style={{ float: 'left', padding: '0px', marginBottom: '10px', fontFamily:'customfont', fontWeight:'600', letterSpacing:'1px'}}>
+          <DialogTitle style={{ float: 'left', padding: '0px', marginBottom: '10px' }}>
             {isUpdate ? 'Edit' : 'Add'} Sensor
           </DialogTitle>
-          <Grid container spacing={2} sx={{ mt: 0 }}>
+          <Grid container spacing={1} sx={{ mt: 0 }}>
             <Grid
               sx={{ mt: 0, padding: 0 }}
               item
@@ -576,7 +545,6 @@ function DeviceAdd({
               md={6}
               lg={6}
               xl={6}
-              
             >
               <Box>
                 <FormControl fullWidth margin="normal" sx={{ marginTop: 0 }}>
@@ -1223,7 +1191,6 @@ function DeviceAdd({
                     setOutofrangeHighAlert={setOutofrangeHighAlert}
                     alerts={alerts}
                     setAlert={setAlert}
-                    selectedSensorName={selectedSensorName}
                   />
                 </>
               )
@@ -1240,24 +1207,10 @@ function DeviceAdd({
                 />
               )}
 
-          <div className="float-right mt-7">
+          <div className="float-right">
             {
                userDetails.userRole !== 'systemSpecialist' &&
           <Button
-          style={{
-            background: 'rgb(19 60 129)',}}
-          sx={{
-            height: '0',
-            color: 'white',
-            padding: "10px 19px",
-            fontSize: '13px',
-            borderRadius: '10px',
-            fontWeight: '600',
-            fontFamily: 'customfont',
-            letterSpacing: '1px',
-            boxShadow: 'none',
-            marginRight:'20px'
-          }}
               size="large"
               onClick={GetSensorRefValues}
             >
@@ -1265,20 +1218,6 @@ function DeviceAdd({
             </Button>
             }
             <Button
-            style={{
-              background: 'rgb(19 60 129)',}}
-            sx={{
-              height: '0',
-              color: 'white',
-              padding: "10px 19px",
-              fontSize: '13px',
-              borderRadius: '10px',
-              fontWeight: '600',
-              fontFamily: 'customfont',
-              letterSpacing: '1px',
-              boxShadow: 'none',
-              marginRight:'20px'
-            }}
               size="large"
               onClick={() => {
                 setErrorObject({});
@@ -1293,19 +1232,7 @@ function DeviceAdd({
             {moduleAccess.edit === true
               && (
                 <Button
-                style={{
-                  background: 'rgb(19 60 129)',}}
-                sx={{
-                  height: '0',
-                  color: 'white',
-                  padding: "10px 19px",
-                  fontSize: '13px',
-                  borderRadius: '10px',
-                  fontWeight: '600',
-                  fontFamily: 'customfont',
-                  letterSpacing: '1px',
-                  boxShadow: 'none'
-                }}
+                  sx={{ m: 1 }}
                   size="large"
                   type="submit"
                 >

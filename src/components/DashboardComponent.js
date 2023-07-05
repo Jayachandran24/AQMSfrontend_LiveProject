@@ -49,8 +49,7 @@ function Dashboard() {
   const [locationCoordinationList, setLocationCoordinationList] = useState([]);
   const [locationState, setProgressState] = useState(0);
   const [Img, setImg] = useState('');
-  // const imgSrc = `https://localhost/backend/blog/public/${Img}`;
-  const imgSrc = `${process.env.REACT_APP_API_ENDPOINT}blog/public/${Img}`;
+  const imgSrc = `https://wisething.in/aideaLabs/blog/public/${Img}`;
   const [ImageState, setImageState] = useState(0);
   const [deviceCoordsList, setDeviceCoordsList] = useState([]);
   const [isdashboard, setIsDashBoard] = useState(0);
@@ -314,78 +313,140 @@ function Dashboard() {
   };
   
   return (
-    <Grid container spacing={1} className={'h-full w-full p-0.5 ml-0 mt-0'}>
-    {isdashboard === 0 && (
-      <div className={'h-auto w-full'}>
-        <Grid item xs={12} sx={{ marginLeft: 1, }} className={'h-auto w-full ml-0'}>
-          <Grid container item xs={12} sm={12} md={12} lg={12}  className={'h-auto w-full'}>
-            <Grid item xs={12} sm={12} md={8} lg={8} sx={{marginTop:0}} className={'min-h-[300px] h-auto'}>
-              <LocationGridWidget
-                setLocationCoordinationList={setLocationCoordinationList}
-                locationState={locationState}
-                setProgressState={setProgressState}
-                setImg={setImg}
-                setImageState={setImageState}
-                locationDetails={locationDetails}
-                setLocationDetails={setLocationDetails}
-                setDeviceCoordsList={setDeviceCoordsList}
-                setIsDashBoard={setIsDashBoard}
-                setIsGeoMap={setIsGeoMap}
-                siteImages={siteImages}
-                setSiteImages={setSiteImages}
-                setZoomLevel={setZoomLevel}
-                setCenterLatitude={setCenterLatitude}
-                setCenterLongitude={setCenterLongitude}
-                breadCrumbLabels={breadCrumbLabels}
-                setBreadCrumbLabels={setBreadCrumbLabels}
-                setAlertList={setAlertList}
-                locationAlerts={locationAlerts}
-              />
+    <Grid container spacing={1} style={{ height: '94vh', width: '100%', padding: 2, marginLeft: '0px', marginTop: '0px' }}>
+      {isdashboard === 0
+        && (
+          <div style={{ height: '94vh', width: '100%' }}>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                marginLeft: 1,
+              }}
+              style={{
+                height: '94vh',
+                width: '100%',
+                marginLeft: '0px'
+
+              }}
+            >
+              <Grid
+                container
+                item
+                xs={12}
+                style={{
+                  height: '94vh',
+                  width: '100%',
+                  overflow: 'auto',
+                }}
+              >
+                <Grid
+                  item
+                  xs={12}
+                  sm={12}
+                  md={8}
+                  lg={8}
+                  sx={{
+                  }}
+                  style={{ minHeight: '300px', height: '47vh', }}
+                >
+                  <LocationGridWidget
+                    setLocationCoordinationList={setLocationCoordinationList}
+                    locationState={locationState}
+                    setProgressState={setProgressState}
+                    setImg={setImg}
+                    setImageState={setImageState}
+                    locationDetails={locationDetails}
+                    setLocationDetails={setLocationDetails}
+                    setDeviceCoordsList={setDeviceCoordsList}
+                    setIsDashBoard={setIsDashBoard}
+                    setIsGeoMap={setIsGeoMap}
+                    siteImages={siteImages}
+                    setSiteImages={setSiteImages}
+                    setZoomLevel={setZoomLevel}
+                    setCenterLatitude={setCenterLatitude}
+                    setCenterLongitude={setCenterLongitude}
+                    breadCrumbLabels={breadCrumbLabels}
+                    setBreadCrumbLabels={setBreadCrumbLabels}
+                    setAlertList={setAlertList}
+                    locationAlerts={locationAlerts}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={12}
+                  md={4}
+                  lg={4}
+                  style={{
+                    border: '2px solid black', height: '47vh', 
+                    minHeight: '304px', 
+                    // maxHeight: '300px', 
+                    padding: '2px'
+                  }}
+                >
+                  {/* eslint-disable-next-line */}
+                  {isGeoMap === true ? <GeoLocationWidget locationCoordination={locationCoordinationList} zoomLevel={zoomLevel} centerLatitude={centerLatitude} centerLongitude={centerLongitude} height="46vh" />
+                    : <ImageMarkerList labImage={imgSrc} deviceCoordsList={deviceCoordsList} height="h-46vh min-h-295" />}
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={12}
+                  md={12}
+                  style={{
+                    padding: '0px',
+                    marginLeft: 1, 
+                    height: '47vh',
+                  }}
+                >
+                  <AlertWidget dataList={alertList} setAlertList={setAlertList} setNotification={setNotification} />
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={12} md={4} lg={4} className={' h-[45vh] p-6 xl:h-[43vh]'} >
-              {/* eslint-disable-next-line */}
-              {isGeoMap === true ? <GeoLocationWidget locationCoordination={locationCoordinationList} zoomLevel={zoomLevel} centerLatitude={centerLatitude} centerLongitude={centerLongitude} />
-                : <ImageMarkerList labImage={imgSrc} deviceCoordsList={deviceCoordsList} height="h-[38vh]" />}
-            </Grid>
-            <Grid item xs={12} sm={12} md={12} className={'p-6 h-[40vh] pt-5 xl:h-[40vh]'}>
-              <AlertWidget dataList={alertList} setAlertList={setAlertList} setNotification={setNotification} />
-            </Grid>
-          </Grid>
-        </Grid>
-      </div>
-    )}
-    {isdashboard === 1 && (
-      <div className={'h-[94vh] w-full'}>
-        <LandingPageComponent locationDetails={locationDetails} setIsDashBoard={setIsDashBoard} />
-      </div>
-    )}
-    {isdashboard === 2 && (
-      <div className={'h-[auto] w-full overflow-auto '}>
-        <DeviceGridComponent
-          setImg={setImg}
-          locationDetails={locationDetails}
-          setLocationDetails={setLocationDetails}
-          setDeviceCoordsList={setDeviceCoordsList}
-          setProgressState={setProgressState}
-          breadCrumbLabels={breadCrumbLabels}
-          setBreadCrumbLabels={setBreadCrumbLabels}
-          setIsDashBoard={setIsDashBoard}
-          setIsGeoMap={setIsGeoMap}
-          siteImages={siteImages}
-          setSiteImages={setSiteImages}
-          setCenterLatitude={setCenterLatitude}
-          setCenterLongitude={setCenterLongitude}
-          locationAlerts={locationAlerts}
+          </div>
+        )}
+      {isdashboard === 1
+        && (
+          <div style={{
+            height: '94vh',
+            width: '100%'
+          }}>
+            <LandingPageComponent locationDetails={locationDetails} setIsDashBoard={setIsDashBoard} />
+          </div>
+        )}
+      {isdashboard === 2
+        && (
+          <div style={{
+            height: '94vh',
+            width: '100%',
+            overflow: 'auto'
+          }}>
+            <DeviceGridComponent
+              setImg={setImg}
+              locationDetails={locationDetails}
+              setLocationDetails={setLocationDetails}
+              setDeviceCoordsList={setDeviceCoordsList}
+              setProgressState={setProgressState}
+              breadCrumbLabels={breadCrumbLabels}
+              setBreadCrumbLabels={setBreadCrumbLabels}
+              setIsDashBoard={setIsDashBoard}
+              setIsGeoMap={setIsGeoMap}
+              siteImages={siteImages}
+              setSiteImages={setSiteImages}
+              setCenterLatitude={setCenterLatitude}
+              setCenterLongitude={setCenterLongitude}
+              locationAlerts={locationAlerts}
+            />
+          </div>
+        )}
+        <NotificationBar
+          handleClose={handleClose}
+          notificationContent={openNotification.message}
+          openNotification={openNotification.status}
+          type={openNotification.type}
         />
-      </div>
-    )}
-    <NotificationBar
-      handleClose={handleClose}
-      notificationContent={openNotification.message}
-      openNotification={openNotification.status}
-      type={openNotification.type}
-    />
-  </Grid>
+    </Grid>
   );
 }
 

@@ -60,26 +60,26 @@ function SensorGraphComponent({
 
   return (
     <Dialog
-      sx={{ '& .MuiDialog-paper': { minWidth: '90%', 
+      sx={{ '& .MuiDialog-paper': { minWidth: '95%', 
       // minHeight: '95%' 
     } }}
       maxWidth="sm"
       open={open}
     >
-      <DialogTitle sx={{fontFamily:'customfont', fontWeight:'600', letterSpacing:'1px'}}>
+      <DialogTitle>
         Trends of Sensor (
         {sensorTag}
         )
       </DialogTitle>
       <DialogContent style={{
-        // minWidth: '1200px',
+        minWidth: '1200px',
         minHeight: '400px',
       }}>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} style={{
           minWidth: 'inherit',
           marginLeft: '0px'
         }}>
-          <Grid item xs={3} />
+          <Grid item xs={6} />
           <Grid item xs={2}>
             <FormControl fullWidth margin="normal" sx={{ marginTop: 1 }}>
               <TextField
@@ -162,28 +162,14 @@ function SensorGraphComponent({
           marginLeft: '0px'
         }}>
           <Button
+            sx={{ m: 1 }}
             size="large"
             onClick={() => {
               setOpen(false);
             }}
             style={{
-              float: 'right',
-              background: 'rgb(19 60 129)',
+              float: 'right'
             }}
-              sx={{
-                m: 1 ,
-                textAlign: 'center',
-                height: '40px',
-                color: 'white',
-                padding: "10px 19px",
-                fontSize: '13px',
-                borderRadius: '10px',
-                fontWeight: '600',
-                fontFamily: 'customfont',
-                letterSpacing: '1px',
-                boxShadow: 'none',
-                marginRight:'20px'
-              }}
           >
             Cancel
           </Button>

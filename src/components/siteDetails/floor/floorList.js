@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import { PlayArrow, Edit, DeleteOutlined } from '@mui/icons-material';
-import { Breadcrumbs, Card, CardContent, Stack, Typography } from '@mui/material';
+import { Breadcrumbs, Stack, Typography } from '@mui/material';
 import { FloorDeleteService, FloorfetchService } from '../../../services/LoginPageService';
 import { FloorListToolbar } from './floor-list-toolbars';
 import FloorModal from './FloorModalComponent';
@@ -11,7 +11,6 @@ import { useUserAccess } from '../../../context/UserAccessProvider';
 import ApplicationStore from '../../../utils/localStorageUtil';
 import DeleteConfirmationDailog from '../../../utils/confirmDeletion';
 import CentralHooterModal from '../CentralHooter/CentralHooterModal';
-import { MdLocationPin } from 'react-icons/md';
 
 export function FloorListResults({ img }) {
   const dataColumns = [
@@ -20,21 +19,6 @@ export function FloorListResults({ img }) {
       headerName: 'Floor Name',
       width: 270,
       type: 'actions',
-      renderCell: ((params) => {
-        return (
-          <>
-            <div className='flex w-full justify-between'>
-              <div>
-              <MdLocationPin className='text-[18px] text-left' />
-              </div>
-              <div className='w-full'>
-              <LinkTo selectedRow={params.row} />
-              </div>
-            </div>
-
-          </>
-        )
-      }),
       getActions: (params) => [
         <LinkTo selectedRow={params.row} />,
       ],
@@ -181,29 +165,23 @@ export function FloorListResults({ img }) {
     return (path);
   });
   return (
-    <Card className='h-[50vh] sm:h-[41vh]' style={{ height: '50vh', width: '95%', paddingBottom: '0', marginTop: '0px', overflow: 'hidden', boxShadow:'none' }}
-    >
+    <div style={{ height: '70vh', width: '100%' }}>
       <Stack style={{
-        // padding: '0 10px'
+        overflow: 'auto'
       }}
-        // width={{
-        //   xs: '100vw',
-        //   sm: '100vw',
-        //   md: '54vw',
-        //   lg: '54vw',
-        //   xl: '56vw'
-        // }}
+      width = {{
+        xs: '100vw',
+        sm: '100vw',
+        md: '54vw',
+        lg: '54vw',
+        xl: '56vw'
+      }}
       >
         <Breadcrumbs aria-label="breadcrumb" separator="›" style={{
           // height: '2vh',
-          // minHeight: '15px',
-          fontFamily: 'customfont',
-          fontWeight: '600',
-          color: 'black',
-          fontSize: '16px',
-          letterSpacing: '1px',
-          // minWidth: 'max-content'  // enable for scroll bar
-        }}
+          minHeight: '15px',
+          minWidth: 'max-content'  // enable for scroll bar
+          }}
         >
           {locationLabel ? (
             <Typography
@@ -217,7 +195,7 @@ export function FloorListResults({ img }) {
               Location
             </Link>
           )}
-          {branchLabel
+          { branchLabel
             ? (
               <Typography
                 underline="hover"
@@ -261,30 +239,29 @@ export function FloorListResults({ img }) {
               </Link>
             )}
           {buildingLabel ? (
-            <Typography
-              underline="hover"
-              color="inherit"
-            >
-              {pathname[3]}
-            </Typography>
-          ) : (
-            <Link
-              underline="hover"
-              color="inherit"
-              to={`/Location/${pathname[1]}/${pathname[2]}/${pathname[3]}`}
-              state={{
-                location_id,
-                branch_id,
-                facility_id,
-              }}
-            >
-              {pathname[3]}
-            </Link>
-          )}
+              <Typography
+                underline="hover"
+                color="inherit"
+              >
+                {pathname[3]}
+              </Typography>
+            ) : (
+              <Link
+                underline="hover"
+                color="inherit"
+                to={`/Location/${pathname[1]}/${pathname[2]}/${pathname[3]}`}
+                state={{
+                  location_id,
+                  branch_id,
+                  facility_id,
+                }}
+              >
+                {pathname[3]}
+              </Link>
+            )}
           <Typography
             underline="hover"
             color="inherit"
-            sx={{ fontFamily: 'customfont', fontWeight: '600' }}
           >
             {pathname[4]}
           </Typography>
@@ -296,17 +273,28 @@ export function FloorListResults({ img }) {
         setIsAddButton={setIsAddButton}
         setEditData={setEditData}
         userAccess={moduleAccess}
+        setOpenCentralHooter={setOpenCentralHooter}
+        centralButtonText={centralButtonText}
+        colorValue={colorValue}
       />
-    <CardContent className='h-[310px] sm:h-[85%] lg:h-[90%] xl:h-[90%]'>
+
       <DataGrid
-      className='mt-5 sm:mt-0'
-        sx={{ border: 'none', fontFamily: 'customfont', color: 'black'}}
         rows={dataList}
         columns={dataColumns}
-        pageSize={3}
+        pageSize={5}
         loading={isLoading}
-        rowsPerPageOptions={[3]}
+        rowsPerPageOptions={[5]}
         disableSelectionOnClick
+        style={{ 
+          // maxHeight: `${80}%`,
+          // height: '37vh'
+
+          // height: 'auto',
+          // minHeight: '57vh',
+          height: '85%',
+          minHeight: '250px',
+          maxHeight: '70vh'
+        }}
       />
 
       <FloorModal
@@ -320,6 +308,12 @@ export function FloorListResults({ img }) {
         buildingId={building_id}
         setRefreshData={setRefreshData}
         src={img}
+      />
+      <CentralHooterModal 
+        openCentralHooter={openCentralHooter}
+        setOpenCentralHooter={setOpenCentralHooter}
+        setCentralButtonText={setCentralButtonText}
+        setColorValue={setColorValue}
       />
       <NotificationBar
         handleClose={handleClose}
@@ -335,7 +329,6 @@ export function FloorListResults({ img }) {
         handleSuccess={deletehandleSuccess}
         handleException={deletehandleException}
       />
-      </CardContent>
-    </Card>
+    </div>
   );
 }

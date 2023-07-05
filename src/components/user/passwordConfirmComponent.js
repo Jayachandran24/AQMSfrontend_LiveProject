@@ -1,36 +1,17 @@
 import {
   Button, Dialog, DialogContent, DialogTitle, TextField,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import React from 'react';
 
 function ConfirmPassword({
   open, passwordSubmit, setConfirmPassword, setBtnReset,
 }) {
-
-  const Buttons = styled(Button)(
-    () => ({
-
-      height: '0',
-      color: 'white',
-      padding: "20px 19px",
-      fontSize: '13px',
-      borderRadius: '10px',
-      fontWeight: '600',
-      fontFamily: 'customfont',
-      letterSpacing: '1px',
-      boxShadow: 'none',
-      marginRight: '20px',
-      marginBottom: '20px'
-
-    })
-  );
   return (
     <Dialog
       maxWidth="sm"
       open={open}
     >
-      <DialogTitle sx={{fontFamily:'customfont', fontWeight:'600', letterSpacing:'1px'}}>
+      <DialogTitle>
         Confirm your password
       </DialogTitle>
       <DialogContent>
@@ -47,23 +28,19 @@ function ConfirmPassword({
               />
             </div>
           </div>
-          <div className="mt-5 ml-0 float-right">
-            <Buttons
-            style={{
-              background: 'rgb(19 60 129',}}
+          <div className="mt-3 ml-2 float-right">
+            <Button
               onClick={() => {
                 setBtnReset(false);
               }}
             >
               Cancel
-            </Buttons>
-            <Buttons
-            style={{
-              background: 'rgb(19 60 129',}}
+            </Button>
+            <Button
               type="submit"
             >
               Submit
-            </Buttons>
+            </Button>
           </div>
         </form>
       </DialogContent>

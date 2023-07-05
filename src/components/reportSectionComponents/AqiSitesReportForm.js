@@ -10,7 +10,6 @@ import { DownloadReportAqiCsv, EmailAQIIndexReportService } from '../../services
 import { currentDateValidator, dateRangevalidator, setAQIColor } from '../../utils/helperFunctions';
 import AQITrendModal from './AQITrendModal';
 import NotificationBar from '../notification/ServiceNotificationBar';
-import CircleIcon from '@mui/icons-material/Circle';
 
 function AqiSitesReportForm({ siteId, deviceList }) {
   const [fromDate, setFromDate] = useState('');
@@ -55,7 +54,7 @@ function AqiSitesReportForm({ siteId, deviceList }) {
     {
       field: 'date',
       headerName: 'Date',
-      minWidth: 110,
+      minWidth: 100,
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -70,7 +69,7 @@ function AqiSitesReportForm({ siteId, deviceList }) {
     {
       field: 'stateName',
       headerName: 'Location',
-      minWidth: 120,
+      minWidth: 100,
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -78,7 +77,7 @@ function AqiSitesReportForm({ siteId, deviceList }) {
     {
       field: 'branchName',
       headerName: 'Branch',
-      minWidth: 120,
+      minWidth: 100,
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -94,7 +93,7 @@ function AqiSitesReportForm({ siteId, deviceList }) {
     {
       field: 'buildingName',
       headerName: 'Building',
-      minWidth: 130,
+      minWidth: 100,
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -102,7 +101,7 @@ function AqiSitesReportForm({ siteId, deviceList }) {
     {
       field: 'floorName',
       headerName: 'Floor',
-      minWidth: 130,
+      minWidth: 100,
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -125,23 +124,6 @@ function AqiSitesReportForm({ siteId, deviceList }) {
     },
     {
       field: 'AqiValue',
-      headerName: 'AQI Value',
-      minWidth: 100,
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      renderCell: (params) => (
-        <span style={{
-          color: setAQIColor(parseFloat(params.value)),
-        }}
-        >
-          
-          {params.value}
-        </span>
-      ),
-    },
-    {
-      field: 'AqiStatus',
       headerName: 'AQI Status',
       minWidth: 100,
       flex: 1,
@@ -152,8 +134,7 @@ function AqiSitesReportForm({ siteId, deviceList }) {
           color: setAQIColor(parseFloat(params.value)),
         }}
         >
-          {/* {params.value} */}
-          <CircleIcon/>
+          {params.value}
         </span>
       ),
     },
@@ -283,139 +264,125 @@ function AqiSitesReportForm({ siteId, deviceList }) {
     }, 2000);
   };
   return (
-    <form onSubmit={handleSubmit} className='w-full '>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <Grid container spacing={2}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={2}
+            xl={2}
+          >
+            <TextField
+              // sx={{ minWidth: 250 }}
+              fullWidth
+              label="From Date"
+              type="date"
+              value={fromDate}
+              variant="outlined"
+              required
+              onChange={(e) => {
+                setFromDate(e.target.value);
+              }}
+              autoComplete="off"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              inputProps={{
+                max: currentDateValidator()
+              }}
+            />
 
-
-        <Grid container spacing={1}>
-                <Grid item 
-                  xs={12}
-                  sm={4}
-                  md={4}
-                  lg={4}
-                  xl={4}
-                >
-                  <TextField
-                    sx={{ width: '100%' }}
-                    fullWidth
-                    label="From Date"
-                    type="date"
-                    value={fromDate}
-                    variant="standard"
-                    required
-                    onChange={(e) => { setFromDate(e.target.value); }}
-                    autoComplete="off"
-                    InputLabelProps={{ shrink: true, style: { fontFamily: 'customfont' } }}
-                    inputProps={{ max: currentDateValidator() }}
-                  />
-
-                </Grid>
-                <Grid item 
-                  xs={12}
-                  sm={4}
-                  md={4}
-                  lg={4}
-                  xl={4}
-                >
-                  <TextField
-                    fullWidth
-                    // sx={{ minWidth: 250 }}
-                    label="To Date"
-                    type="date"
-                    value={toDate}
-                    variant="standard"
-                    required
-                    onChange={(e) => { setToDate(e.target.value); }}
-                    autoComplete="off"
-                    InputLabelProps={{ shrink: true, style: { fontFamily: 'customfont' } }}
-                    inputProps={{ max: currentDateValidator() }}
-                  />
-                </Grid>
-                <Grid item 
-                  xs={12}
-                  sm={4}
-                  md={4}
-                  lg={4}
-                  xl={4}
-                >
-                  <FormControl fullWidth >
-                    <InputLabel sx={{ fontFamily: 'customfont', color: 'black' }}>Devices</InputLabel>
-
-                    <Select
-
-                      value={deviceId}
-                      label="Devices"
-                      variant="standard"
-
-                      onChange={(e) => { HandleDeviceChange(e.target.value); }}
-                    >
-                      <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
-                        <em className={'font-bold'}>All</em>
-                      </MenuItem>
-                      {deviceList?.map((data, index) => (
-                        <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.deviceName}</MenuItem>
-                      ))}
-
-                    </Select>
-
-                  </FormControl>
-
-                </Grid>
-                <Grid item 
-                  xs={12}
-                  sm={3}
-                  md={3}
-                  lg={3}
-                  xl={3}
-                 className={'self-center'}>
-                  <FormControl fullWidth>
-                    <Button type="submit"
-                      sx={{
-                        height: '40px',
-                        padding: "10px 19px",
-                        color: 'white',
-                        marginTop: '20px',
-                        marginBottom: '15px',
-                        fontSize: '13px',
-                        borderRadius: '10px',
-                        fontWeight: '600',
-                        fontFamily: 'customfont',
-                        letterSpacing: '1px'
-                      }}
-                      style={{
-                        background: 'rgb(120 53 15)',}}
-                      >
-                      Submit
-                    </Button>
-                  </FormControl>
-                </Grid>
-                <Grid item 
-                  xs={12}
-                  sm={3}
-                  md={3}
-                  lg={3}
-                  xl={3}
-                 className={'self-center'}>
-                  <Button
-                    sx={{
-                      height: '40px',
-                      padding: "10px 19px",
-                      color: 'white',
-                      marginTop: '20px',
-                      marginBottom: '15px',
-                      fontSize: '13px',
-                      borderRadius: '10px',
-                      fontWeight: '600',
-                      fontFamily: 'customfont',
-                      letterSpacing: '1px'
-                    }}
-                    style={{
-                      background: 'rgb(120 53 15)',}}
-                    fullWidth onClick={handleAQITrend}>
-                    Trend
-                  </Button>
-                </Grid>
-             
-              {/* <Grid item
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={2}
+            xl={2}
+          >
+            <TextField
+              fullWidth
+              // sx={{ minWidth: 250 }}
+              label="To Date"
+              type="date"
+              value={toDate}
+              variant="outlined"
+              required
+              onChange={(e) => {
+                setToDate(e.target.value);
+              }}
+              autoComplete="off"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              inputProps={{
+                max: currentDateValidator()
+              }}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={4}
+            lg={2}
+            xl={2}
+          >
+            <FormControl fullWidth>
+              <InputLabel>Devices</InputLabel>
+              <Select
+                value={deviceId}
+                label="Devices"
+                onChange={(e) => {
+                  HandleDeviceChange(e.target.value);
+                }}
+              >
+                <MenuItem value="" key={0}>
+                  <em style={{ fontWeight: 'bold' }}>All</em>
+                </MenuItem>
+                {deviceList?.map((data, index) => (
+                  <MenuItem value={data.id} key={index + 1}>{data.deviceName}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sm={6}
+            md={3}
+            lg={1.3}
+            xl={1.5}
+            style={{
+              alignSelf: 'center',
+            }}
+          >
+            <FormControl fullWidth>
+              <Button size="medium" variant="contained" type="submit">
+                Submit
+              </Button>
+            </FormControl>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sm={6}
+            md={3}
+            lg={1.3}
+            xl={1.5}
+            style={{
+              alignSelf: 'center',
+            }}
+          >
+            <Button variant="contained" color="warning" fullWidth onClick={handleAQITrend}>
+              Trend
+            </Button>
+          </Grid>
+          {/* <Grid item
             xs={6}
             sm={6}
             md={3}
@@ -431,98 +398,61 @@ function AqiSitesReportForm({ siteId, deviceList }) {
               </Button>
             </FormControl>
           </Grid> */}
-              
-                <Grid item 
-                  xs={12}
-                  sm={3}
-                  md={3}
-                  lg={3}
-                  xl={3}
-                 className={'self-center'}>
-                  <FormControl fullWidth>
-                    <Button
+          <Grid
+            item
+            xs={6}
+            sm={6}
+            md={3}
+            lg={1.9}
+            xl={1.5}
+            style={{
+              alignSelf: 'center',
+            }}
+          >
+            <FormControl fullWidth>
+              <Button
+                variant="contained"
+                size="medium"
+                color="primary"
+                onClick={() => {
+                  DownloadCsv();
+                }}
+                style={{
+                  width: '100%',
+                  borderRadius: '5px',
+                }}
+                disabled={enableDownload}
+              >
+                {enableDownload === true ? <CircularProgress style={{ height: '25px', width: '25px', color: 'white' }} /> : <DownloadIcon sx={{ mr: 1 }} />}
 
-                      sx={{
-                        width: '100%',
-                        height: '40px',
-                        padding: "9px 19px",
-                        color: 'white',
-                        marginTop: '20px',
-                        marginBottom: '15px',
-                        fontSize: '13px',
-                        borderRadius: '10px',
-                        fontWeight: '600',
-                        fontFamily: 'customfont',
-                        letterSpacing: '1px'
-                      }}
-                      onClick={() => { DownloadCsv(); }}
-                      style={{
-                        background: 'rgb(19, 60, 129)',}}
-                      disabled={enableDownload}
-                    >
-                      {enableDownload === true ? <CircularProgress className={'h-6 w-6 text-white'} /> : <DownloadIcon sx={{ mr: 1 }} />}
-
-                      Download
-                    </Button>
-                  </FormControl>
-                </Grid>
-                <Grid item 
-                  xs={12}
-                  sm={3}
-                  md={3}
-                  lg={3}
-                  xl={3}
-                className={'self-center'}>
-                  <Button
-                    sx={{
-                      height: '40px',
-                      padding: "10px 19px",
-                      color: 'white',
-                      marginTop: '20px',
-                      marginBottom: '15px',
-                      fontSize: '13px',
-                      borderRadius: '10px',
-                      fontWeight: '600',
-                      fontFamily: 'customfont',
-                      letterSpacing: '1px'
-                    }}
-                    style={{
-                      background: 'rgb(19, 60, 129)',}}
-                    endIcon={enableSend === true ? <CircularProgress className={'h-6 w-6'} /> : <SendIcon />}
-                    onClick={sendEmail}
-                    fullWidth
-                    disabled={enableSend}
-                  >
-                    Send
-                  </Button>
-                </Grid>
-
-
-            <div className='w-full mt-2 mb-2 flex flex-col sm:flex-row gap-5 justify-center'>
-              <div style={{fontFamily:'customfont'}}>
-              <CircleIcon style={{color:"#58AC4C"}}/> Good
-              </div>
-              <div style={{fontFamily:'customfont'}}>
-              <CircleIcon style={{color:"#A8CC54"}}/> Satisfactory
-              </div>
-              <div style={{fontFamily:'customfont'}}>
-              <CircleIcon style={{color:"#FFFC34"}}/> Moderate
-              </div>
-              <div style={{fontFamily:'customfont'}}>
-              <CircleIcon style={{color:"#F89C34"}}/> Poor
-              </div>
-              <div style={{fontFamily:'customfont'}}>
-              <CircleIcon style={{color:"#F03C34"}}/> Very Poor
-              </div>
-              <div style={{fontFamily:'customfont'}}>
-              <CircleIcon style={{color:"#B02C24"}}/> Severe
-              </div>
-              </div>
-          
+                Download
+              </Button>
+            </FormControl>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sm={6}
+            md={3}
+            lg={1.3}
+            xl={1.5}
+            style={{
+              alignSelf: 'center',
+            }}
+          >
+            <Button
+              variant="contained"
+              endIcon={enableSend === true ? <CircularProgress style={{ height: '25px', width: '25px' }} /> : <SendIcon />}
+              onClick={sendEmail}
+              fullWidth
+              disabled={enableSend}
+            >
+              Send
+            </Button>
+          </Grid>
         </Grid>
-        <div className={'h-[40vh] w-full mt-2'}>
+        <div style={{ height: '620px', width: '100%', marginTop: 20 }}>
           <DataGrid
-            sx={{ border: 'none', fontFamily: 'customfont' }}
             rows={aqiStatusReportList}
             rowCount={rowCountState}
             columns={columns}
@@ -532,11 +462,11 @@ function AqiSitesReportForm({ siteId, deviceList }) {
             pageSize={pageSize}
             onPageChange={onPageChange}
             onPageSizeChange={onPageSizeChange}
-            // rowsPerPageOptions={[5, 10]} 
+            // rowsPerPageOptions={[5, 10]}
             paginationMode="server"
           />
         </div>
-      
+      </div>
       <AQITrendModal setOpenTrend={setOpenTrend} openTrend={openTrend} id={{ deviceId, fromDate, toDate }} type="device" />
       <NotificationBar
         handleClose={handleClose}
@@ -544,7 +474,7 @@ function AqiSitesReportForm({ siteId, deviceList }) {
         openNotification={openNotification.status}
         type={openNotification.type}
       />
-    </form >
+    </form>
   );
 }
 

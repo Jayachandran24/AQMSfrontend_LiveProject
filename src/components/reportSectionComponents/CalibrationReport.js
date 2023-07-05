@@ -56,7 +56,7 @@ const CalibrationReport = ({ deviceList, siteId }) => {
         {
           field: 'deviceName',
           headerName: 'Device Tag',
-          minWidth: 130,
+          minWidth: 150,
           flex: 1,
           align: 'center',
           headerAlign: 'center',
@@ -64,7 +64,7 @@ const CalibrationReport = ({ deviceList, siteId }) => {
         {
           field: 'sensorTag',
           headerName: 'Sensor Tag',
-          minWidth: 130,
+          minWidth: 150,
           flex: 1,
           align: 'center',
           headerAlign: 'center',
@@ -72,7 +72,7 @@ const CalibrationReport = ({ deviceList, siteId }) => {
         {
           field: 'name',
           headerName: 'Sensor Name',
-          minWidth: 130,
+          minWidth: 150,
           flex: 1,
           align: 'center',
           headerAlign: 'center',
@@ -80,7 +80,7 @@ const CalibrationReport = ({ deviceList, siteId }) => {
         {
           field: 'calibrationDate',
           headerName: 'Calibration Due Date',
-          minWidth: 180,
+          minWidth: 150,
           flex: 1,
           align: 'center',
           headerAlign: 'center',
@@ -96,7 +96,7 @@ const CalibrationReport = ({ deviceList, siteId }) => {
         {
           field: 'testResult',
           headerName: 'Calibrated Test Result',
-          minWidth: 200,
+          minWidth: 150,
           flex: 1,
           align: 'center',
           headerAlign: 'center',
@@ -104,7 +104,7 @@ const CalibrationReport = ({ deviceList, siteId }) => {
         {
           field: 'nextDueDate',
           headerName: 'Next Calibration Due Date',
-          minWidth: 230,
+          minWidth: 150,
           flex: 1,
           align: 'center',
           headerAlign: 'center',
@@ -316,20 +316,19 @@ const CalibrationReport = ({ deviceList, siteId }) => {
     <Grid item>
     <form onSubmit={handleSubmit}>
       <Grid container spacing={1}>
-
         <Grid
           item
-          xs={12}
-          sm={4}
+          xs={6}
+          sm={6}
           md={4}
-          lg={4}
-          xl={4}
+          lg={2}
+          xl={2.5}
         >
           <TextField
             fullWidth
             label="From Date"
             type="date"
-            variant="standard"
+            variant="outlined"
             value={fromDate}
             required
             onChange={(e) => {
@@ -344,21 +343,20 @@ const CalibrationReport = ({ deviceList, siteId }) => {
             }}
           />
         </Grid>
-
         <Grid
           item
-          xs={12}
-          sm={4}
+          xs={6}
+          sm={6}
           md={4}
-          lg={4}
-          xl={4}
+          lg={2}
+          xl={2.5}
         >
           <TextField
             fullWidth
             label="To Date"
             type="date"
             value={toDate}
-            variant="standard"
+            variant="outlined"
             required
             onChange={(e) => {
               setToDate(e.target.value);
@@ -372,128 +370,81 @@ const CalibrationReport = ({ deviceList, siteId }) => {
             }}
           />
         </Grid>
-
         <Grid
           item
           xs={12}
-          sm={4}
+          sm={12}
           md={4}
-          lg={4}
-          xl={4}
+          lg={2}
+          xl={3}
         >
           <FormControl fullWidth>
-            <InputLabel sx={{ fontFamily: 'customfont', color: 'black' }}>Device</InputLabel>
+            <InputLabel>Device</InputLabel>
             <Select
               value={device_id}
               label="Device"
-              variant="standard"
               onChange={(e) => {
                 HandleDeviceChange(e.target.value);
               }}
             >
-              <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
+              <MenuItem value="" key={0}>
                 <em style={{ fontWeight: 'bold' }}>All</em>
               </MenuItem>
               {deviceList?.map((data, index) => (
-                <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.deviceName}</MenuItem>
+                <MenuItem value={data.id} key={index + 1}>{data.deviceName}</MenuItem>
               ))}
             </Select>
           </FormControl>
         </Grid>
-
         <Grid
           item
-          xs={12}
+          xs={6}
           sm={3}
           md={3}
-          lg={3}
-          xl={3}
+          lg={1.5}
+          xl={1}
           style={{
             alignSelf: 'center',
           }}
         >
           <FormControl fullWidth>
-            <Button 
-              sx={{
-              height: '0',
-              padding: "10px 19px",
-              color: 'white',
-              marginTop: '20px',
-              marginBottom: '15px',
-              fontSize: '13px',
-              borderRadius: '10px',
-              fontWeight: '600',
-              fontFamily: 'customfont',
-              letterSpacing: '1px'
-            }}
-            style={{
-              background: 'rgb(120 53 15)',}}
-            autoFocus type="submit">
+            <Button size="medium" variant="contained" autoFocus type="submit">
               Submit
             </Button>
           </FormControl>
         </Grid>
-
         <Grid
           item
-          xs={12}
+          xs={6}
           sm={3}
           md={3}
-          lg={3}
-          xl={3}
+          lg={1.5}
+          xl={1}
           style={{
             alignSelf: 'center',
           }}
         >
           <FormControl fullWidth>
-            <Button 
-              sx={{
-              height: '0',
-              padding: "10px 19px",
-              color: 'white',
-              marginTop: '20px',
-              marginBottom: '15px',
-              fontSize: '13px',
-              borderRadius: '10px',
-              fontWeight: '600',
-              fontFamily: 'customfont',
-              letterSpacing: '1px'
-            }}
-            style={{
-              background: 'rgb(120 53 15)',}}
-            autoFocus onClick={handleCancel}>
+            <Button size="medium" variant="contained" autoFocus onClick={handleCancel}>
               Cancel
             </Button>
           </FormControl>
         </Grid>
-
         <Grid
           item
-          xs={12}
+          xs={6}
           sm={3}
           md={3}
-          lg={3}
-          xl={3}
+          lg={1.5}
+          xl={1}
           style={{
             alignSelf: 'center',
           }}
         >
           <FormControl fullWidth>
             <Button
-              sx={{
-                height: '0',
-                padding: "9px 19px",
-                color: 'white',
-                marginTop: '20px',
-                marginBottom: '15px',
-                fontSize: '13px',
-                borderRadius: '10px',
-                fontWeight: '600',
-                fontFamily: 'customfont',
-                letterSpacing: '1px'
-              }}
-              style={{
-                background: 'rgb(19, 60, 129)',}}
+              size="medium"
+              variant="contained"
               autoFocus
               endIcon={enableDownload === true ? <CircularProgress style={{ height: '25px', width: '25px' }} /> : <DownloadIcon />}
               onClick={() => {
@@ -505,34 +456,20 @@ const CalibrationReport = ({ deviceList, siteId }) => {
             </Button>
           </FormControl>
         </Grid>
-
         <Grid
           item
-          xs={12}
+          xs={6}
           sm={3}
           md={3}
-          lg={3}
-          xl={3}
+          lg={1.5}
+          xl={1}
           style={{
             alignSelf: 'center',
           }}
         >
           <FormControl fullWidth>
             <Button
-              sx={{
-                height: '0',
-                padding: "9px 19px",
-                color: 'white',
-                marginTop: '20px',
-                marginBottom: '15px',
-                fontSize: '13px',
-                borderRadius: '10px',
-                fontWeight: '600',
-                fontFamily: 'customfont',
-                letterSpacing: '1px'
-              }}
-              style={{
-                background: 'rgb(19, 60, 129)',}}
+              variant="contained"
               endIcon={enableSend === true ? <CircularProgress style={{ height: '25px', width: '25px' }} /> : <SendIcon />}
               disabled={enableSend}
               onClick={SendEmail}
@@ -541,10 +478,8 @@ const CalibrationReport = ({ deviceList, siteId }) => {
             </Button>
           </FormControl>
         </Grid>
-
-        <div className={'w-full mt-3 h-[40vh]  px-0 sm:px-10'}>
+        <div style={{ height: '620px', width: '100%', marginTop: 25 }}>
           <DataGrid
-          sx={{ border: 'none', fontFamily: 'customfont' }}
             rows={calibrationReportList}
             // rowCount={rowCountState}
             loading={isLoading}

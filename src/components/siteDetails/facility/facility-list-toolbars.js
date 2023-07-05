@@ -10,13 +10,11 @@ import AddIcon from '@mui/icons-material/Add';
 export function FacilityListToolbar(props) {
   return (
     <Box
-      className='min-[320px]:mt-6 min-[768px]:mt-0 '
       sx={{
         alignItems: 'center',
         display: 'flex',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        // marginTop: '20px',
       }}
       style={{
         height: '6vh',
@@ -24,14 +22,7 @@ export function FacilityListToolbar(props) {
       }}
     >
       <Typography
-        sx={{
-          m: 1,
-          fontSize: '16px',
-          fontFamily: 'customfont',
-          fontWeight: '600',
-          letterSpacing: '1px',
-          color: '#8f8f8f'
-        }}
+        sx={{ m: 1 }}
         variant="h5"
       >
         Facility
@@ -45,24 +36,8 @@ export function FacilityListToolbar(props) {
             props.setOpen(true);
           }}
         >
-          <Stack direction="row" spacing={2} >
-            <Fab 
-              style={{
-                background: 'rgb(19 60 129)',}}
-              sx={{
-                width:'100%',
-                height: '0',
-                color: 'white',
-                padding: "10px 15px",
-                fontSize: '13px',
-                borderRadius: '10px',
-                fontWeight: '600',
-                fontFamily: 'customfont',
-                letterSpacing: '1px',
-                boxShadow: 'none',
-                float: 'right'
-              }}
-            >
+          <Stack direction="row" spacing={2}>
+            <Fab variant="extended" size="medium" color="primary" aria-label="add">
               <AddIcon sx={{ mr: 1 }} />
               Add Facility
             </Fab>
