@@ -7,7 +7,7 @@ import AddSensorManagement from './AddSensorManagement';
 
 function AddSensorListResult() {
   return (
-    <div style={{ marginTop: 0, padding: 0, width: '100%' }}>
+    <div className={'mt-0 p-0 w-full'}>
       <Container maxWidth={false} style={{ padding: 0, marginTop: 0 }}>
         <AddSensorManagement />
       </Container>

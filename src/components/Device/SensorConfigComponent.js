@@ -29,6 +29,7 @@ import { AddCategoryValidate } from '../../validation/formValidation';
 import StelTWA from './sensorType/StelTWAComponent';
 import SensorAlertRange from './categoryManagement/addSensors/subComponent/SensorAlertRangeComponent';
 import ApplicationStore from '../../utils/localStorageUtil';
+import { OutlinedInput } from '@mui/material';
 
 function SensorConfig({
   locationDetails, setOpen, editData, isAddButton, setRefreshData,
@@ -399,30 +400,32 @@ function SensorConfig({
 
   return (
     <div className="w-full" style={{ marginTop: 0 }}>
-      <form className="mt-0 p-0 w-full" onSubmit={handleSubmit}>
+      <form className="mt-0 px-0 sm:px-5 w-full" onSubmit={handleSubmit}>
         <DialogContent sx={{ px: 0, p: 5 }}>
-          <Typography sx={{ m: 0 }} variant="h5">
+          <Typography variant="h5"
+          sx={{ m: 0, textAlign: 'center', fontFamily: 'customfont', fontWeight: '600', marginTop: '0px', marginBottom: '25px' }}>
             {isAddButton ? 'Add Sensor' : 'Edit Sensor'}
           </Typography>
           {nextPage === true
             ? (
               <>
-                <Grid container spacing={1} sx={{ mt: 0 }}>
+                <Grid container spacing={2} sx={{ mt: 0 }}>
                   <Grid
                     sx={{ mt: 0, padding: 0 }}
                     item
                     xs={12}
                     sm={6}
-                    md={4}
-                    lg={4}
-                    xl={4}
+                    md={6}
+                    lg={6}
+                    xl={6}
                   >
                     <Box>
                       <FormControl fullWidth margin="normal" sx={{ marginTop: 0 }}>
-                        <InputLabel id="demo-simple-select-label">
+                        <InputLabel shrink id="demo-simple-select-label">
                           Sensor Category
                         </InputLabel>
                         <Select
+                         input={<OutlinedInput notched label={'Sensor Category'} />}
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           value={sensorCategoryId}
@@ -431,7 +434,9 @@ function SensorConfig({
                           onChange={(e) => {
                             onSensorCategoryChange(e);
                           }}
+                        
                         >
+                          
                           {sensorCategoryList.map((data) => {
                             return (
                               <MenuItem value={data.id}>{data.sensorName}</MenuItem>
@@ -446,9 +451,9 @@ function SensorConfig({
                     item
                     xs={12}
                     sm={6}
-                    md={4}
-                    lg={4}
-                    xl={4}
+                    md={6}
+                    lg={6}
+                    xl={6}
                   >
                     <div className="rounded-md -space-y-px">
                       <TextField
@@ -466,6 +471,9 @@ function SensorConfig({
                         error={errorObject?.sensorName?.errorStatus}
                         helperText={errorObject?.sensorName?.helperText}
                         autoComplete="off"
+                        InputLabelProps={{
+                          shrink:'true'
+                        }}
                       />
                     </div>
                   </Grid>
@@ -474,9 +482,9 @@ function SensorConfig({
                     item
                     xs={12}
                     sm={6}
-                    md={4}
-                    lg={4}
-                    xl={4}
+                    md={6}
+                    lg={6}
+                    xl={6}
                   >
                     <div className="rounded-md -space-y-px">
                       <TextField
@@ -494,6 +502,9 @@ function SensorConfig({
                         error={errorObject?.manufacturer?.errorStatus}
                         helperText={errorObject?.manufacturer?.helperText}
                         autoComplete="off"
+                        InputLabelProps={{
+                          shrink:'true'
+                        }}
                       />
                     </div>
                   </Grid>
@@ -502,9 +513,9 @@ function SensorConfig({
                     item
                     xs={12}
                     sm={6}
-                    md={4}
-                    lg={4}
-                    xl={4}
+                    md={6}
+                    lg={6}
+                    xl={6}
                   >
                     <div className="rounded-md -space-y-px">
                       <TextField
@@ -522,6 +533,9 @@ function SensorConfig({
                         error={errorObject?.partId?.errorStatus}
                         helperText={errorObject?.partId?.helperText}
                         autoComplete="off"
+                        InputLabelProps={{
+                          shrink:'true'
+                        }}
                       />
                     </div>
                   </Grid>
@@ -530,9 +544,9 @@ function SensorConfig({
                     item
                     xs={12}
                     sm={6}
-                    md={4}
-                    lg={4}
-                    xl={4}
+                    md={6}
+                    lg={6}
+                    xl={6}
                   >
                     <FormControl fullWidth margin="normal" sx={{ marginTop: 0 }}>
                       <InputLabel id="demo-simple-select-label3">Alarm Type</InputLabel>
@@ -583,13 +597,13 @@ function SensorConfig({
                     item
                     xs={12}
                     sm={6}
-                    md={4}
-                    lg={4}
-                    xl={4}
+                    md={6}
+                    lg={6}
+                    xl={6}
                   >
                     <div className="rounded-md -space-y-px">
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Bump Test</InputLabel>
+                        <InputLabel id="demo-simple-select-label" >Bump Test</InputLabel>
                         <Select
                           labelId="demo-simple-select-label"
                           label="Bump Test"
@@ -613,16 +627,16 @@ function SensorConfig({
                         item
                         xs={12}
                         sm={6}
-                        md={4}
-                        lg={4}
-                        xl={4}
+                        md={6}
+                        lg={6}
+                        xl={6}
                       >
                       <TextField
                           sx={{ marginTop: 0 }}
                           margin="dense"
                           id="outlined-required"
                           label="Percentage deviation for Zero Check"
-                          placeholder='Percentage deviation for Zero Check'
+                          // placeholder='Percentage deviation for Zero Check'
                           defaultValue=""
                           fullWidth
                           value={zeroCheckValue}
@@ -633,6 +647,9 @@ function SensorConfig({
                           autoComplete="off"
                           error={errorObject?.zeroCheckValue?.errorStatus}
                           helperText={errorObject?.zeroCheckValue?.helperText}
+                          InputLabelProps={{
+                            shrink:'true'
+                          }}
                         />
                       </Grid>
                       
@@ -642,16 +659,16 @@ function SensorConfig({
                         item
                         xs={12}
                         sm={6}
-                        md={4}
-                        lg={4}
-                        xl={4}
+                        md={6}
+                        lg={6}
+                        xl={6}
                       >
                         <TextField
                           sx={{ marginTop: 0 }}
                           margin="dense"
                           id="outlined-required"
                           label="Percentage deviation for Span Check"
-                          placeholder='Percentage deviation for Span Check'
+                          // placeholder='Percentage deviation for Span Check'
                           defaultValue=""
                           fullWidth
                          
@@ -663,6 +680,9 @@ function SensorConfig({
                           autoComplete="off"
                           error={errorObject?.spanCheckValue?.errorStatus}
                           helperText={errorObject?.spanCheckValue?.helperText}
+                          InputLabelProps={{
+                            shrink:'true'
+                          }}
                         />
                       </Grid>
                     </>
@@ -676,9 +696,9 @@ function SensorConfig({
                     item
                     xs={12}
                     sm={6}
-                    md={4}
-                    lg={4}
-                    xl={4}
+                    md={6}
+                    lg={6}
+                    xl={6}
                   >
                     <Box>
                       <FormControl fullWidth margin="normal" sx={{ marginTop: 0 }}>
@@ -878,7 +898,25 @@ function SensorConfig({
               {nextPage !== true
                 && (
                   <Button
-                    sx={{ m: 2 }}
+                  style={{
+                    background: 'rgb(19 60 129)',}}
+                  sx={{
+                    m: 2,
+                    color: 'white',
+                    padding: "8px 27px",
+                    marginTop: '18px',
+                    marginRight: '10px',
+                    marginBottom: '35px',
+                    fontSize: '13px',
+                    borderRadius: '10px',
+                    fontWeight: '600',
+                    fontFamily: 'customfont',
+                    letterSpacing: '1px',
+                    "&.Mui-disabled": {
+                      background: "#eaeaea",
+                      color: "#c0c0c0"
+                    }
+                  }}
                     size="large"
                     type="submit"
                     disabled={
@@ -900,7 +938,25 @@ function SensorConfig({
                   </Button>
                 )}
               <Button
-                sx={{ m: 2 }}
+                style={{
+                  background: 'rgb(19 60 129)',}}
+                sx={{
+                  m: 2,
+                  color: 'white',
+                  padding: "8px 27px",
+                  marginTop: '18px',
+                  marginRight: '10px',
+                  marginBottom: '35px',
+                  fontSize: '13px',
+                  borderRadius: '10px',
+                  fontWeight: '600',
+                  fontFamily: 'customfont',
+                  letterSpacing: '1px',
+                  "&.Mui-disabled": {
+                    background: "#eaeaea",
+                    color: "#c0c0c0"
+                  }
+                }}
                 onClick={() => {
                   if(nextButton === 'Next'){
                     validateNextButton();
@@ -916,7 +972,25 @@ function SensorConfig({
                 {nextButton}
               </Button>
               <Button
-                sx={{ m: 2 }}
+                style={{
+                  background: 'rgb(19 60 129)',}}
+                sx={{
+                  m: 2,
+                  color: 'white',
+                  padding: "8px 27px",
+                  marginTop: '18px',
+                  marginRight: '10px',
+                  marginBottom: '35px',
+                  fontSize: '13px',
+                  borderRadius: '10px',
+                  fontWeight: '600',
+                  fontFamily: 'customfont',
+                  letterSpacing: '1px',
+                  "&.Mui-disabled": {
+                    background: "#eaeaea",
+                    color: "#c0c0c0"
+                  }
+                }}
                 onClick={() => {
                   setErrorObject({});
                   setOpen(false);

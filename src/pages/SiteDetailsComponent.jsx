@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Grid from '@mui/material/Grid';
-import { Container } from '@mui/material'
+
 import { LocationListResults } from '../components/siteDetails/location/locationList';
 import MapsMultiplePoints from '../components/maps/mapsMultiplePoints';
 import ApplicationStore from '../utils/localStorageUtil';
+import { Card, CardContent, Container } from '@mui/material'
 
 const SiteDetails = () => {
   const [locationCoordinationList, setLocationCoordinationList] = useState([]);
@@ -32,35 +33,27 @@ const SiteDetails = () => {
   }, [locationCoordinationList]);
 
   return (
-    <Container maxWidth={false} style={{
-      marginTop:0, height: '94vh', width: '100%',
-      paddingRight: '2px',
-      paddingLeft: '2px'
-    }}>
-      <Grid container style={{overflow: 'auto', height: '94vh', width: '100%'}}>
-        <Grid item sx={{ mt: 1 }}  xs={12} sm={12} md={12} lg={12} xl={12}
-        style={{
-          height: '46vh',
-          marginTop: '0px',
-          minHeight: '300px'
-        }}>
+    <Container maxWidth={false} className={'overflow-auto mt-0 h-full w-full px-0.5'} style={{height:'auto'}}>
+      <Grid container className={'h-auto w-full gap-y-8'}>
+        <Grid item sx={{ mt: 1 }}  xs={12} sm={12} md={12} lg={12} xl={12} className={'mt-0 '}>
           <LocationListResults setLocationCoordinationList={setLocationCoordinationList} centerLat={centerLat} centerLng={centerLng} />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12} 
-        style={{
-          height: '47vh',
-        }}>
-        {locationCoordinationList.length !== 0
-            ? (
-          <MapsMultiplePoints 
-            width="100%"
-            height="47vh"
-            markers={locationCoordinationList}
-            zoom={4}
-            center={{ lat: centerLat, lng: centerLng }}
-          />
-          )
-          : ''}
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className={'h-full pb-20'}>
+          <Card>
+            <CardContent style={{ padding: 0 }}>
+              {locationCoordinationList.length !== 0
+                  ? (
+                <MapsMultiplePoints 
+                  width="100%"
+                  height="40vh"
+                  markers={locationCoordinationList}
+                  zoom={4}
+                  center={{ lat: centerLat, lng: centerLng }}
+                />
+                )
+                : ''}
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
     </Container>

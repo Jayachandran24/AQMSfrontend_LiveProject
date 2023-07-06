@@ -36,11 +36,20 @@ function AnalogAlert({
   const { userDetails } = ApplicationStore().getStorage('userDetails');
   const moduleAccess = useUserAccess()('devicelocation');
   const [alertSensor,setAlerSensor] = useState('');
+  const [editSensorTrue,setEditSensorTrue] = useState(false);
   
   const validateForNullValue = (value, type) => {
     AnalogSensorValidate(value, type, setErrorObject);
   };
   
+  useEffect(()=>{
+  
+    if(userDetails?.userRole === 'Admin' || userDetails?.userRole === 'Manager')
+    {
+      setEditSensorTrue(true);
+    }
+  },[]);
+
   useEffect(()=>{
     // console.log("selectedSensorName",selectedSensorName);
     // setAlerSensor(selectedSensorName);
@@ -136,7 +145,7 @@ const  validateValue=(value ,type,RefValue)=> {
 
   return (
     <DialogContent sx={{ px: 0, p: 0 }}>
-      <Grid container spacing={1} sx={{ mt: 1 }}>
+      <Grid container spacing={2} sx={{ mt: 1 }}>
         <Grid
           sx={{ mt: 0, padding: 0 }}
           item
@@ -166,7 +175,7 @@ const  validateValue=(value ,type,RefValue)=> {
           </FormControl>
         </Grid>
       </Grid>
-      <Grid container spacing={1} sx={{ mt: 1 }}>
+      <Grid container spacing={2} sx={{ mt: 1 }}>
         <Grid
           sx={{ mt: 0, padding: 0 }}
           item
@@ -198,6 +207,7 @@ const  validateValue=(value ,type,RefValue)=> {
               labelId="demo-simple-select-label"
               value={criticalAlertType}
               required
+              disabled={editSensorTrue}
               label="Sensor alert"
               onChange={(e) => {
                 setCriticalAlertType(e.target.value);
@@ -327,7 +337,7 @@ const  validateValue=(value ,type,RefValue)=> {
             <TextField
               sx={{ marginTop: 0 }}
               value={criticalMinValue}
-              disabled={criticalAlertType === 'High' || criticalAlertType === '' || (moduleAccess.edit === false && true)}
+              disabled={criticalAlertType === 'High' || criticalAlertType === '' || (moduleAccess.edit === false && true || editSensorTrue)}
               type="number"
               inputProps={{
                 min: userDetails.userRole !== 'systemSpecialist' && criticalRefMinValue,
@@ -367,7 +377,7 @@ const  validateValue=(value ,type,RefValue)=> {
               sx={{ marginTop: 0 }}
               value={criticalMaxValue}
               type="number"
-              disabled={criticalAlertType === 'Low' || criticalAlertType === '' || (moduleAccess.edit === false && true)}
+              disabled={criticalAlertType === 'Low' || criticalAlertType === '' || (moduleAccess.edit === false && true || editSensorTrue)}
               onBlur={() => {
                 validateForNullValue(criticalMaxValue, 'criticalMaxValue');
                 validateAlertrange(criticalMaxValue, criticalRefMinValue, criticalRefMaxValue, setCriticalMaxValue);
@@ -393,7 +403,7 @@ const  validateValue=(value ,type,RefValue)=> {
           </div>
         </Grid>
       </Grid>
-      <Grid container spacing={1} sx={{ mt: 1 }}>
+      <Grid container spacing={2} sx={{ mt: 1 }}>
         <Grid
           sx={{ mt: 0, padding: 0 }}
           item
@@ -425,7 +435,7 @@ const  validateValue=(value ,type,RefValue)=> {
               labelId="demo-simple-select-label"
               value={warningAlertType}
               label="Sensor alert"
-              disabled={moduleAccess.edit === false && true}
+              disabled={moduleAccess.edit === false && true || editSensorTrue}
               required
               onChange={(e) => {
                 setWarningAlertType(e.target.value);
@@ -549,7 +559,7 @@ const  validateValue=(value ,type,RefValue)=> {
               sx={{ marginTop: 0 }}
               value={warningMinValue}
               type="number"
-              disabled={warningAlertType === 'High' || warningAlertType === '' || (moduleAccess.edit === false && true)}
+              disabled={warningAlertType === 'High' || warningAlertType === '' || (moduleAccess.edit === false && true || editSensorTrue)}
               onBlur={() => {
                 validateForNullValue(warningMinValue, 'warningMinValue');
                 validateAlertrange(warningMinValue, warningRefMinValue, warningRefMaxValue, setWarningMinValue);
@@ -588,7 +598,7 @@ const  validateValue=(value ,type,RefValue)=> {
               sx={{ marginTop: 0 }}
               value={warningMaxValue}
               type="number"
-              disabled={warningAlertType === 'Low' || warningAlertType === '' || (moduleAccess.edit === false && true)}
+              disabled={warningAlertType === 'Low' || warningAlertType === '' || (moduleAccess.edit === false && true || editSensorTrue)}
               onBlur={() => {
                 validateForNullValue(warningMaxValue, 'warningMaxValue');
                 validateAlertrange(warningMaxValue, warningRefMinValue, warningRefMaxValue, setWarningMaxValue);
@@ -614,7 +624,7 @@ const  validateValue=(value ,type,RefValue)=> {
           </div>
         </Grid>
       </Grid>
-      <Grid container spacing={1} sx={{ mt: 1 }}>
+      <Grid container spacing={2} sx={{ mt: 1 }}>
         <Grid
           sx={{ mt: 0, padding: 0 }}
           item
@@ -645,7 +655,7 @@ const  validateValue=(value ,type,RefValue)=> {
               // sx={{ minWidth: 250 }}
               labelId="demo-simple-select-label"
               value={outofrangeAlertType}
-              disabled={moduleAccess.edit === false && true}
+              disabled={moduleAccess.edit === false && true || editSensorTrue}
               required
               label="Sensor alert"
               onChange={(e) => {
@@ -771,7 +781,7 @@ const  validateValue=(value ,type,RefValue)=> {
               sx={{ marginTop: 0 }}
               value={outofrangeMinValue}
               type="number"
-              disabled={outofrangeAlertType === 'High' || outofrangeAlertType === '' || (moduleAccess.edit === false && true)}
+              disabled={outofrangeAlertType === 'High' || outofrangeAlertType === '' || (moduleAccess.edit === false && true || editSensorTrue) }
               onBlur={() => {
                 validateForNullValue(outofrangeMinValue, 'outofrangeMinValue');
                 validateAlertrange(outofrangeMinValue, outofrangeRefMinValue, outofrangeRefMaxValue, setOutofrangeMinValue);
@@ -810,7 +820,7 @@ const  validateValue=(value ,type,RefValue)=> {
               sx={{ marginTop: 0 }}
               value={outofrangeMaxValue}
               type="number"
-              disabled={outofrangeAlertType === 'Low' || outofrangeAlertType === '' || (moduleAccess.edit === false && true)}
+              disabled={outofrangeAlertType === 'Low' || outofrangeAlertType === '' || (moduleAccess.edit === false && true || editSensorTrue)}
               onBlur={() => {
                 validateForNullValue(outofrangeMaxValue, 'outofrangeMaxValue');
                 validateAlertrange(outofrangeMaxValue, outofrangeRefMinValue, outofrangeRefMaxValue, setOutofrangeMaxValue);

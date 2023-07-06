@@ -11,19 +11,26 @@ function Floor() {
   const { buildingImg } = routeStateObject.state;
   const {locationDetails} = ApplicationStore().getStorage('userDetails');
   const {imageBuildingURL} = locationDetails ;
-  const imgSrc = `https://wisething.in/aideaLabs/blog/public/${imageBuildingURL || buildingImg}`;
+  //const imgSrc = `https://localhost/backend/blog/public/${imageBuildingURL || buildingImg}`;
+  const imgSrc = `${process.env.REACT_APP_API_ENDPOINT}blog/public/${imageBuildingURL || buildingImg}`;
   return (
-    <Container maxWidth={false} style={{ marginTop: 0, height: '94vh', paddingLeft: '2px' }}>
+    <Container maxWidth={false} style={{ marginTop: '16px', height: 'auto', paddingLeft: '24px', paddingRight: '35px' }}>
       <Grid
         container
         spacing={2}
         columns={{
           xs: 12, sm: 12, md: 12, lg: 12, xl: 12,
         }}
+        className='h-auto lg:h-[60vh]'
         style={{
-          height: '70vh',
+          // height: 'auto',
           marginLeft: '2px',
-          marginTop: '0px'
+          marginTop: '0px',
+          background: 'white',
+          borderRadius: '12px',
+          boxShadow: 'none',
+          padding: '16px',
+          marginBottom:'20px'
         }}
       >
         <Grid
@@ -39,7 +46,8 @@ function Floor() {
             minHeight: '350px',
             paddingTop: '0px',
             paddingLeft: '0px',
-            marginTop: '0px'
+            marginTop: '0px',
+            width: '100%'
           }}
         >
           <FloorListResults img={imgSrc} />
@@ -58,24 +66,27 @@ function Floor() {
           }}
           sx={{ mt: 2 }}
           style={{
-            height: '70vh',
-            border: '1px solid black',
+            // height: 'auto',
+            // border: '1px solid black',
             paddingLeft: '0px',
             paddingTop: '0px',
             paddingBottom: '0px',
-            marginTop: '2px'
+            marginTop: '2px',
+            // width: '100%'
           }}
         >
           <img
+            className='object-cover w-full'
             src={imgSrc}
-            style={{ 
-              width: `${99}%`, 
-              height: `${100}%`
+            style={{
+              width: `${99}%`,
+              // height: `${100}%`
+              height:'50vh'
             }}
           />
         </Box>
       </Grid>
-    </Container>
+    </Container >
   );
 }
 

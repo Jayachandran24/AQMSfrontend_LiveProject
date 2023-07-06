@@ -1,4 +1,4 @@
-import './Sidebar.scss';
+// import './Sidebar.scss';
 import {
   Box,
   Drawer,
@@ -19,12 +19,13 @@ export default function Sidebar(props) {
   // }, [location])
 
   const openedMixin = () => ({
-    width: 190,
+    width: 250,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    overflowX: 'hidden',
+    // overflowX: 'hidden',
+    border: 'none'
   });
 
   const closedMixin = () => ({
@@ -86,6 +87,7 @@ export default function Sidebar(props) {
         ModalProps={{
           keepMounted: true,
         }}
+        className={!props.mobileMenu ? 'is_mobile_menu' : "is_desktop_menu"}
         sx={{
           display: { xs: 'none', sm: 'none', md: 'block' },
           '& .MuiDrawer-paper': { boxSizing: 'border-box', position: 'inherit' },

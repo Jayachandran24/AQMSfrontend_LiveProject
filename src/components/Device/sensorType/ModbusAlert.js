@@ -1,7 +1,7 @@
 import {
   DialogContent, FormControl, Grid, InputLabel, MenuItem, Select, TextField,
 } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUserAccess } from '../../../context/UserAccessProvider';
 import ApplicationStore from '../../../utils/localStorageUtil';
 
@@ -27,9 +27,12 @@ function ModbusAlert({
   outofrangeLowAlert, setOutofrangeLowAlert,
   outofrangeHighAlert, setOutofrangeHighAlert,
   outofrangeRefMinValue, outofrangeRefMaxValue,
+
+  selectedSensorName,
 }) {
   const { userDetails } = ApplicationStore().getStorage('userDetails');
   const moduleAccess = useUserAccess()('devicelocation');
+  const [editSensorTrue,setEditSensorTrue] = useState(false);
 
   const validateAlertrange = (currentValue, minimumValue, maximumvalue, setCurrentValue) =>{
     if(parseInt(currentValue)<parseInt(minimumValue)){
@@ -40,9 +43,73 @@ function ModbusAlert({
     }
   }
 
+  useEffect(()=>{
+  
+    if(userDetails?.userRole === 'Admin' || userDetails?.userRole === 'Manager')
+    {
+      setEditSensorTrue(true);
+    }
+  },[]);
+
+  const CriticalAlertTypeSelect=(e)=>{
+    if(e.target.value === "High" )
+    {
+    
+      setCriticalHighAlert(selectedSensorName +" "+"Critical " + e.target.value +" "+ "Alarm");
+      setCriticalLowAlert('');
+    }else if(e.target.value === "Low")
+    {
+      setCriticalLowAlert(selectedSensorName +" "+"Critical " + e.target.value + " "+"Alarm");
+      setCriticalHighAlert('');
+    }else 
+    {
+      setCriticalHighAlert(selectedSensorName +" "+"Critical High Alarm");
+      setCriticalLowAlert(selectedSensorName +" "+"Critical Low Alarm");
+    }
+
+  }
+
+  const WarningAlertTypeSelect=(e)=>{
+    if(e.target.value === "High" )
+    {
+ 
+      setWarningHighAlert(selectedSensorName +" "+"Warning " + e.target.value +" "+ "Alarm");
+      setWarningLowAlert('');
+    }else if(e.target.value === "Low")
+    {
+      setWarningLowAlert(selectedSensorName +" "+"Warning " + e.target.value + " "+"Alarm");
+      setWarningHighAlert('');
+    }else 
+    {
+      setWarningHighAlert(selectedSensorName +" "+"Warning High Alarm");
+      setWarningLowAlert(selectedSensorName +" "+"Warning Low Alarm");
+    }
+
+  }
+
+  const Out_of_AlertTypeSelect=(e)=>{
+    if(e.target.value === "High" )
+    {
+
+ 
+      setOutofrangeHighAlert(selectedSensorName +" "+"Out Of Range " + e.target.value +" "+ "Alarm");
+      setOutofrangeLowAlert('');
+    }else if(e.target.value === "Low")
+    {
+      setOutofrangeLowAlert(selectedSensorName +" "+"Out Of Range " + e.target.value + " "+"Alarm");
+      setOutofrangeHighAlert('');
+    }else 
+    {
+      setOutofrangeHighAlert(selectedSensorName +" "+"Out Of Range High Alarm");
+      setOutofrangeLowAlert(selectedSensorName +" "+"Out Of Range Low Alarm");
+    }
+
+  }
+
+
   return (
     <DialogContent sx={{ px: 0, p: 0 }}>
-      <Grid container spacing={1} sx={{ mt: 1 }}>
+      <Grid container spacing={2} sx={{ mt: 1 }}>
         <Grid
           sx={{ mt: 0, padding: 0 }}
           item
@@ -73,7 +140,7 @@ function ModbusAlert({
           </FormControl>
         </Grid>
       </Grid>
-      <Grid container spacing={1} sx={{ mt: 0 }}>
+      <Grid container spacing={2} sx={{ mt: 0 }}>
         <Grid
           sx={{ mt: 0, padding: 0 }}
           item
@@ -104,11 +171,14 @@ function ModbusAlert({
               // sx={{ minWidth: 250 }}
               labelId="demo-simple-select-label"
               value={criticalAlertType}
+              disabled ={editSensorTrue}
               label="Sensor alert"
+              required
               onChange={(e) => {
                 setCriticalAlertType(e.target.value);
                 setCriticalMinValue(criticalMinValue);
                 setCriticalMaxValue(criticalMaxValue);
+                CriticalAlertTypeSelect(e);
               }}
               // error={errorObject?.deviceName?.errorStatus}
               // helperText={errorObject?.deviceName?.helperText}
@@ -215,7 +285,7 @@ function ModbusAlert({
             <TextField
               sx={{ marginTop: 0 }}
               value={criticalMinValue}
-              disabled={criticalAlertType === 'High' || criticalAlertType === 'High' || (moduleAccess.edit === false && true)}
+              disabled={criticalAlertType === 'High' || criticalAlertType === 'High' || (moduleAccess.edit === false && true || editSensorTrue)}
               type='number'
               inputProps={{
                 min: userDetails.userRole !== 'systemSpecialist' && criticalRefMinValue,
@@ -253,7 +323,7 @@ function ModbusAlert({
             <TextField
               sx={{ marginTop: 0 }}
               value={criticalMaxValue}
-              disabled={criticalAlertType === 'Low' || criticalAlertType === '' || (moduleAccess.edit === false && true)}
+              disabled={criticalAlertType === 'Low' || criticalAlertType === '' || (moduleAccess.edit === false && true || editSensorTrue)}
               type='number'
               inputProps={{
                 min: userDetails.userRole !== 'systemSpecialist' && criticalRefMinValue,
@@ -279,7 +349,7 @@ function ModbusAlert({
           </div>
         </Grid>
       </Grid>
-      <Grid container spacing={1} sx={{ mt: 0 }}>
+      <Grid container spacing={2} sx={{ mt: 0 }}>
         <Grid
           sx={{ mt: 0, padding: 0 }}
           item
@@ -310,11 +380,14 @@ function ModbusAlert({
               // sx={{ minWidth: 250 }}
               labelId="demo-simple-select-label"
               value={warningAlertType}
+              disabled={editSensorTrue}
+              required
               label="Sensor alert"
               onChange={(e) => {
                 setWarningAlertType(e.target.value);
                 setWarningMinValue(warningMinValue);
                 setWarningMaxValue(warningMaxValue);
+                WarningAlertTypeSelect(e);
               }}
               // error={errorObject?.deviceName?.errorStatus}
               // helperText={errorObject?.deviceName?.helperText}
@@ -339,7 +412,7 @@ function ModbusAlert({
         >
           <Grid
             container
-            spacing={1}
+            spacing={2}
           >
 
             {warningAlertType === 'Low' || warningAlertType === 'Both'
@@ -423,7 +496,7 @@ function ModbusAlert({
             <TextField
               sx={{ marginTop: 0 }}
               value={warningMinValue}
-              disabled={warningAlertType === 'High' || warningAlertType === '' || (moduleAccess.edit === false && true)}
+              disabled={warningAlertType === 'High' || warningAlertType === '' || (moduleAccess.edit === false && true || editSensorTrue)}
               type='number'
               onBlur={() => {
                 // validateForNullValue(alertTag, "alertTag");
@@ -461,7 +534,7 @@ function ModbusAlert({
             <TextField
               sx={{ marginTop: 0 }}
               value={warningMaxValue}
-              disabled={warningAlertType === 'Low' || warningAlertType === '' || (moduleAccess.edit === false && true)}
+              disabled={warningAlertType === 'Low' || warningAlertType === '' || (moduleAccess.edit === false && true || editSensorTrue)}
               type='number'
               onBlur={() => {
                 // validateForNullValue(alertTag, "alertTag");
@@ -487,7 +560,7 @@ function ModbusAlert({
           </div>
         </Grid>
       </Grid>
-      <Grid container spacing={1} sx={{ mt: 0 }}>
+      <Grid container spacing={2} sx={{ mt: 0 }}>
         <Grid
           sx={{ mt: 0, padding: 0 }}
           item
@@ -519,10 +592,12 @@ function ModbusAlert({
               labelId="demo-simple-select-label"
               value={outofrangeAlertType}
               label="Sensor alert"
+              disabled={editSensorTrue}
               onChange={(e) => {
                 setOutofrangeAlertType(e.target.value);
                 setOutofrangeMinValue(outofrangeMinValue);
                 setOutofrangeMaxValue(outofrangeMaxValue);
+                Out_of_AlertTypeSelect(e);
               }}
               // error={errorObject?.deviceName?.errorStatus}
               // helperText={errorObject?.deviceName?.helperText}
@@ -631,7 +706,7 @@ function ModbusAlert({
             <TextField
               sx={{ marginTop: 0 }}
               value={outofrangeMinValue}
-              disabled={outofrangeAlertType === 'High' || outofrangeAlertType === '' || (moduleAccess.edit === false && true)}
+              disabled={outofrangeAlertType === 'High' || outofrangeAlertType === '' || (moduleAccess.edit === false && true || editSensorTrue)}
               type='number'
               onBlur={() => {
                 // validateForNullValue(alertTag, "alertTag");
@@ -669,7 +744,7 @@ function ModbusAlert({
             <TextField
               sx={{ marginTop: 0 }}
               value={outofrangeMaxValue}
-              disabled={outofrangeAlertType === 'Low' || outofrangeAlertType === '' || (moduleAccess.edit === false && true)}
+              disabled={outofrangeAlertType === 'Low' || outofrangeAlertType === '' || (moduleAccess.edit === false && true || editSensorTrue)}
               type='number'
               onBlur={() => {
                 // validateForNullValue(alertTag, "alertTag");

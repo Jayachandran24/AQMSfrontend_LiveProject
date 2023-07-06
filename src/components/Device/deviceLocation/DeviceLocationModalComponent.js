@@ -10,7 +10,8 @@ import floorPlan from '../../../images/departmentBlueprint.png';
 function DeviceLocationModal({
   open, setOpen, isAddButton, locationData, categoryList, src, floorCords, setFloorCords,
 }) {
-  const labMap = `https://wisething.in/aideaLabs/blog/public/${src}`;
+  // const labMap = `https://localhost/backend/blog/public/${src}`;
+  const labMap = `${process.env.REACT_APP_API_ENDPOINT}blog/public/${src}`;
   const [categoryName, setCategoryName] = useState('');
   const [category_id, setCategoryId] = useState('');
   const [deviceName, setDeviceName] = useState('');

@@ -58,9 +58,10 @@ function CustomerModal({
     setDataRetentionPeriodInterval(customerData.dataRetentionPeriodInterval || '');
     setExpireDateReminder(customerData.expireDateReminder || '');
     setPeriodicBackupInterval(customerData.periodicBackupInterval || '');
-    setPreviewBuilding(customerData.customerLogo ? `https://wisething.in/aideaLabs/blog/public/${customerData.customerLogo}?${new Date().getTime()}` : previewImage);
-    setPreviewBuilding2(customerData.customerLogo ? `https://wisething.in/aideaLabs/blog/public/${customerData.customerImage}?${new Date().getTime()}` : previewImage);
-
+    setPreviewBuilding(customerData.customerLogo ? `${process.env.REACT_APP_API_ENDPOINT}blog/public/${customerData.customerLogo}?${new Date().getTime()}` : previewImage);
+    //setPreviewBuilding(customerData.customerLogo ? `https://localhost/backend/blog/public/${customerData.customerLogo}?${new Date().getTime()}` : previewImage);
+    //setPreviewBuilding2(customerData.customerLogo ? `https://localhost/backend/blog/public/${customerData.customerImage}?${new Date().getTime()}` : previewImage);
+    setPreviewBuilding2(customerData.customerLogo ? `${process.env.REACT_APP_API_ENDPOINT}blog/public/${customerData.customerImage}?${new Date().getTime()}` : previewImage);
     setCustomerLogo('');
   };
   const validateForNullValue = (value, type) => {
@@ -153,14 +154,14 @@ function CustomerModal({
       maxWidth="lg"
       open={open}
     >
-      <DialogTitle>
+      <DialogTitle sx={{fontFamily:'customfont', fontWeight:'600', letterSpacing:'1px'}}>
         {isAddButton ? 'Add Customer' : 'Edit Customer'}
       </DialogTitle>
       <DialogContent>
         <form className="mt-2 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md  -space-y-px ">
+          <div className="rounded-md  -space-y-px px-5 sm:px-10 ">
             <Grid container spacing={2}>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px mb-2">
                   <TextField
                     sx={{ mb: 1 }}
@@ -168,7 +169,7 @@ function CustomerModal({
                     type="text"
                     value={customerName}
                     variant="outlined"
-                    placeholder="Customer Name"
+                    // placeholder="Customer Name"
                     /* eslint-disable-next-line */
                     className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
                     required
@@ -177,10 +178,17 @@ function CustomerModal({
                     autoComplete="off"
                     error={errorObject?.fullName?.errorStatus}
                     helperText={errorObject?.fullName?.helperText}
+                    InputLabelProps={{
+                      shrink:'true',
+                      style:{fontFamily:'customfont'}
+                    }}
+                    InputProps={{
+                      style:{fontFamily:'customfont'}
+                    }}
                   />
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -189,7 +197,7 @@ function CustomerModal({
                       type="email"
                       value={email}
                       variant="outlined"
-                      placeholder="Customer Email Id"
+                      // placeholder="Customer Email Id"
                       /* eslint-disable-next-line */
                       className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
                       required
@@ -198,6 +206,13 @@ function CustomerModal({
                       autoComplete="off"
                       error={errorObject?.emailID?.errorStatus}
                       helperText={errorObject?.emailID?.helperText}
+                      InputLabelProps={{
+                        shrink:'true',
+                        style:{fontFamily:'customfont'}
+                      }}
+                      InputProps={{
+                        style:{fontFamily:'customfont'}
+                      }}
                     />
                   </div>
                 </div>
@@ -205,10 +220,10 @@ function CustomerModal({
 
              
                 <Grid item  xs={12}>
-                  <label>System Generated Communication</label>
+                  <label style={{fontFamily:'customfont', fontWeight:'600'}}>System Generated Communication</label>
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -217,7 +232,7 @@ function CustomerModal({
                       type="System Email Id"
                       value={systemEmail}
                       variant="outlined"
-                      placeholder="System Email Id"
+                      // placeholder="System Email Id"
                       /* eslint-disable-next-line */
                       className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
                       required
@@ -226,12 +241,19 @@ function CustomerModal({
                       autoComplete="off"
                       error={errorObject?.systemEmail?.errorStatus}
                       helperText={errorObject?.systemEmail?.helperText}
+                      InputLabelProps={{
+                        shrink:'true',
+                        style:{fontFamily:'customfont'}
+                      }}
+                      InputProps={{
+                        style:{fontFamily:'customfont'}
+                      }}
                     />
                   </div>
                 </div>
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                   <TextField
@@ -241,14 +263,19 @@ function CustomerModal({
                     type={showPassword ? 'text' : 'password'}
                     value={systemPassword}
                     variant="outlined"
-                    placeholder="Password"
+                    // placeholder="Password"
                     required
                     onChange={(e) => setSystemPassword(e.target.value)}
                     onBlur={() => { validateForNullValue(systemPassword, 'systemPassword'); }}
                     autoComplete="off"
                     error={errorObject?.systemPassword?.errorStatus}
                     helperText={errorObject?.systemPassword?.helperText}
+                    InputLabelProps={{
+                      shrink:'true',
+                      style:{fontFamily:'customfont'}
+                    }}
                     InputProps={{
+                      style:{fontFamily:'customfont'},
                     endAdornment: (
                       <InputAdornment  position="end">
                         <IconButton
@@ -267,7 +294,7 @@ function CustomerModal({
               </Grid>
 
             
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -276,7 +303,7 @@ function CustomerModal({
                       type="number"
                       value={phoneNo}
                       variant="outlined"
-                      placeholder="Phone number"
+                      // placeholder="Phone number"
                       /* eslint-disable-next-line */
                       className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
                       required
@@ -285,11 +312,18 @@ function CustomerModal({
                       autoComplete="off"
                       error={errorObject?.phone?.errorStatus}
                       helperText={errorObject?.phone?.helperText}
+                      InputLabelProps={{
+                        shrink:'true',
+                        style:{fontFamily:'customfont'}
+                      }}
+                      InputProps={{
+                        style:{fontFamily:'customfont'}
+                      }}
                     />
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -298,7 +332,7 @@ function CustomerModal({
                       type="text"
                       value={address}
                       variant="outlined"
-                      placeholder="Address"
+                      // placeholder="Address"
                       /* eslint-disable-next-line */
                       className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
                       required
@@ -307,11 +341,18 @@ function CustomerModal({
                       autoComplete="off"
                       error={errorObject?.address?.errorStatus}
                       helperText={errorObject?.address?.helperText}
+                      InputLabelProps={{
+                        shrink:'true',
+                        style:{fontFamily:'customfont'}
+                      }}
+                      InputProps={{
+                        style:{fontFamily:'customfont'}
+                      }}
                     />
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -320,7 +361,7 @@ function CustomerModal({
                       type="text"
                       value={customerId}
                       variant="outlined"
-                      placeholder="Customer Id"
+                      // placeholder="Customer Id"
                       disabled={isAddButton ? false : true}
                       /* eslint-disable-next-line */
                       className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
@@ -330,11 +371,18 @@ function CustomerModal({
                       autoComplete="off"
                       error={errorObject?.customerID?.errorStatus}
                       helperText={errorObject?.customerID?.helperText}
+                      InputLabelProps={{
+                        shrink:'true',
+                        style:{fontFamily:'customfont'}
+                      }}
+                      InputProps={{
+                        style:{fontFamily:'customfont'}
+                      }}
                     />
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={5} spacing={2} style={{display:'flex',justifyContent: 'space-between'}}>
+              <Grid item xs={12} sm={4} spacing={2}>
                 <div className="col-span-12 sm:col-span-8 lg:col-span-8">
                   <div className="mb-2 block">
                     <TextField
@@ -365,7 +413,8 @@ function CustomerModal({
                     />
                   </div>
                 </div>
-             
+                </Grid>
+                <Grid item xs={12} sm={2}>
                 <div className="col-span-12 sm:col-span-2 lg:col-span-2">
                   <div className="mb-2 block">
                     <Box
@@ -382,7 +431,7 @@ function CustomerModal({
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -391,7 +440,7 @@ function CustomerModal({
                       type="number"
                       value={alertLogInterval}
                       variant="outlined"
-                      placeholder="Alert Log Interval(Seconds)"
+                      // placeholder="Alert Log Interval(Seconds)"
                       /* eslint-disable-next-line */
                       className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
                       required
@@ -400,11 +449,18 @@ function CustomerModal({
                       autoComplete="off"
                       error={errorObject?.alertLogInterval?.errorStatus}
                       helperText={errorObject?.alertLogInterval?.helperText}
+                      InputLabelProps={{
+                        shrink:'true',
+                        style:{fontFamily:'customfont'}
+                      }}
+                      InputProps={{
+                        style:{fontFamily:'customfont'}
+                      }}
                     />
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -413,7 +469,7 @@ function CustomerModal({
                       type="number"
                       value={deviceLogInterval}
                       variant="outlined"
-                      placeholder="Device Log Interval(Seconds)"
+                      // placeholder="Device Log Interval(Seconds)"
                       /* eslint-disable-next-line */
                       className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
                       required
@@ -422,11 +478,18 @@ function CustomerModal({
                       autoComplete="off"
                       error={errorObject?.deviceLogInterval?.errorStatus}
                       helperText={errorObject?.deviceLogInterval?.helperText}
+                      InputLabelProps={{
+                        shrink:'true',
+                        style:{fontFamily:'customfont'}
+                      }}
+                      InputProps={{
+                        style:{fontFamily:'customfont'}
+                      }}
                     />
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -435,7 +498,7 @@ function CustomerModal({
                       type="number"
                       value={sensorLogInterval}
                       variant="outlined"
-                      placeholder="Sensor Log Interval(Seconds)"
+                      // placeholder="Sensor Log Interval(Seconds)"
                       /* eslint-disable-next-line */
                       className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
                       required
@@ -444,11 +507,18 @@ function CustomerModal({
                       autoComplete="off"
                       error={errorObject?.sensorLogInterval?.errorStatus}
                       helperText={errorObject?.sensorLogInterval?.helperText}
+                      InputLabelProps={{
+                        shrink:'true',
+                        style:{fontFamily:'customfont'}
+                      }}
+                      InputProps={{
+                        style:{fontFamily:'customfont'}
+                      }}
                     />
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -457,7 +527,7 @@ function CustomerModal({
                       type="number"
                       value={dataRetentionPeriodInterval}
                       variant="outlined"
-                      placeholder="Data Retention Period(Days)"
+                      // placeholder="Data Retention Period(Days)"
                       /* eslint-disable-next-line */
                       className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
                       required
@@ -466,11 +536,18 @@ function CustomerModal({
                       autoComplete="off"
                       error={errorObject?.dataRetentionPeriodInterval?.errorStatus}
                       helperText={errorObject?.dataRetentionPeriodInterval?.helperText}
+                      InputLabelProps={{
+                        shrink:'true',
+                        style:{fontFamily:'customfont'}
+                      }}
+                      InputProps={{
+                        style:{fontFamily:'customfont'}
+                      }}
                     />
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -479,7 +556,7 @@ function CustomerModal({
                       type="number"
                       value={expireDateReminder}
                       variant="outlined"
-                      placeholder="Expire Date Reminder(Days)"
+                      // placeholder="Expire Date Reminder(Days)"
                       /* eslint-disable-next-line */
                       className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
                       required
@@ -488,11 +565,18 @@ function CustomerModal({
                       autoComplete="off"
                       error={errorObject?.expireDateReminder?.errorStatus}
                       helperText={errorObject?.expireDateReminder?.helperText}
+                      InputLabelProps={{
+                        shrink:'true',
+                        style:{fontFamily:'customfont'}
+                      }}
+                      InputProps={{
+                        style:{fontFamily:'customfont'}
+                      }}
                     />
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={6}>
                 <div className="rounded-md -space-y-px">
                   <div className="mb-2">
                     <TextField
@@ -501,7 +585,7 @@ function CustomerModal({
                       type="number"
                       value={periodicBackupInterval}
                       variant="outlined"
-                      placeholder="Periodic Backup Interval(Days)"
+                      // placeholder="Periodic Backup Interval(Days)"
                       /* eslint-disable-next-line */
                       className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
                       required
@@ -510,11 +594,18 @@ function CustomerModal({
                       autoComplete="off"
                       error={errorObject?.periodicBackupInterval?.errorStatus}
                       helperText={errorObject?.periodicBackupInterval?.helperText}
+                      InputLabelProps={{
+                        shrink:'true',
+                        style:{fontFamily:'customfont'}
+                      }}
+                      InputProps={{
+                        style:{fontFamily:'customfont'}
+                      }}
                     />
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={12} sm={6}>
                 <div className="col-span-12 sm:col-span-8 lg:col-span-8">
                   <div className="mb-2 block">
                     <TextField
@@ -568,6 +659,22 @@ function CustomerModal({
               {isAddButton ? ''
                 : (
                   <Button
+                  sx={{
+                    height: '0',
+                    // width:'100%',
+                    padding: "10px 19px",
+                    color: 'white',
+                    marginTop: '10px',
+                    marginBottom: '15px',
+                    fontSize: '13px',
+                    borderRadius: '10px',
+                    fontWeight: '600',
+                    fontFamily: 'customfont',
+                    letterSpacing: '1px',
+                    marginRight:'20px'
+                  }}
+                  style={{
+                    background: 'rgb(19, 60, 129)',}}
                     onClick={() => {
                       setBtnReset(true);
                     }}
@@ -576,6 +683,22 @@ function CustomerModal({
                   </Button>
                 )}
               <Button
+                sx={{
+                  height: '0',
+                  // width:'100%',
+                  padding: "10px 19px",
+                  color: 'white',
+                  marginTop: '20px',
+                  marginBottom: '15px',
+                  fontSize: '13px',
+                  borderRadius: '10px',
+                  fontWeight: '600',
+                  fontFamily: 'customfont',
+                  letterSpacing: '1px',
+                  marginRight:'20px'
+                }}
+                style={{
+                  background: 'rgb(19, 60, 129)',}}
                 type="submit"
                 /* eslint-disable-next-line */
                 // disabled={errorObject?.fullName?.errorStatus || errorObject?.emailID?.errorStatus || errorObject?.phone?.errorStatus || errorObject?.address?.errorStatus || errorObject?.customerID?.errorStatus || errorObject?.customerTheme?.errorStatus || errorObject?.customerLogo?.errorStatus}
@@ -583,6 +706,22 @@ function CustomerModal({
                 {isAddButton ? 'Add' : 'Update'}
               </Button>
               <Button
+                sx={{
+                  height: '0',
+                  // width:'100%',
+                  padding: "10px 19px",
+                  color: 'white',
+                  marginTop: '20px',
+                  marginBottom: '15px',
+                  fontSize: '13px',
+                  borderRadius: '10px',
+                  fontWeight: '600',
+                  fontFamily: 'customfont',
+                  letterSpacing: '1px',
+                  marginRight:'20px'
+                }}
+                style={{
+                  background: 'rgb(19, 60, 129)',}}
               /* eslint-disable-next-line */
                 onClick={(e) => {
                   setOpen(false);
@@ -619,6 +758,21 @@ function CustomerModal({
             </div>
             <div className="mt-3 ml-2 float-right">
               <Button
+                sx={{
+                  height: '0',
+                  width:'100%',
+                  padding: "10px 19px",
+                  color: 'white',
+                  marginTop: '20px',
+                  marginBottom: '15px',
+                  fontSize: '13px',
+                  borderRadius: '10px',
+                  fontWeight: '600',
+                  fontFamily: 'customfont',
+                  letterSpacing: '1px'
+                }}
+                style={{
+                  background: 'rgb(19, 60, 129)',}}
                 onClick={() => {
                   setBtnReset(false);
                 }}
@@ -626,6 +780,21 @@ function CustomerModal({
                 Cancel
               </Button>
               <Button
+                sx={{
+                  height: '0',
+                  width:'100%',
+                  padding: "10px 19px",
+                  color: 'white',
+                  marginTop: '20px',
+                  marginBottom: '15px',
+                  fontSize: '13px',
+                  borderRadius: '10px',
+                  fontWeight: '600',
+                  fontFamily: 'customfont',
+                  letterSpacing: '1px'
+                }}
+                style={{
+                  background: 'rgb(19, 60, 129)',}}
                 type="submit"
               >
                 Submit

@@ -41,7 +41,7 @@ function AddDeviceListResults(props) {
     {
       field: 'deviceCategory',
       headerName: 'Device Category',
-      minWidth: 130,
+      minWidth: 150,
       flex: 1,
       align: 'center',
       headerAlign: 'center'
@@ -101,7 +101,7 @@ function AddDeviceListResults(props) {
       field: 'hardwareModelVersion',
       headerName: 'H/W Model No.',
       sortable: false,
-      minWidth: 120,
+      minWidth: 170,
       flex: 1,
       align: 'center',
       headerAlign: 'center'
@@ -441,7 +441,9 @@ function AddDeviceListResults(props) {
   const getHoverBackgroundColor = (color, mode) => (mode === 'dark' ? darken(color, 0.5) : lighten(color, 0.5));
 
   return (
-    <div style={{ height: 300, width: '100%', padding: 0 }}>
+    <div style={{ width: '100%', padding: 0 }}
+    className='h-[50vh] sm:h-[41vh]'
+    >
       <Grid container spacing={1}>
         <Grid
           item
@@ -453,7 +455,8 @@ function AddDeviceListResults(props) {
         >
           <Box
             sx={{
-              height: 400,
+              height: 540,
+              fontFamily: 'customfont',
               '& .super-app-theme--calibration': {
                 color: 'maroon',
                 bgcolor: (theme) => getBackgroundColor('#FAE8FA', theme.palette.mode),
@@ -507,6 +510,7 @@ function AddDeviceListResults(props) {
             }}
           >
             <DataGrid
+              sx={{ border: 'none', padding: '0 10px', fontFamily: 'customfont', height: 'full' }}
               rows={deviceList}
               columns={columns}
               pageSize={5}
@@ -531,14 +535,16 @@ function AddDeviceListResults(props) {
             sx={{
               width: '100%',
               height: '100%',
+              fontFamily: 'customfont',
             }}
           >
             <div style={{
-              width: `${99}%`, height: `${100}%`, borderColor: 'black', border: `${2}px` + ' solid' + ' black',
+              fontFamily: 'customfont',
+              width: `${99}%`, height: `${'auto'}`, borderColor: '#c3c3c3', border: `${1}px` + ' solid' + ' #c3c3c3',
             }}
             >
               <ImageMarkerList
-                labImage={`https://wisething.in/aideaLabs/blog/public/${props.labMap}`}
+                labImage={`${process.env.REACT_APP_API_ENDPOINT}blog/public/${props.labMap}`}
                 deviceCoordsList={deviceCoordsList}
               />
             </div>
@@ -612,7 +618,7 @@ function AddDeviceListResults(props) {
         openNotification={openNotification.status}
         type={openNotification.type}
       />
-      <ConfirmModeChange 
+      <ConfirmModeChange
         modeChange={modeChange}
         setModeChange={setModeChange}
         changeDeviceId={changeDeviceId}

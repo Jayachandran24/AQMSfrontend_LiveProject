@@ -12,6 +12,7 @@ import ApplicationStore from '../../utils/localStorageUtil';
 import { AddUserValidate } from '../../validation/formValidation';
 import NotificationBar from '../notification/ServiceNotificationBar';
 import ConfirmPassword from './passwordConfirmComponent';
+
 /* eslint-disable no-shadow */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-unused-vars */
@@ -393,66 +394,59 @@ function UserModal({
     setLabId(lab_id);
   }
 
+
   return (
     <Dialog
       sx={{ '& .MuiDialog-paper': { minWidth: '80%' } }}
       maxWidth="sm"
       open={open}
     >
-      <DialogTitle>
+      <DialogTitle sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '1px', textAlign: 'center' }}>
         {isAddButton ? 'Add User' : 'Edit User'}
       </DialogTitle>
-      <DialogContent>
-        <form className="space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md  -space-y-px">
+      <DialogContent style={{paddingRight:'15+px'}} >
+        <form className={'space-y-0'} onSubmit={handleSubmit}>
+          <div className={'rounded-md  -space-y-px'}>
             {isSuperAdmin ? ''
               : (
-                <Grid container spacing={1} sx={{ mt: 0, mb: 2 }}>
-                  <Grid
-                    sx={{ mt: 0, padding: 0 }}
-                    item
-                    xs={12}
-                    sm={12}
-                    md={4}
-                    lg={4}
-                    xl={4}
-                  >
+                <Grid container spacing={2} sx={{ mt: 0, mb: 2 }}>
+                  <Grid sx={{ mt: 0, padding: 0 }} gap={1} item xs={12} sm={12} md={4} lg={4} xl={4}>
                     <div className="rounded-md -space-y-px">
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-standard-label">Location</InputLabel>
+                        {/* <InputLabel id="demo-simple-select-standard-label">Location</InputLabel> */}
+                        <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-black'>Location</label>
                         <Select
+                          className='text-left px-2 py-1 bg-[#f9f9f9] ' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                          size='small'
+                          displayEmpty
                           value={location_id}
                           onChange={(e) => onLocationChange(e.target.value)}
-                          label="Location"
+                        // label="Location"
                         >
                           <MenuItem value="" key={0}>
                             <em>N/A</em>
                           </MenuItem>
                           {locationList?.map((data, index) => {
                             return (
-                              <MenuItem value={data.id} key={index + 1}>{data.stateName}</MenuItem>
+                              <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.stateName}</MenuItem>
                             );
                           })}
                         </Select>
                       </FormControl>
                     </div>
                   </Grid>
-                  <Grid
-                    sx={{ mt: 0, padding: 0 }}
-                    item
-                    xs={12}
-                    sm={12}
-                    md={4}
-                    lg={4}
-                    xl={4}
-                  >
+                  <Grid sx={{ mt: 0, padding: 0 }} item xs={12} sm={12} md={4} lg={4} xl={4}>
                     <div className="rounded-md -space-y-px">
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-standard-label">Branch</InputLabel>
+                        {/* <InputLabel id="demo-simple-select-standard-label">Branch</InputLabel> */}
+                        <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-black'>Branch</label>
                         <Select
+                          className='text-left px-2 py-1 bg-[#f9f9f9] ' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                          size='small'
+                          displayEmpty
                           value={branch_id}
                           onChange={(e) => onBranchChange(e.target.value)}
-                          label="Branch"
+                        // label="Branch"
                         >
                           <MenuItem value="" key={0}>
                             <em>N/A</em>
@@ -466,22 +460,18 @@ function UserModal({
                       </FormControl>
                     </div>
                   </Grid>
-                  <Grid
-                    sx={{ mt: 0, padding: 0 }}
-                    item
-                    xs={12}
-                    sm={12}
-                    md={4}
-                    lg={4}
-                    xl={4}
-                  >
+                  <Grid sx={{ mt: 0, padding: 0 }} item xs={12} sm={12} md={4} lg={4} xl={4}>
                     <div className="rounded-md -space-y-px">
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-standard-label">Facility</InputLabel>
+                        {/* <InputLabel id="demo-simple-select-standard-label">Facility</InputLabel> */}
+                        <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-black'>Facility</label>
                         <Select
+                          className='text-left px-2 py-1 bg-[#f9f9f9] ' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                          size='small'
+                          displayEmpty
                           value={facility_id}
                           onChange={(e) => onFacilityChange(e.target.value)}
-                          label="Facility"
+                        // label="Facility"
                         >
                           <MenuItem value="" key={0}>
                             <em>N/A</em>
@@ -495,80 +485,68 @@ function UserModal({
                       </FormControl>
                     </div>
                   </Grid>
-                  <Grid
-                    sx={{ mt: 0, padding: 0 }}
-                    item
-                    xs={12}
-                    sm={12}
-                    md={4}
-                    lg={4}
-                    xl={4}
-                  >
+                  <Grid sx={{ mt: 0, padding: 0 }} item xs={12} sm={12} md={4} lg={4} xl={4}>
                     <div className="rounded-md -space-y-px">
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-standard-label">Building</InputLabel>
+                        {/* <InputLabel id="demo-simple-select-standard-label">Building</InputLabel> */}
+                        <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-black'>Building</label>
                         <Select
+                          className='text-left px-2 py-1 bg-[#f9f9f9] ' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                          size='small'
+                          displayEmpty
                           value={building_id}
                           onChange={(e) => onBuildingChange(e.target.value)}
-                          label="Building"
+                        // label="Building"
                         >
-                          <MenuItem value="" key={0}>
+                          <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
                             <em>N/A</em>
                           </MenuItem>
                           {buildingList?.map((data, index) => {
                             return (
-                              <MenuItem value={data.id} key={index + 1}>{data.buildingName}</MenuItem>
+                              <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.buildingName}</MenuItem>
                             );
                           })}
                         </Select>
                       </FormControl>
                     </div>
                   </Grid>
-                  <Grid
-                    sx={{ mt: 0, padding: 0 }}
-                    item
-                    xs={12}
-                    sm={12}
-                    md={4}
-                    lg={4}
-                    xl={4}
-                  >
+                  <Grid sx={{ mt: 0, padding: 0 }} item xs={12} sm={12} md={4} lg={4} xl={4}>
                     <div className="rounded-md -space-y-px">
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-standard-label">Floor</InputLabel>
+                        {/* <InputLabel id="demo-simple-select-standard-label">Floor</InputLabel> */}
+                        <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-black'>Floor</label>
                         <Select
+                          className='text-left px-2 py-1 bg-[#f9f9f9] ' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                          size='small'
+                          displayEmpty
                           value={floor_id}
                           onChange={(e) => onFloorChange(e.target.value)}
-                          label="Floor"
+                        // label="Floor"
                         >
-                          <MenuItem value="" key={0}>
+                          <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
                             <em>N/A</em>
                           </MenuItem>
                           {floorList?.map((data, index) => {
                             return (
-                              <MenuItem value={data.id} key={index + 1}>{data.floorName}</MenuItem>
+                              <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.floorName}</MenuItem>
                             );
                           })}
                         </Select>
                       </FormControl>
                     </div>
                   </Grid>
-                  <Grid
-                    sx={{ mt: 0, padding: 0 }}
-                    item
-                    xs={12}
-                    sm={12}
-                    md={4}
-                    lg={4}
-                    xl={4}
-                  >
+                  <Grid sx={{ mt: 0, padding: 0 }} item xs={12} sm={12} md={4} lg={4} xl={4}>
                     <div className="rounded-md -space-y-px">
                       <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-standard-label">Zone</InputLabel>
+                        {/* <InputLabel id="demo-simple-select-standard-label">Lab</InputLabel> */}
+                        <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-black'>Zone</label>
                         <Select
+                          className='text-left px-2 py-1 bg-[#f9f9f9] ' sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                          size='small'
+                          displayEmpty
                           value={lab_id}
                           onChange={(e) => onLabChange(e.target.value)}
-                          label="Zone"
+                        // label="Lab"
                         >
                           <MenuItem value="" key={0}>
                             <em>N/A</em>
@@ -583,36 +561,47 @@ function UserModal({
                     </div>
                   </Grid>
                 </Grid>
-              ) }
-            <div className="rounded-md -space-y-px mb-2">
-              <TextField
-                sx={{ mb: 2, mt: 2 }}
-                label="Employee Id"
-                type="text"
-                value={empId}
-                variant="outlined"
-                placeholder="Employee Id"
-                className="mb-2 appearance-none rounded-none
-                relative block w-full px-3 py-2 border border-gray-300
-                placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none
-                focus:ring-red-500 focus:border-red-500  sm:text-sm"
-                required
-                onBlur={() => validateForNullValue(empId, 'employeeId')}
-                onChange={(e) => { setEmployeeId(e.target.value); }}
-                autoComplete="off"
-                error={errorObject?.employeeId?.errorStatus}
-                helperText={errorObject?.employeeId?.helperText}
-              />
-            </div>
-            <div className="rounded-md -space-y-px">
-              <div className="mb-2">
+              )}
+            <div className='flex gap-5 items-center justify-center flex-col sm:flex-row'>
+              <div className="rounded-md -space-y-px mb-2 w-full ">
                 <TextField
+                  fullWidth
+                  sx={{ mb: 2, mt: 2, fontFamily: 'customfont' }}
+                  label="Employee Id"
+                  type="text"
+                  value={empId}
+                  variant="outlined"
+                  // placeholder="Employee Id"
+                  className="mb-2 appearance-none rounded-none
+                  relative block w-full px-3 py-2 border border-gray-300
+                  placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none
+                  focus:ring-red-500 focus:border-red-500  sm:text-sm"
+                  required
+                  onBlur={() => validateForNullValue(empId, 'employeeId')}
+                  onChange={(e) => { setEmployeeId(e.target.value); }}
+                  autoComplete="off"
+                  error={errorObject?.employeeId?.errorStatus}
+                  helperText={errorObject?.employeeId?.helperText}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+
+                  InputProps={{
+                    className: 'bg-[#f9f9f9]',
+                    sx: { fontFamily: 'customfont' }
+                  }}
+                />
+              </div>
+              {/* <div className="rounded-md -space-y-px"> */}
+              <div className="mt-2 w-full ">
+                <TextField
+                  fullWidth
                   sx={{ mb: 2 }}
                   label="Email Id"
                   type="email"
                   value={email}
                   variant="outlined"
-                  placeholder="Email Id"
+                  // placeholder="Email Id"
                   className="mb-2 appearance-none rounded-none relative
                   block w-full px-3 py-2 border border-gray-300 placeholder-gray-500
                   text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500
@@ -623,150 +612,233 @@ function UserModal({
                   autoComplete="off"
                   error={errorObject?.emailId?.errorStatus}
                   helperText={errorObject?.emailId?.helperText}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  InputProps={{
+                    className: 'bg-[#f9f9f9]',
+                    style: { fontFamily: 'customfont' }
+                  }}
                 />
               </div>
+              {/* </div> */}
             </div>
-            <div className="rounded-md -space-y-px">
-              <div className="mb-2">
-                <TextField
-                  sx={{ mb: 2 }}
-                  label="Phone"
-                  type="number"
-                  value={phoneNo}
-                  variant="outlined"
-                  placeholder="Phone number"
-                  className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2
-                  border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md
-                  focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
-                  required
-                  onBlur={() => validateForNullValue(phoneNo, 'phone')}
-                  onChange={(e) => { setPhone(e.target.value); }}
-                  autoComplete="off"
-                  error={errorObject?.phone?.errorStatus}
-                  helperText={errorObject?.phone?.helperText}
-                />
-              </div>
-            </div>
-            <div className="rounded-md -space-y-px">
-              <div className="mb-2">
-                <TextField
-                  sx={{ mb: 2 }}
-                  label="Full Name"
-                  type="text"
-                  value={empName}
-                  variant="outlined"
-                  placeholder="Full Name"
-                  className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2
-                  border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md
-                  focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
-                  required
-                  onBlur={() => validateForNullValue(empName, 'fullName')}
-                  onChange={(e) => setFullName(e.target.value)}
-                  autoComplete="off"
-                  error={errorObject?.fullName?.errorStatus}
-                  helperText={errorObject?.fullName?.helperText}
-                />
-              </div>
-            </div>
-            <div className="rounded-md -space-y-px">
-              <div className="mb-2">
-                <FormControl sx={{ mb: 2 }} fullWidth>
-                  <InputLabel id="demo-simple-select-label">Role</InputLabel>
-                  {isSuperAdmin
-                    ? (
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={empRole}
-                        label="Role"
-                        onChange={(e) => {
-                          setRole(e.target.value);
-                        }}
-                        disabled
-                      >
-                        <MenuItem value="superAdmin">Super Admin</MenuItem>
-                      </Select>
-                    )
-                    : (
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={empRole}
-                        disabled={userRole === 'Manager' && true}
-                        label="Role"
-                        onChange={(e) => {
-                          setRole(e.target.value);
-                        }}
-                      >
-                        <MenuItem value="User">User</MenuItem>
-                        <MenuItem value="Manager">Manager</MenuItem>
-                        <MenuItem value="Admin">Admin</MenuItem>
-                      </Select>
-                    )}
-                </FormControl>
-              </div>
-            </div>
-            {isSuperAdmin ? '' : 
-              <div className="">
-                <div className="">
-                  <FormGroup sx={{ display: 'block' }}>
-                    <FormControlLabel
-                      control={(
-                        <Switch
-                        /* eslint-disable-next-line */
-                          checked={empNotification}
-                          onChange={(e) => {
-                            setEmpNotification(e.target.checked);
-                          }}
-                          color="warning"
-                        />
-                      )}
-                      label="Enable Notification"
-                    />
-                  </FormGroup>
+            <div className='flex gap-5 items-center justify-center flex-col sm:flex-row'>
+              <div className="rounded-md -space-y-px w-full">
+                <div className="mb-2">
+                  <TextField
+                    sx={{ mb: 2 }}
+                    label="Phone"
+                    type="number"
+                    value={phoneNo}
+                    variant="outlined"
+                    // placeholder="Phone number"
+                    className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2
+                    border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md
+                    focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
+                    required
+                    onBlur={() => validateForNullValue(phoneNo, 'phone')}
+                    onChange={(e) => { setPhone(e.target.value); }}
+                    autoComplete="off"
+                    error={errorObject?.phone?.errorStatus}
+                    helperText={errorObject?.phone?.helperText}
+                    InputLabelProps={{
+                      shrink: true,
+                      // backgroundCo:'#f9f9f9'
+
+                    }}
+                    InputProps={{
+                      className: 'bg-[#f9f9f9]',
+                      style: { fontFamily: 'customfont' }
+                    }}
+                  />
                 </div>
               </div>
-            }
-            <div className="rounded-md -space-y-px float-right">
-              {isAddButton ? ''
-                : (
-                  <Button
-                    onClick={() => {
-                      setBtnReset(true);
+              <div className="rounded-md -space-y-px w-full">
+                <div className="mb-2">
+                  <TextField
+                    sx={{ mb: 2, fontFamily: 'customfont' }}
+                    label="Full Name"
+                    type="text"
+                    value={empName}
+                    variant="outlined"
+                    // placeholder="Full Name"
+                    className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2
+                    border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md
+                    focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
+                    required
+                    onBlur={() => validateForNullValue(empName, 'fullName')}
+                    onChange={(e) => setFullName(e.target.value)}
+                    autoComplete="off"
+                    error={errorObject?.fullName?.errorStatus}
+                    helperText={errorObject?.fullName?.helperText}
+                    InputLabelProps={{
+                      shrink: true,
                     }}
-                  >
-                    Reset Password
-                  </Button>
-                )}
-              <Button
-                type="submit"
-                disabled={
-                  errorObject?.employeeId?.errorStatus
-                  || errorObject?.emailId?.errorStatus
-                  || errorObject?.phone?.errorStatus
-                  || errorObject?.role?.errorStatus
-                  || errorObject?.fullName?.errorStatus
-                }
-              >
-                {isAddButton ? 'Add' : 'Update'}
-              </Button>
-              <Button
-                onClick={() => {
-                  setErrorObject({});
-                  setBranchList([]);
-                  setFacilityList([]);
-                  setBuildingList([]);
-                  setBranchId('');
-                  setFacilityId('');
-                  setBuildingId('');
-                  setFloorId('');
-                  setLabId('');
-                  loaddata();
-                  setOpen(false);
-                }}
-              >
-                Cancel
-              </Button>
+                    InputProps={{
+                      className: 'bg-[#f9f9f9] ',
+                      style: { fontFamily: 'customfont' }
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className='flex gap-5 items-center justify-center flex-col sm:flex-row'>
+              <div className="rounded-md -space-y-px w-full">
+                <div className="mb-2">
+                  <FormControl sx={{ mb: 2 }} fullWidth>
+                    <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                    {isSuperAdmin
+                      ? (
+                        <Select
+                          className='bg-[#f9f9f9]'
+                          sx={{ fontFamily: 'customfont' }}
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={empRole}
+                          label="Role"
+                          onChange={(e) => {
+                            setRole(e.target.value);
+                          }}
+                          disabled
+                        >
+                          <MenuItem value="superAdmin" sx={{ fontFamily: 'customfont' }}>Super Admin</MenuItem>
+                        </Select>
+                      )
+                      : (
+                        <Select
+                          className='bg-[#f9f9f9]'
+                          sx={{ fontFamily: 'customfont' }}
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={empRole}
+                          disabled={userRole === 'Manager' && true}
+                          label="Role"
+                          displayEmpty
+                          onChange={(e) => {
+                            setRole(e.target.value);
+                          }}
+                        >
+                          <MenuItem value="User" sx={{ fontFamily: 'customfont' }}>User</MenuItem>
+                          <MenuItem value="Manager" sx={{ fontFamily: 'customfont' }}>Manager</MenuItem>
+                          <MenuItem value="Admin" sx={{ fontFamily: 'customfont' }}>Admin</MenuItem>
+                        </Select>
+                      )}
+                  </FormControl>
+                </div>
+              </div>
+
+              {isSuperAdmin ? '' :
+                <div className="w-full text-right mr-2">
+                  <div className="">
+                    <FormGroup sx={{ display: 'block' }}>
+                      <FormControlLabel
+                        control={(
+                          <Switch
+                            /* eslint-disable-next-line */
+                            checked={empNotification}
+                            onChange={(e) => {
+                              setEmpNotification(e.target.checked);
+                            }}
+                            color="success"
+                          // sx={{color:'black'}}
+                          />
+                        )}
+                        label="Enable Notification"
+                      />
+                    </FormGroup>
+                  </div>
+                </div>
+              }
+            </div>
+            <div className=" float-right flex mt-3 flex-col sm:flex-row">
+              <div className='mt-3 min-[320px]:mb-5 min-[768px]:mb-5  min-[320px]:mr-0 min-[768px]:mr-7' >
+                {isAddButton ? ''
+                  : (
+                    <Button
+                     style={{
+                      background: 'rgb(19 60 129)',}}
+                      sx={{
+                        textAlign: 'center',
+                        height: '40px',
+                        color: 'white',
+                        padding: "10px 19px",
+                        fontSize: '13px',
+                        borderRadius: '10px',
+                        fontWeight: '600',
+                        fontFamily: 'customfont',
+                        letterSpacing: '1px',
+                        boxShadow: 'none',
+                        marginRight:'20px'
+                      }}
+                      onClick={() => {
+                        setBtnReset(true);
+                      }}
+                    >
+                      Reset Password
+                    </Button>
+                  )}
+              </div>
+              <div className='mt-3 min-[320px]:mb-5 min-[768px]:mb-0 min-[320px]:mr-0 min-[768px]:mr-7'>
+                <Button
+                  style={{
+                    background: 'rgb(19 60 129)',}}
+                  sx={{
+                    height: '40px',
+                    color: 'white',
+                    padding: "10px 25px",
+                    fontSize: '13px',
+                    borderRadius: '10px',
+                    fontWeight: '600',
+                    fontFamily: 'customfont',
+                    letterSpacing: '1px',
+                    boxShadow: 'none',
+                    marginRight:'20px'
+                  }}
+                  type="submit"
+                  disabled={
+                    errorObject?.employeeId?.errorStatus
+                    || errorObject?.emailId?.errorStatus
+                    || errorObject?.phone?.errorStatus
+                    || errorObject?.role?.errorStatus
+                    || errorObject?.fullName?.errorStatus
+                  }
+                >
+                  {isAddButton ? 'Add' : 'Update'}
+                </Button>
+              </div>
+              <div className='mt-3  min-[320px]:mb-5 min-[768px]:mb-0 min-[320px]:mr-0 min-[768px]:mr-7'>
+                <Button
+                  style={{
+                    background: 'rgb(19 60 129)',}}
+                  sx={{
+                    height: '40px',
+                    color: 'white',
+                    padding: "10px 19px",
+                    fontSize: '13px',
+                    borderRadius: '10px',
+                    fontWeight: '600',
+                    fontFamily: 'customfont',
+                    letterSpacing: '1px',
+                    boxShadow: 'none'
+                  }}
+                  onClick={() => {
+                    setErrorObject({});
+                    setBranchList([]);
+                    setFacilityList([]);
+                    setBuildingList([]);
+                    setBranchId('');
+                    setFacilityId('');
+                    setBuildingId('');
+                    setFloorId('');
+                    setLabId('');
+                    loaddata();
+                    setOpen(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           </div>
         </form>

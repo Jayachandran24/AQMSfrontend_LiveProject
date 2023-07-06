@@ -8,6 +8,7 @@ import { ConfigSetupFetchService, ConfigSetupDeleteService } from '../../../../s
 import NotificationBar from '../../../notification/ServiceNotificationBar';
 import { useUserAccess } from '../../../../context/UserAccessProvider';
 import DeleteConfirmationDailog from '../../../../utils/confirmDeletion';
+import { Card, CardContent, CardHeader, Divider } from '@mui/material';
 
 export function ConfigSetupListResults() {
   const columns = [
@@ -16,7 +17,7 @@ export function ConfigSetupListResults() {
       headerName: 'Access Point Name',
       minWidth: 170,
       align: 'center',
-      flex : 1,
+      flex: 1,
       headerAlign: 'center'
     },
     {
@@ -24,7 +25,7 @@ export function ConfigSetupListResults() {
       headerName: 'FTP Account Name',
       minWidth: 170,
       align: 'center',
-      flex : 1,
+      flex: 1,
       headerAlign: 'center'
     },
     {
@@ -32,7 +33,7 @@ export function ConfigSetupListResults() {
       headerName: 'Port',
       minWidth: 100,
       align: 'center',
-      flex : 1,
+      flex: 1,
       headerAlign: 'center'
     },
     {
@@ -40,7 +41,7 @@ export function ConfigSetupListResults() {
       headerName: 'Server Url',
       minWidth: 200,
       align: 'center',
-      flex : 1,
+      flex: 1,
       headerAlign: 'center'
     },
     {
@@ -48,7 +49,7 @@ export function ConfigSetupListResults() {
       headerName: 'APN',
       minWidth: 100,
       align: 'center',
-      flex : 1,
+      flex: 1,
       headerAlign: 'center'
     },
     {
@@ -57,7 +58,7 @@ export function ConfigSetupListResults() {
       headerName: 'Actions',
       minWidth: 100,
       align: 'center',
-      flex : 1,
+      flex: 1,
       cellClassName: 'actions',
       getActions: (params) => [
         <EditData selectedRow={params.row} />,
@@ -151,47 +152,58 @@ export function ConfigSetupListResults() {
   };
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
-      <ConfigSetupListToolbar
-        setIsAddButton={setIsAddButton}
-        setEditConfigSetup={setEditConfigSetup}
-        setOpen={setOpen}
-        editConfigSetup={editConfigSetup}
-        userAccess={moduleAccess}
-      />
-
-      <DataGrid
-        rows={configSetupList}
-        columns={columns}
-        pageSize={5}
-        loading={isLoading}
-        rowsPerPageOptions={[5]}
-        disableSelectionOnClick
-      />
-      <ConfigSetupModal
-        isAddButton={isAddButton}
-        configSetupData={editConfigSetup}
-        open={open}
-        setOpen={setOpen}
-        setRefreshData={setRefreshData}
-        handleClose={handleClose}
-        openNotification={openNotification}
-        setNotification={setNotification}
-      />
-      <NotificationBar
-        handleClose={handleClose}
-        notificationContent={openNotification.message}
-        openNotification={openNotification.status}
-        type={openNotification.type}
-      />
-      <DeleteConfirmationDailog
-        open={deleteDailogOpen}
-        setOpen={setDeleteDailogOpen}
-        deleteId={deleteId}
-        deleteService={ConfigSetupDeleteService}
-        handleSuccess={deletehandleSuccess}
-        handleException={deletehandleException}
-      />
-    </div>
+    <>
+      <Card style={{ boxShadow: 'none' }}>
+        <CardHeader
+          className='mt-0' 
+          style={{padding:'0 15px'}}
+          title={
+            <ConfigSetupListToolbar
+              setIsAddButton={setIsAddButton}
+              setEditConfigSetup={setEditConfigSetup}
+              setOpen={setOpen}
+              editConfigSetup={editConfigSetup}
+              userAccess={moduleAccess}
+            />
+          }
+        />
+        <CardContent className={'w-full h-[56vh]'}
+        >
+          <DataGrid
+            sx={{ border: 'none', fontFamily: 'customfont', fontSize: '16px', fontWeight: '500', color: 'black', letterSpacing: '1px' }}
+            rows={configSetupList}
+            columns={columns}
+            pageSize={5}
+            loading={isLoading}
+            rowsPerPageOptions={[5]}
+            disableSelectionOnClick
+          />
+          <ConfigSetupModal
+            isAddButton={isAddButton}
+            configSetupData={editConfigSetup}
+            open={open}
+            setOpen={setOpen}
+            setRefreshData={setRefreshData}
+            handleClose={handleClose}
+            openNotification={openNotification}
+            setNotification={setNotification}
+          />
+          <NotificationBar
+            handleClose={handleClose}
+            notificationContent={openNotification.message}
+            openNotification={openNotification.status}
+            type={openNotification.type}
+          />
+          <DeleteConfirmationDailog
+            open={deleteDailogOpen}
+            setOpen={setDeleteDailogOpen}
+            deleteId={deleteId}
+            deleteService={ConfigSetupDeleteService}
+            handleSuccess={deletehandleSuccess}
+            handleException={deletehandleException}
+          />
+        </CardContent>
+      </Card>
+    </>
   );
 }

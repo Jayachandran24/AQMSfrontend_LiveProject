@@ -348,8 +348,19 @@ function SensorModel({
     >
       {progressStatus === 1 && (
         <>
-          <DialogTitle style={{padding: '0px', paddingLeft: '26px', paddingTop: '10px'}}>Sensors for device</DialogTitle>
-          <DialogContent style={{padding: '10px'}}>
+          <DialogTitle
+            style={{
+              fontFamily: 'customfont',
+              letterSpacing: '1px',
+              fontWeight: '600',
+              textAlign: 'center',
+              padding: '30px 0',
+              fontSize: '22px'
+            }}
+          >
+            Sensors for device
+          </DialogTitle>
+          <DialogContent style={{ padding: '10px' }}>
             <SensorSettingsMenu
               anchorEl={anchorEl}
               popperOpen={popperOpen}
@@ -371,7 +382,16 @@ function SensorModel({
             <Box sx={{ flexGrow: 1, width: '100%', height: 300 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={4}>
-                  <div style={{ marginLeft: 20, textAlign: 'center' }}>
+                  <div
+                    style={{
+                      fontFamily: 'customfont',
+                      fontWeight: '600',
+                      letterSpacing: '1px',
+                      textAlign: 'center',
+                      padding: '10px 0',
+                      fontSize: '19px'
+                    }}
+                    >
                     Analog
                   </div>
                   <ListWrapper style={{ maxHeight: 300, overflow: 'auto' }}>
@@ -387,9 +407,10 @@ function SensorModel({
                                   onClick={() => {
                                     setEditData(data);
                                     setProgressStatus(2);
-                                  }}
+                                  }
+                                }
                                 >
-                                  <ListItemAvatar>
+                                  <ListItemAvatar >
                                     <Avatar>
                                       <SensorsIcon />
                                     </Avatar>
@@ -418,17 +439,28 @@ function SensorModel({
                         })
                         : (
                           <ListItem
-                            style={{ display: 'block', textAlignLast: 'center' }}
+                            style={{
+                              display: 'block',
+                              textAlignLast: 'center',
+                              fontFamily: 'customfont'
+                            }}
                           >
                             <ListItemAvatar />
-                            <span style={{ display: 'block', textAlignLast: 'center' }}>No Analog Sensors</span>
+                            <span style={{ display: 'block', textAlignLast: 'center', fontFamily: 'customfont', letterSpacing: '1px', fontWeight: '600' }}>No Analog Sensors</span>
                           </ListItem>
                         )}
                     </List>
                   </ListWrapper>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <div style={{ marginLeft: 20, textAlign: 'center' }}>
+                  <div style={{
+                    fontFamily: 'customfont',
+                    fontWeight: '600',
+                    letterSpacing: '1px',
+                    textAlign: 'center',
+                    padding: '10px 0',
+                    fontSize: '19px'
+                  }}>
                     Modbus
                   </div>
                   <ListWrapper style={{ maxHeight: 300, overflow: 'auto' }}>
@@ -480,6 +512,9 @@ function SensorModel({
                             style={{
                               display: 'block',
                               textAlignLast: 'center',
+                              fontFamily: 'customfont',
+                              fontWeight: '600',
+                              letterSpacing: '1px'
                             }}
                           >
                             No Modbus Sensors
@@ -490,7 +525,15 @@ function SensorModel({
                   </ListWrapper>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <div style={{ marginLeft: 20, textAlign: 'center' }}>
+                  <div
+                    style={{
+                      fontFamily: 'customfont',
+                      fontWeight: '600',
+                      letterSpacing: '1px',
+                      textAlign: 'center',
+                      padding: '10px 0',
+                      fontSize: '19px'
+                    }}>
                     Digital
                   </div>
                   <ListWrapper>
@@ -498,11 +541,11 @@ function SensorModel({
                       {digitalSensorList.length > 0 ? (
                         digitalSensorList.map((data) => {
                           return (
-                            <ListItem component="li" disablePadding>
+                            <ListItem component="li" disablePadding sx={{ fontFamily: 'customfont' }}>
                               <ListItemButton sx={{ height: 56 }}>
                                 <Grid
                                   container
-                                  style={{ display: 'contents' }}
+                                  style={{ display: 'contents', fontFamily: 'customfont' }}
                                   onClick={() => {
                                     setEditData(data);
                                     setProgressStatus(2);
@@ -535,13 +578,16 @@ function SensorModel({
                         })
                       ) : (
                         <ListItem
-                          style={{ display: 'block', textAlignLast: 'center' }}
+                          style={{ display: 'block', textAlignLast: 'center', fontFamily: 'customfont' }}
                         >
                           <ListItemAvatar />
                           <span
                             style={{
                               display: 'block',
                               textAlignLast: 'center',
+                              fontFamily: 'customfont',
+                              fontWeight: '600',
+                              letterSpacing: '1px'
                             }}
                           >
                             No Digital Sensors
@@ -558,7 +604,22 @@ function SensorModel({
             <div className="float-right">
               <div className="rounded-md -space-y-px">
                 <Button
-                  sx={{ m: 2 }}
+                  style={{
+                    background: 'rgb(19 60 129)',}}
+                  sx={{
+                    m: 2,
+                    height: '0',
+                    color: 'white',
+                    padding: "10px 19px",
+                    fontSize: '13px',
+                    borderRadius: '10px',
+                    fontWeight: '600',
+                    fontFamily: 'customfont',
+                    letterSpacing: '1px',
+                    boxShadow: 'none',
+                    marginRight: '40px',
+                    marginBottom: '30px'
+                  }}
                   onClick={() => {
                     setOpen(false);
                   }}
@@ -622,8 +683,8 @@ function SensorModel({
                       </FormControl>
                     </div>
                   </Grid> */}
-                  <Grid 
-                    item 
+                  <Grid
+                    item
                     xs={12}
                     sm={6}
                     md={4}
@@ -646,8 +707,8 @@ function SensorModel({
                           setSensorTag(e.target.value);
                           fetchCalibrationDetails(e.target.value);
                         }}
-                        // error={errorObject?.deviceCategory?.errorStatus}
-                        // helperText={errorObject?.deviceCategory?.helperText}
+                      // error={errorObject?.deviceCategory?.errorStatus}
+                      // helperText={errorObject?.deviceCategory?.helperText}
                       >
                         {deployedSensorTagList.map((data) => {
                           return (
@@ -839,11 +900,39 @@ function SensorModel({
                     xl={12}
                   >
                     <div className="float-right">
-                      <Button type="submit">
+                      <Button type="submit"
+                       style={{
+                        background: 'rgb(19 60 129)',}}
+                        sx={{
+                          height: '0',
+                          color: 'white',
+                          padding: "10px 19px",
+                          fontSize: '13px',
+                          borderRadius: '10px',
+                          fontWeight: '600',
+                          fontFamily: 'customfont',
+                          letterSpacing: '1px',
+                          boxShadow: 'none',
+                          marginRight: '20px'
+                        }}>
                         Submit
                       </Button>
                       <Button
                         onClick={handleCancel}
+                        style={{
+                          background: 'rgb(19 60 129)',}}
+                        sx={{
+                          height: '0',
+                          color: 'white',
+                          padding: "10px 19px",
+                          fontSize: '13px',
+                          borderRadius: '10px',
+                          fontWeight: '600',
+                          fontFamily: 'customfont',
+                          letterSpacing: '1px',
+                          boxShadow: 'none',
+                          marginRight: '20px'
+                        }}
                       >
                         Cancel
                       </Button>

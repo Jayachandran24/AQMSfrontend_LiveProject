@@ -57,7 +57,7 @@ const EVENT_LOG = ({ deviceList, siteId }) => {
         {
           field: 'date',
           headerName: 'Date',
-          minWidth: 50,
+          minWidth: 100,
           flex: 1,
           align: 'center',
           headerAlign: 'center',
@@ -65,7 +65,7 @@ const EVENT_LOG = ({ deviceList, siteId }) => {
         {
           field: 'time',
           headerName: 'Time',
-          minWidth: 50,
+          minWidth: 100,
           flex: 1,
           align: 'center',
           headerAlign: 'center',
@@ -89,7 +89,7 @@ const EVENT_LOG = ({ deviceList, siteId }) => {
         {
           field: 'eventDetails',
           headerName: 'Event Details',
-          minWidth: 600,
+          minWidth: 490,
           flex: 1,
           overflow: 'auto',
           align: 'center',
@@ -240,17 +240,17 @@ const EVENT_LOG = ({ deviceList, siteId }) => {
       <Grid container spacing={1}>
         <Grid
           item
-          xs={6}
-          sm={6}
+          xs={12}
+          sm={4}
           md={4}
-          lg={2}
-          xl={2.5}
+          lg={4}
+          xl={4}
         >
           <TextField
             fullWidth
             label="From Date"
             type="date"
-            variant="outlined"
+            variant="standard"
             value={fromDate}
             required
             onChange={(e) => {
@@ -267,18 +267,18 @@ const EVENT_LOG = ({ deviceList, siteId }) => {
         </Grid>
         <Grid
           item
-          xs={6}
-          sm={6}
+          xs={12}
+          sm={4}
           md={4}
-          lg={2}
-          xl={2.5}
+          lg={4}
+          xl={4}
         >
           <TextField
             fullWidth
             label="To Date"
             type="date"
             value={toDate}
-            variant="outlined"
+            variant="standard"
             required
             onChange={(e) => {
               setToDate(e.target.value);
@@ -295,16 +295,17 @@ const EVENT_LOG = ({ deviceList, siteId }) => {
         <Grid
           item
           xs={12}
-          sm={12}
+          sm={4}
           md={4}
-          lg={2}
-          xl={3}
+          lg={4}
+          xl={4}
         >
           <FormControl fullWidth>
             <InputLabel>Event Names</InputLabel>
             <Select
               value={eventName}
               label="Event Names"
+              variant="standard"
               onChange={(e) => {
                 setEventName(e.target.value);
               }}
@@ -327,53 +328,95 @@ const EVENT_LOG = ({ deviceList, siteId }) => {
         </Grid>
         <Grid
           item
-          xs={6}
+          xs={12}
           sm={3}
           md={3}
-          lg={1.5}
-          xl={1}
+          lg={3}
+          xl={3}
           style={{
             alignSelf: 'center',
           }}
         >
           <FormControl fullWidth>
-            <Button size="medium" variant="contained" autoFocus type="submit">
+            <Button 
+              sx={{
+                height: '0',
+                padding: "10px 19px",
+                color: 'white',
+                marginTop: '20px',
+                marginBottom: '15px',
+                fontSize: '13px',
+                borderRadius: '10px',
+                fontWeight: '600',
+                fontFamily: 'customfont',
+                letterSpacing: '1px'
+              }}
+              style={{
+                background: 'rgb(120 53 15)',}}
+            autoFocus type="submit">
               Submit
             </Button>
           </FormControl>
         </Grid>
         <Grid
           item
-          xs={6}
+          xs={12}
           sm={3}
           md={3}
-          lg={1.5}
-          xl={1}
-          style={{
-            alignSelf: 'center',
-          }}
-        >
-          <FormControl fullWidth>
-            <Button size="medium" variant="contained" autoFocus onClick={handleCancel}>
-              Cancel
-            </Button>
-          </FormControl>
-        </Grid>
-        <Grid
-          item
-          xs={6}
-          sm={3}
-          md={3}
-          lg={1.5}
-          xl={1}
+          lg={3}
+          xl={3}
           style={{
             alignSelf: 'center',
           }}
         >
           <FormControl fullWidth>
             <Button
-              size="medium"
-              variant="contained"
+              sx={{
+                height: '0',
+                padding: "10px 19px",
+                color: 'white',
+                marginTop: '20px',
+                marginBottom: '15px',
+                fontSize: '13px',
+                borderRadius: '10px',
+                fontWeight: '600',
+                fontFamily: 'customfont',
+                letterSpacing: '1px'
+              }}
+              style={{
+                background: 'rgb(120 53 15)',}}
+            autoFocus onClick={handleCancel}>
+              Cancel
+            </Button>
+          </FormControl>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={3}
+          md={3}
+          lg={3}
+          xl={3}
+          style={{
+            alignSelf: 'center',
+          }}
+        >
+          <FormControl fullWidth>
+            <Button
+              sx={{
+              height: '0',
+              padding: "9px 19px",
+              color: 'white',
+              marginTop: '20px',
+              marginBottom: '15px',
+              fontSize: '13px',
+              borderRadius: '10px',
+              fontWeight: '600',
+              fontFamily: 'customfont',
+              letterSpacing: '1px'
+            }}
+            style={{
+              background: 'rgb(19, 60, 129)',}}
               autoFocus
               endIcon={enableDownload === true ? <CircularProgress style={{ height: '25px', width: '25px' }} /> : <DownloadIcon />}
               onClick={() => {
@@ -387,18 +430,31 @@ const EVENT_LOG = ({ deviceList, siteId }) => {
         </Grid>
         <Grid
           item
-          xs={6}
+          xs={12}
           sm={3}
           md={3}
-          lg={1.5}
-          xl={1}
+          lg={3}
+          xl={3}
           style={{
             alignSelf: 'center',
           }}
         >
           <FormControl fullWidth>
             <Button
-              variant="contained"
+              sx={{
+                height: '0',
+                padding: "9px 19px",
+                color: 'white',
+                marginTop: '20px',
+                marginBottom: '15px',
+                fontSize: '13px',
+                borderRadius: '10px',
+                fontWeight: '600',
+                fontFamily: 'customfont',
+                letterSpacing: '1px'
+              }}
+              style={{
+                background: 'rgb(19, 60, 129)',}}
               endIcon={enableSend === true ? <CircularProgress style={{ height: '25px', width: '25px' }} /> : <SendIcon />}
               disabled={enableSend}
               onClick={SendEmail}
@@ -407,8 +463,9 @@ const EVENT_LOG = ({ deviceList, siteId }) => {
             </Button>
           </FormControl>
         </Grid>
-        <div style={{ height: '620px', width: '100%', marginTop: 25 }}>
+        <div className={'w-full mt-3 h-[40vh]  px-0 sm:px-10'}>
           <DataGrid
+          sx={{ border: 'none', fontFamily: 'customfont' }}
             rows={calibrationReportList}
             
             loading={isLoading}

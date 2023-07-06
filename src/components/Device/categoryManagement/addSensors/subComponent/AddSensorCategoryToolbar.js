@@ -17,7 +17,7 @@ export function AddSensorCategoryToolbar(props) {
       }}
     >
       <Typography
-        sx={{ m: 0 }}
+        sx={{ m: 0, fontFamily: 'customfont', fontSize: '22px', fontWeight: '600' }}
         variant="h5"
       >
         Sensor List
@@ -31,8 +31,21 @@ export function AddSensorCategoryToolbar(props) {
             props.setOpen(true);
           }}
         >
-          <Stack direction="row" spacing={2}>
-            <Fab variant="extended" size="medium" color="primary" aria-label="add">
+          <Stack direction="row" spacing={2} className='mt-3 sm:mt-0'>
+            <Fab
+              style={{
+                backgroundColor: 'rgb(19 60 129)'}}
+              sx={{ 
+                width:"100%",
+                height:'0',
+                padding:'10px 19px',
+                fontFamily: 'customfont', 
+                boxShadow: 'none', 
+                borderRadius: '10px', 
+                color: 'white', 
+                fontWeight: '600',  }}
+            >
+              {/* // size="medium" color="primary" aria-label="add"> */}
               <AddIcon sx={{ mr: 1 }} />
               Add Sensor
             </Fab>

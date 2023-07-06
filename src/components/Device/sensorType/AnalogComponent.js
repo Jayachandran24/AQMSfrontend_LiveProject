@@ -20,7 +20,7 @@ function Analog({
   };
   return (
     <DialogContent sx={{ px: 0, p: 0 }}>
-      <Grid container spacing={1}>
+      <Grid container spacing={2}>
         <Grid
           sx={{ mt: 0, padding: 0 }}
           item

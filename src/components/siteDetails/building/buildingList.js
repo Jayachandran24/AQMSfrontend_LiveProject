@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Edit, DeleteOutlined } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
-import { Breadcrumbs, Typography } from '@mui/material';
+import { Breadcrumbs, Card, CardContent, Typography } from '@mui/material';
 import { BuildingDeleteService, BuildingFetchService } from '../../../services/LoginPageService';
 import { BuildingListToolbar } from './building-list-toolbars';
 import BuildingModal from './BuildingModalComponent';
@@ -10,6 +10,7 @@ import NotificationBar from '../../notification/ServiceNotificationBar';
 import { useUserAccess } from '../../../context/UserAccessProvider';
 import ApplicationStore from '../../../utils/localStorageUtil';
 import DeleteConfirmationDailog from '../../../utils/confirmDeletion';
+import { MdLocationPin } from 'react-icons/md';
 
 export function BuildingListResults(props) {
   const dataColumns = [
@@ -18,6 +19,23 @@ export function BuildingListResults(props) {
       headerName: 'Building Name',
       width: 170,
       type: 'actions',
+      align:'center',
+      renderCell: ((params) => {
+        return (
+          <>
+            <div className='flex w-full justify-between'>
+              <div>
+              <MdLocationPin className='text-[18px] mr-3' />
+              </div>
+              <div className='w-full'>
+
+              <LinkTo selectedRow={params.row} />
+              </div>
+            </div>
+
+          </>
+        )
+      }),
       getActions: (params) => [
         <LinkTo selectedRow={params.row} />,
       ],
@@ -26,17 +44,20 @@ export function BuildingListResults(props) {
       field: 'buildingTotalFloors',
       headerName: 'Total Floors',
       width: 130,
+      align:'center',
       headerAlign: 'center'
     },
     {
       field: 'buildingTag',
       headerName: 'Building Tag',
       width: 230,
+      align:'center',
       headerAlign: 'center'
     },
     {
       field: 'actions',
       type: 'actions',
+      align:'center',
       headerName: 'Actions',
       width: 100,
       cellClassName: 'actions',
@@ -182,11 +203,19 @@ export function BuildingListResults(props) {
   });
 
   return (
-    <div style={{ height: '46vh', width: '100%' }}>
+    <Card  className='h-[50vh] sm:h-[41vh] ' style={{  width: '100%', paddingBottom: '0px', marginTop: '0px', boxShadow:'none' }}
+    >
       <Breadcrumbs aria-label="breadcrumb" separator="›" style={{
         // height: '2vh',
-        minHeight: '15px'
-      }}>
+        minHeight: '15px',
+        fontFamily: 'customfont',
+        fontWeight: '600',
+        color: 'black',
+        fontSize: '16px',
+        letterSpacing: '1px'
+      }} 
+      // className='pb-20 min-[320px]:pb-20 min-[768px]:pb-0'
+      >
         {locationLabel ? (
           <Typography
             underline="hover"
@@ -221,31 +250,32 @@ export function BuildingListResults(props) {
             </Link>
           )}
         {facilityLabel
-            ? (
-              <Typography
-                underline="hover"
-                color="inherit"
-              >
-                {pathname[2]}
-              </Typography>
-            )
-            : (
-              <Link
-                underline="hover"
-                color="inherit"
-                to={`/Location/${pathname[1]}/${pathname[2]}`}
-                state={{
-                  location_id,
-                  branch_id,
-                }}
-              >
-                {pathname[2]}
-              </Link>
-            )
+          ? (
+            <Typography
+              underline="hover"
+              color="inherit"
+            >
+              {pathname[2]}
+            </Typography>
+          )
+          : (
+            <Link
+              underline="hover"
+              color="inherit"
+              to={`/Location/${pathname[1]}/${pathname[2]}`}
+              state={{
+                location_id,
+                branch_id,
+              }}
+            >
+              {pathname[2]}
+            </Link>
+          )
         }
         <Typography
           underline="hover"
           color="inherit"
+          sx={{ fontFamily: 'customfont', fontWeight: '600' }}
         >
           {pathname[3]}
         </Typography>
@@ -257,19 +287,21 @@ export function BuildingListResults(props) {
         setEditData={setEditData}
         userAccess={moduleAccess}
       />
+      <CardContent className='h-[85%] sm:h-[89%] lg:h-[85%] xl:h-[85%]' style={{padding:'15px'}}>
       <DataGrid
+        sx={{ border: 'none', fontFamily: 'customfont', color: 'black'}}
         rows={dataList}
         columns={dataColumns}
-        pageSize={5}
+        pageSize={3}
         loading={isLoading}
-        rowsPerPageOptions={[5]}
+        rowsPerPageOptions={[3]}
         disableSelectionOnClick
-        style={{ 
+        style={{
           // maxHeight: `${80}%`,
-          height: '100%',
+          // height: '100%',
           // minHeight: '31vh',
-          minHeight: '230px',
-          maxHeight: '36vh'
+          // minHeight: '330px',  
+          // height: '273px'
         }}
       />
 
@@ -299,6 +331,7 @@ export function BuildingListResults(props) {
         handleSuccess={deletehandleSuccess}
         handleException={deletehandleException}
       />
-    </div>
+      </CardContent>
+    </Card>
   );
 }

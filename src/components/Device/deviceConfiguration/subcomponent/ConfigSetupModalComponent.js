@@ -165,34 +165,49 @@ function ConfigSetupModal({
       open={open}
     >
       <form onSubmit={handleSubmit}>
-        <DialogTitle>
+        <DialogTitle
+          sx={{ textAlign: 'center', fontFamily: 'customfont', fontWeight: '600', marginTop: '8px', marginBottom: '5px' }}>
           {isAddButton ? 'Add Comm Setup' : 'Edit Comm Setup'}
         </DialogTitle>
 
         <DialogContent>
-          <Typography variant="subtitle1" component="h6">
+          <Typography variant="subtitle1" component="h6"
+            sx={{ fontFamily: 'customfont', fontWeight: '500', fontSize: '18px', marginBottom: '5px' }}
+          >
             Access Point
           </Typography>
-          <div className="flex items-center justify-between gap-3">
-            <TextField
-              value={accessPointName}
-              margin="dense"
-              id="outlined-basic"
-              label="Access Point Name"
-              variant="outlined"
-              fullWidth
-              // required
-              // onBlur={() =>validateForNullValue(accessPointName, 'accessPointName')}
-              onChange={(e) => { setAccessPointName(e.target.value); }}
-              autoComplete="off"
-            />
+          <TextField
+            value={accessPointName}
+            margin="dense"
+            id="outlined-basic"
+            // label="Access Point Name"
+            placeholder='Access Point Name'
+            variant="outlined"
+            size='small'
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // required
+            // onBlur={() =>validateForNullValue(accessPointName, 'accessPointName')}
+            onChange={(e) => { setAccessPointName(e.target.value); }}
+            autoComplete="off"
+          />
+          <div className="flex items-center justify-between gap-3 mb-3">
+
+
             <TextField
               value={ssId}
               margin="dense"
               id="outlined-basic"
-              label="SSID"
+              // label="SSID"
+              placeholder='SSID'
+              size='small'
               variant="outlined"
               fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
               // required
               // onBlur={() =>validateForNullValue(ssId, 'ssId')}
               onChange={(e) => { setSsId(e.target.value); }}
@@ -202,10 +217,15 @@ function ConfigSetupModal({
               value={accessPointPassword}
               margin="dense"
               id="outlined-basic"
-              label="Password"
+              // label="Password"
+              placeholder='Password'
+              size='small'
               // type="password"
               variant="outlined"
               fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
               // required
               // onBlur={() =>validateForNullValue(accessPointPassword, 'accessPointPassword')}
               onChange={(e) => { setAccessPointPassword(e.target.value); }}
@@ -251,18 +271,25 @@ function ConfigSetupModal({
               autoComplete="new-password"
             />
           </div> */}
-          <Typography variant="subtitle1" component="h6">
+          <Typography variant="subtitle1" component="h6"
+            sx={{ fontFamily: 'customfont', fontWeight: '500', fontSize: '18px', marginBottom: '5px' }}
+          >
             FTP
           </Typography>
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-3 mb-3">
             <TextField
               value={ftpAccountName}
               margin="dense"
               id="outlined-basic"
-              label="Account Name"
+              // label="Account Name"
+              placeholder='Account Name'
               variant="outlined"
               fullWidth
               required
+              size='small'
+              InputLabelProps={{
+                shrink: true,
+              }}
               // onBlur={() =>validateForNullValue(ftpAccountName, 'ftpAccountName')}
               onChange={(e) => { setFtpAccountName(e.target.value); }}
               autoComplete="off"
@@ -271,46 +298,64 @@ function ConfigSetupModal({
               value={userName}
               margin="dense"
               id="outlined-basic"
-              label="User name"
+              // label="User name"
+              placeholder='User name'
               variant="outlined"
               required
               //  onBlur={() =>validateForNullValue(userName, 'userName')}
               onChange={(e) => { setUserName(e.target.value); }}
               autoComplete="off"
               fullWidth
+              size='small'
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
+          </div>
+          <div className="flex items-center justify-between gap-3">
             <TextField
               value={ftpPassword}
               margin="dense"
               id="outlined-basic"
               // type="password"
-              label="Password"
+              // label="Password"
+              placeholder='Password'
               variant="outlined"
               fullWidth
               required
               //  onBlur={() =>validateForNullValue(ftpPassword, 'ftpPassword')}
               onChange={(e) => { setFtpPassword(e.target.value); }}
               autoComplete="off"
+              size='small'
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
-          </div>
-          <div className="flex items-center justify-between gap-3">
             <TextField
               value={port}
               margin="dense"
               id="outlined-basic"
-              label="Port"
+              // label="Port"
+              placeholder='Port'
               variant="outlined"
               fullWidth
               required
               //  onBlur={() =>validateForNullValue(port, 'port')}
               onChange={(e) => { setPort(e.target.value); }}
               autoComplete="off"
+              size='small'
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
+          </div>
+          <div className="flex items-center justify-between gap-3 mb-3">
             <TextField
               value={serverUrl}
               margin="dense"
               id="outlined-multiline-flexible"
-              label="Server Url"
+              // label="Server Url"
+              placeholder='Service Url'
               multiline
               maxRows={4}
               fullWidth
@@ -318,21 +363,32 @@ function ConfigSetupModal({
               // onBlur={() =>validateForNullValue(serverUrl, 'serverUrl')}
               onChange={(e) => { setServerUrl(e.target.value); }}
               autoComplete="off"
+              size='small'
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
             <TextField
               value={folderPath}
               margin="dense"
               id="outlined-basic"
-              label="Folder Path"
+              // label="Folder Path"
+              placeholder='Folder Path'
               variant="outlined"
               fullWidth
               required
               //  onBlur={() =>validateForNullValue(folderPath, 'folderPath')}
               onChange={(e) => { setFolderPath(e.target.value); }}
               autoComplete="off"
+              size='small'
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
           </div>
-          <Typography variant="subtitle1" component="h6">
+          <Typography variant="subtitle1" component="h6"
+            sx={{ fontFamily: 'customfont', fontWeight: '500', fontSize: '18px', marginBottom: '5px' }}
+          >
             APN
           </Typography>
           <div className="flex items-center justify-between gap-3">
@@ -340,23 +396,33 @@ function ConfigSetupModal({
               value={serviceProvider}
               margin="dense"
               id="outlined-basic"
-              label="Service Provider"
+              // label="Service Provider"
+              placeholder='Service Provider'
               variant="outlined"
               fullWidth
               // onBlur={() =>validateForNullValue(serviceProvider, 'serviceProvider')}
               onChange={(e) => { setServiceProvider(e.target.value); }}
               autoComplete="off"
+              size='small'
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
             <TextField
               value={apn}
               margin="dense"
               id="outlined-basic"
-              label="APN"
+              // label="APN"
+              placeholder='APN'
               variant="outlined"
               fullWidth
               //  onBlur={() =>validateForNullValue(apn, 'apn')}
               onChange={(e) => { setApn(e.target.value); }}
               autoComplete="off"
+              size='small'
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
           </div>
         </DialogContent>
@@ -364,10 +430,24 @@ function ConfigSetupModal({
           <Button
             size="large"
             autoFocus
+            style={{
+              background: 'rgb(19 60 129)',}}
             onClick={() => {
               setOpen(false);
               setErrorObject({});
               loadData();
+            }}
+            sx={{
+              color: 'white',
+              padding: "8px 19px",
+              marginTop: '10px',
+              marginRight: '10px',
+              marginBottom: '35px',
+              fontSize: '13px',
+              borderRadius: '10px',
+              fontWeight: '600',
+              fontFamily: 'customfont',
+              letterSpacing: '1px',
             }}
           >
             Cancel
@@ -375,6 +455,20 @@ function ConfigSetupModal({
           <Button
             size="large"
             type="submit"
+            style={{
+              background: 'rgb(19 60 129)',}}
+            sx={{
+              color: 'white',
+              padding: "8px 19px",
+              marginTop: '10px',
+              marginRight: '10px',
+              marginBottom: '35px',
+              fontSize: '13px',
+              borderRadius: '10px',
+              fontWeight: '600',
+              fontFamily: 'customfont',
+              letterSpacing: '1px',
+            }}
           >
             {' '}
             {isAddButton ? 'Add' : 'Update'}
@@ -387,7 +481,7 @@ function ConfigSetupModal({
         openNotification={openNotification.status}
         type={openNotification.type}
       /> */}
-    </Dialog>
+    </Dialog >
   );
 }
 

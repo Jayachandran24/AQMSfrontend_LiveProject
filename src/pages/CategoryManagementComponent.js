@@ -4,7 +4,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Container } from '@mui/material';
+// import { Container } from '@mui/material';
+import { Card, CardContent, CardHeader, Container, Divider } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import AddDeviceListResults from '../components/Device/subComponent/AddDeviceListResults';
 import HorizontalLinearStepper from '../components/Device/DeviceSensor';
@@ -55,44 +56,50 @@ function CategoryManagement() {
   const routeStateObject = useLocation();
 
   return (
-    <div 
-    // className="container mx-auto"
-    >
-      <Container maxWidth={false} style={{ padding: 0 }}>
-        <Box sx={{
-          width: '100%', marginBottom: 0, marginTop: 0, padding: 0,
-        }}
-        >
-          <Box sx={{ borderBottom: 0, borderColor: 'divider' }}>
-            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"
-              variant='scrollable'
-              visibleScrollbar={true}
-              // allowScrollButtonsMobile
-              style={{overflow: 'auto',
-                  width:'auto'
-              }}
-            >
-              <Tab label="Config Setup" {...a11yProps(0)} />
-              <Tab label="Device Category" {...a11yProps(1)} />
-              <Tab label="Sensor Category" {...a11yProps(2)} />
-              <Tab label="Add Sensor" {...a11yProps(3)} />
-            </Tabs>
-          </Box>
-          <TabPanel value={value} index={0}>
-            <ConfigSetupComponent />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <DeviceManagement locationDetails={routeStateObject.state} />
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            <AddSensorCategory />
-          </TabPanel>
-          <TabPanel value={value} index={3}>
-            <AddSensorComponent />
-          </TabPanel>
-        </Box>
-      </Container>
-    </div>
+    <>
+      <Card className={' h-[auto] mb-10 m-0 sm:m-6'}
+        style={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
+        <CardHeader
+          style={{ display: 'block' }}
+          title={
+            <Box sx={{ width: '100%' }}>
+              <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"
+                variant='scrollable'
+                visibleScrollbar={true}
+                // allowScrollButtonsMobile
+                sx={{
+                  overflow: 'auto',
+                  width: 'auto',
+                  marginTop: '15px',
+                  marginLeft: '15px'
+                }}
+              >
+                <Tab label="Config Setup" sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '1px' }} {...a11yProps(0)} />
+                <Tab label="Device Category" sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '1px' }} {...a11yProps(1)} />
+                <Tab label="Sensor Category" sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '1px' }} {...a11yProps(2)} />
+                <Tab label="Add Sensor" sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '1px' }} {...a11yProps(3)} />
+              </Tabs>
+            </Box>
+          }
+        />
+        <CardContent >
+          <>
+            <TabPanel value={value} index={0}>
+              <ConfigSetupComponent />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <DeviceManagement locationDetails={routeStateObject.state} />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <AddSensorCategory />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              <AddSensorComponent />
+            </TabPanel>
+          </>
+        </CardContent>
+      </Card>
+    </>
   );
 }
 

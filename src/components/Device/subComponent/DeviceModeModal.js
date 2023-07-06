@@ -131,113 +131,113 @@ const DeviceModeModal = ({
 
   return (
     <Dialog
-      fullWidth
-      maxWidth="sm"
-      sx={{ '& .MuiDialog-paper': { width: '100%' } }}
-      open={deviceModalOpen}
-    >
-        <Grid>
-          <DialogTitle style={{padding: '0px', paddingLeft: '26px', paddingTop: '10px'}}>
-            {deviceModeHeader}
-              
-            <div style={{
-                float: 'right',
-                paddingRight: '5px',
-                fontSize: 'medium',
-                fontWeight: 'normal',
+    fullWidth
+    maxWidth="sm"
+    sx={{ '& .MuiDialog-paper': { width: '100%' } }}
+    open={deviceModalOpen}
+  >
+      <Grid>
+        <DialogTitle style={{padding: '0px', paddingLeft: '26px', paddingTop: '10px'}}>
+          {deviceModeHeader}
+            
+          <div style={{
+              float: 'right',
+              paddingRight: '5px',
+              fontSize: 'medium',
+              fontWeight: 'normal',
+              display: 'inline'
+            }}>
+              <div style={{
+                marginRight: 2,
                 display: 'inline'
               }}>
-                <div style={{
-                  marginRight: 2,
-                  display: 'inline'
-                }}>
-                  Device Status : 
-                </div>
-                <Chip
-                  variant="outlined"
-                  label="Connected"
-                  style={{
-                    color: 'green',
-                    borderColor: 'green',
-                  }}
-                />
+                Device Status : 
               </div>
-          </DialogTitle>
-          <Grid container spacing={1} sx={{ p: 3}}>
-            <Box style={{
+              <Chip
+                variant="outlined"
+                label="Connected"
+                style={{
+                  color: 'green',
+                  borderColor: 'green',
+                }}
+              />
+            </div>
+        </DialogTitle>
+        <Grid container spacing={1} sx={{ p: 3}}>
+          <Box style={{
+            textAlign: 'center',
+            width: '100%'
+          }}>
+            <div style={{
               textAlign: 'center',
               width: '100%'
             }}>
-              <div style={{
+              <Alert 
+                // icon={false} 
+                severity="warning" style={{
                 textAlign: 'center',
-                width: '100%'
+                width: '100%',
               }}>
-                <Alert 
-                  // icon={false} 
-                  severity="warning" style={{
-                  textAlign: 'center',
-                  width: '100%',
-                }}>
-                  
-                  Do not turn off the device and make sure that you have a stable network
-                </Alert>
-              </div>
-              
-            </Box>
-            {isInitialProgress === true && 
-              <Grid style={{ 
+                
+                Do not turn off the device and make sure that you have a stable network
+              </Alert>
+            </div>
+            
+          </Box>
+          {isInitialProgress === true && 
+            <Grid style={{ 
+              width: '100%', 
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              marginTop: 25
+            }}>
+                <div>
+                    Checking Connection...
+                </div>
+                <div style={{ width: '100%', marginTop: 1}}>
+                    <div style={{ width: '100%', marginTop: 5, textAlignLast: 'center' }}>
+                        <CircularProgress />
+                    </div>
+                </div>
+            </Grid>
+          }
+          {isSecondaryProgress === true && 
+            <Grid style={{ 
                 width: '100%', 
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 marginTop: 25
-              }}>
-                  <div>
-                      Checking Connection...
-                  </div>
-                  <div style={{ width: '100%', marginTop: 1}}>
-                      <div style={{ width: '100%', marginTop: 5, textAlignLast: 'center' }}>
-                          <CircularProgress />
-                      </div>
-                  </div>
-              </Grid>
-            }
-            {isSecondaryProgress === true && 
-              <Grid style={{ 
-                  width: '100%', 
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  marginTop: 25
-              }}>
-                  <div>
-                      {deviceModeSubHeader}
-                  </div>
-                  <div style={{ width: '100%', marginTop: 1}}>
-                      <div style={{ width: '100%', marginTop: 5, textAlign: 'center' }}>
-                        {isResult === false ? <LinearProgress /> :
-                          <Fab
-                            color={resultStatus === true ? 'primary' : 'secondary'}
-                            sx={buttonSx}
-                            style={{
-                              height: 50,
-                              width: 50,
-                              minHeight: 50,
-                            }}
-                          >
-                            {resultStatus === true ? 
-                              <Check style={{ fontSize: '30px' }}/> :
-                              <Close style={{ fontSize: '30px' }} /> 
-                            }
-                          </Fab>
-                        }
-                      </div>
-                  </div>
-              </Grid>
-            }
-          </Grid>
+            }}>
+                <div>
+                    {deviceModeSubHeader}
+                </div>
+                <div style={{ width: '100%', marginTop: 1}}>
+                    <div style={{ width: '100%', marginTop: 5, textAlign: 'center' }}>
+                      {isResult === false ? <LinearProgress /> :
+                        <Fab
+                          color={resultStatus === true ? 'primary' : 'secondary'}
+                          sx={buttonSx}
+                          style={{
+                            height: 50,
+                            width: 50,
+                            minHeight: 50,
+                          }}
+                        >
+                          {resultStatus === true ? 
+                            <Check style={{ fontSize: '30px' }}/> :
+                            <Close style={{ fontSize: '30px' }} /> 
+                          }
+                        </Fab>
+                      }
+                    </div>
+                </div>
+            </Grid>
+          }
         </Grid>
-    </Dialog>
+      </Grid>
+  </Dialog>
   )
 }
 

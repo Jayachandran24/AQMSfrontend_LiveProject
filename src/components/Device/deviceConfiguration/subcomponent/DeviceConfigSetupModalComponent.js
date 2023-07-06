@@ -185,15 +185,16 @@ function DeviceConfigSetupModal({
       open={open}
     >
       <form onSubmit={handleSubmit}>
-        <DialogTitle>
-          {isAddButton ? 'Add ConfigSetup' : 'Edit ConfigSetup'}
+        <DialogTitle
+          sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '1px', textAlign: 'center', padding: '30px 0' }}>
+          {isAddButton ? 'Add Comm Setup' : 'Edit Comm Setup '}
         </DialogTitle>
 
         <DialogContent>
-          <div className="flex items-center justify-between gap-3">
-            <Grid container spacing={1} sx={{ mt: 0 }}>
+          <div className="flex w-full items-center justify-between gap-3">
+            <Grid container spacing={1} sx={{ mt: 0, width: '100%' }}>
               <Grid
-                sx={{ mt: 0, padding: 0 }}
+                sx={{ mt: 0, padding: 0, width: '100%' }}
                 item
                 xs={12}
                 sm={6}
@@ -201,22 +202,28 @@ function DeviceConfigSetupModal({
                 lg={4}
                 xl={4}
               >
-                <FormControl fullWidth sx={{ mt: 1, padding: 0 }}>
-                  <InputLabel id="demo-simple-select-label">Access Type</InputLabel>
+                <FormControl fullWidth sx={{ mt: 1, padding: 0, width: '100%' }}>
+                  <InputLabel id="demo-simple-select-label"
+                    sx={{ fontFamily: 'customfont' }}
+                  >Access Type</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={accessType}
                     label="Access Type"
+
+                    placeholder='Access Type'
                     onChange={(e) => {
                       setAccessType(e.target.value);
                       Reset(e.target.value);
                     }}
+                    sx={{ fontFamily: 'customfont' }}
                   >
-                    <MenuItem value="accessPoint">Access Point</MenuItem>
-                    <MenuItem value="FTP">FTP</MenuItem>
-                    <MenuItem value="serviceProvider">Service Provider</MenuItem>
-                    <MenuItem value="Custom">Custom</MenuItem>
+                    <MenuItem disabled value='' sx={{ fontFamily: 'customfont' }}><em>Select Access Type</em></MenuItem>
+                    <MenuItem value="accessPoint" sx={{ fontFamily: 'customfont' }}>Access Point</MenuItem>
+                    <MenuItem value="FTP" sx={{ fontFamily: 'customfont' }}>FTP</MenuItem>
+                    <MenuItem value="serviceProvider" sx={{ fontFamily: 'customfont' }}>Service Provider</MenuItem>
+                    <MenuItem value="Custom" sx={{ fontFamily: 'customfont' }}>Custom</MenuItem>
 
                   </Select>
                 </FormControl>
@@ -231,8 +238,9 @@ function DeviceConfigSetupModal({
                 xl={8}
               >
                 <Autocomplete
+
                   id="asynchronous-demo"
-                  sx={{}}
+                  sx={{ fontFamily: 'customfont' }}
                   value={null}
                   disabled={accessType === 'Custom'}
                   isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -270,6 +278,7 @@ function DeviceConfigSetupModal({
                   }}
                   renderInput={(params) => (
                     <TextField
+                      sx={{ fontFamily: 'customfont', width: '100%' }}
                       {...params}
                       label="Search Criteria"
                       onKeyUp={() => {
@@ -277,13 +286,16 @@ function DeviceConfigSetupModal({
                         //   SensorFetchService(sensorCategoryId, sensorHandleSuccess,handleException);
                         // },500);
                       }}
+                      InputLabelProps={{
+                        style: { fontFamily: 'customfont' }
+                      }}
                     />
                   )}
                 />
               </Grid>
             </Grid>
           </div>
-          <Typography variant="subtitle1" component="h6">
+          <Typography variant="subtitle1" component="h6" sx={{ fontFamily: 'customfont', marginTop: '20px', marginBottom: '20px', fontWeight: '600', letterSpacing: '1px' }}>
             Access Point
           </Typography>
           <div className="flex items-center justify-between gap-3">
@@ -298,8 +310,14 @@ function DeviceConfigSetupModal({
               // onBlur={() =>validateForNullValue(accessPointName, 'accessPointName')}
               onChange={(e) => { setAccessPointName(e.target.value); }}
               autoComplete="off"
-              // error={errorObject?.accessPointName?.errorStatus}
-              // helperText={errorObject?.accessPointName?.helperText}
+              InputLabelProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
+              InputProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
+            // error={errorObject?.accessPointName?.errorStatus}
+            // helperText={errorObject?.accessPointName?.helperText}
             />
 
             <TextField
@@ -313,6 +331,12 @@ function DeviceConfigSetupModal({
               // onBlur={() =>validateForNullValue(ssId, 'ssId')}
               onChange={(e) => { setSsId(e.target.value); }}
               autoComplete="off"
+              InputLabelProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
+              InputProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
             />
 
             <TextField
@@ -327,6 +351,12 @@ function DeviceConfigSetupModal({
               // onBlur={() =>validateForNullValue(accessPointPassword, 'accessPointPassword')}
               onChange={(e) => { setAccessPointPassword(e.target.value); }}
               autoComplete="off"
+              InputLabelProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
+              InputProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
             />
           </div>
           {/* <div className="flex items-center justify-between gap-3">
@@ -368,7 +398,7 @@ function DeviceConfigSetupModal({
               autoComplete="new-password"
             />
           </div> */}
-          <Typography variant="subtitle1" component="h6">
+          <Typography variant="subtitle1" component="h6" sx={{ fontFamily: 'customfont', marginTop: '20px', marginBottom: '20px', fontWeight: '600', letterSpacing: '1px' }}>
             FTP
           </Typography>
           <div className="flex items-center justify-between gap-3">
@@ -379,12 +409,18 @@ function DeviceConfigSetupModal({
               label="Account Name"
               variant="outlined"
               fullWidth
-              required     
+              required
+              InputLabelProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
+              InputProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
               // onBlur={() =>validateForNullValue(ftpAccountName, 'ftpAccountName')}
               onChange={(e) => { setFtpAccountName(e.target.value); }}
               autoComplete="off"
-              // error={errorObject?.ftpAccountName?.errorStatus}
-              // helperText={errorObject?.ftpAccountName?.helperText}
+            // error={errorObject?.ftpAccountName?.errorStatus}
+            // helperText={errorObject?.ftpAccountName?.helperText}
             />
 
             <TextField
@@ -398,8 +434,14 @@ function DeviceConfigSetupModal({
               onChange={(e) => { setUserName(e.target.value); }}
               autoComplete="off"
               fullWidth
-              //  error={errorObject?.userName?.errorStatus}
-              //  helperText={errorObject?.userName?.helperText}
+              InputLabelProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
+              InputProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
+            //  error={errorObject?.userName?.errorStatus}
+            //  helperText={errorObject?.userName?.helperText}
             />
 
             <TextField
@@ -411,6 +453,12 @@ function DeviceConfigSetupModal({
               variant="outlined"
               fullWidth
               required
+              InputLabelProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
+              InputProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
               //  onBlur={() =>validateForNullValue(ftpPassword, 'ftpPassword')}
               onChange={(e) => { setFtpPassword(e.target.value); }}
               autoComplete="off"
@@ -425,6 +473,12 @@ function DeviceConfigSetupModal({
               variant="outlined"
               fullWidth
               required
+              InputLabelProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
+              InputProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
               //  onBlur={() =>validateForNullValue(port, 'port')}
               onChange={(e) => { setPort(e.target.value); }}
               autoComplete="off"
@@ -438,11 +492,17 @@ function DeviceConfigSetupModal({
               maxRows={4}
               fullWidth
               required
+              InputLabelProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
+              InputProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
               // onBlur={() =>validateForNullValue(serverUrl, 'serverUrl')}
               onChange={(e) => { setServerUrl(e.target.value); }}
               autoComplete="off"
-              // error={errorObject?.serverUrl?.errorStatus}
-              // helperText={errorObject?.serverUrl?.helperText}
+            // error={errorObject?.serverUrl?.errorStatus}
+            // helperText={errorObject?.serverUrl?.helperText}
             />
             <TextField
               value={folderPath}
@@ -452,12 +512,18 @@ function DeviceConfigSetupModal({
               variant="outlined"
               fullWidth
               required
+              InputLabelProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
+              InputProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
               //  onBlur={() =>validateForNullValue(folderPath, 'folderPath')}
               onChange={(e) => { setFolderPath(e.target.value); }}
               autoComplete="off"
             />
           </div>
-          <Typography variant="subtitle1" component="h6">
+          <Typography variant="subtitle1" component="h6" sx={{ fontFamily: 'customfont', marginTop: '20px', marginBottom: '20px', fontWeight: '600', letterSpacing: '1px' }}>
             APN
           </Typography>
           <div className="flex items-center justify-between gap-3">
@@ -468,6 +534,12 @@ function DeviceConfigSetupModal({
               label="Service Provider"
               variant="outlined"
               fullWidth
+              InputLabelProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
+              InputProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
               // onBlur={() =>validateForNullValue(serviceProvider, 'serviceProvider')}
               onChange={(e) => { setServiceProvider(e.target.value); }}
               autoComplete="off"
@@ -479,6 +551,12 @@ function DeviceConfigSetupModal({
               label="APN"
               variant="outlined"
               fullWidth
+              InputLabelProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
+              InputProps={{
+                sx: { fontFamily: 'customfont' }
+              }}
               //  onBlur={() =>validateForNullValue(apn, 'apn')}
               onChange={(e) => { setApn(e.target.value); }}
               autoComplete="off"
@@ -487,6 +565,20 @@ function DeviceConfigSetupModal({
         </DialogContent>
         <DialogActions sx={{ margin: '10px' }}>
           <Button
+            style={{
+              background: 'rgb(19 60 129)',}}
+            sx={{
+              height: '0',
+              color: 'white',
+              padding: "10px 19px",
+              fontSize: '13px',
+              borderRadius: '10px',
+              fontWeight: '600',
+              fontFamily: 'customfont',
+              letterSpacing: '1px',
+              boxShadow: 'none',
+              marginRight: '20px'
+            }}
             autoFocus
             onClick={() => {
               setOpen(false);
@@ -498,6 +590,20 @@ function DeviceConfigSetupModal({
           </Button>
           {moduleAccess.edit &&
             <Button
+             style={{
+              background: 'rgb(19 60 129)',}}
+              sx={{
+                height: '0',
+                color: 'white',
+                padding: "10px 19px",
+                fontSize: '13px',
+                borderRadius: '10px',
+                fontWeight: '600',
+                fontFamily: 'customfont',
+                letterSpacing: '1px',
+                boxShadow: 'none',
+                marginRight: '20px'
+              }}
               type="submit"
             >
               Update

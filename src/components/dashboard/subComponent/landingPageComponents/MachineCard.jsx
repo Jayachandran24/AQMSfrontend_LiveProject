@@ -38,7 +38,7 @@ function MachineCard(props) {
   }
   return (
     <Card 
-      sx={{ minWidth: 200, boxShadow: 5, borderRadius: 2 }}
+      sx={{ minWidth: 200, boxShadow: 5, borderRadius: 2, }}
     >
       <CardActionArea
         onClick={() => {

@@ -59,7 +59,7 @@ function LogIntervalSetting({
       sx={{ '& .MuiDialog-paper': { width: '95%', maxHeight: '95%' } }}
       open={open}
     >
-      <DialogTitle>
+      <DialogTitle sx={{fontFamily:'customfont', letterSpacing:'1px', fontWeight:'600', textAlign:'center', padding:'25px 0'}}>
         {userRole === 'superAdmin' ? 'Back Up Configuration' : 'Polling Interval' }
       </DialogTitle>
       <DialogContent>
@@ -73,7 +73,7 @@ function LogIntervalSetting({
                     width: '50%', textAlign: 'center', alignSelf: 'center', paddingTop: 2,
                   }}
                 >
-                  <Typography>
+                  <Typography sx={{fontFamily:'customfont',letterSpacing:'1px'}}>
                     Alert Refresh Interval :
                   </Typography>
                 </Grid>
@@ -89,6 +89,9 @@ function LogIntervalSetting({
                     onChange={(e) => {
                       setAlertLogInterval(e.target.value);
                     }}
+                    InputLabelProps={{
+                      style:{fontFamily:'customfont'}
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -99,7 +102,7 @@ function LogIntervalSetting({
                     width: '50%', textAlign: 'center', alignSelf: 'center', paddingTop: 2,
                   }}
                 >
-                  <Typography>
+                  <Typography sx={{fontFamily:'customfont',letterSpacing:'1px'}}>
                     Sensor Refresh Interval :
                   </Typography>
                 </Grid>
@@ -115,6 +118,9 @@ function LogIntervalSetting({
                     onChange={(e) => {
                       setSensorLogInterval(e.target.value);
                     }}
+                    InputLabelProps={{
+                      style:{fontFamily:'customfont'}
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -125,7 +131,7 @@ function LogIntervalSetting({
                     width: '50%', textAlign: 'center', alignSelf: 'center', paddingTop: 2,
                   }}
                 >
-                  <Typography>
+                  <Typography sx={{fontFamily:'customfont',letterSpacing:'1px'}}>
                     Device Refresh Interval :
                   </Typography>
                 </Grid>
@@ -141,6 +147,9 @@ function LogIntervalSetting({
                     onChange={(e) => {
                       setDeviceLogInterval(e.target.value);
                     }}
+                    InputLabelProps={{
+                      style:{fontFamily:'customfont'}
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -151,7 +160,7 @@ function LogIntervalSetting({
                     width: '50%', textAlign: 'center', alignSelf: 'center', paddingTop: 2,
                   }}
                 >
-                  <Typography>
+                  <Typography sx={{fontFamily:'customfont',letterSpacing:'1px'}}>
                     Expire Date Reminder :
                   </Typography>
                 </Grid>
@@ -167,6 +176,9 @@ function LogIntervalSetting({
                     onChange={(e) => {
                       setExpireDateReminder(e.target.value);
                     }}
+                    InputLabelProps={{
+                      style:{fontFamily:'customfont'}
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -179,7 +191,7 @@ function LogIntervalSetting({
                     width: '50%', textAlign: 'center', alignSelf: 'center', paddingTop: 2,
                   }}
                 >
-                  <Typography>
+                  <Typography sx={{fontFamily:'customfont',letterSpacing:'1px'}}>
                     Backup :
                   </Typography>
                 </Grid>
@@ -195,6 +207,9 @@ function LogIntervalSetting({
                     onChange={(e) => {
                       setPeriodicBackupInterval(e.target.value);
                     }}
+                    InputLabelProps={{
+                      style:{fontFamily:'customfont'}
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -205,7 +220,7 @@ function LogIntervalSetting({
                     width: '50%', textAlign: 'center', alignSelf: 'center', paddingTop: 2,
                   }}
                 >
-                  <Typography>
+                  <Typography sx={{fontFamily:'customfont',letterSpacing:'1px'}}>
                     Data Retention Period :
                   </Typography>
                 </Grid>
@@ -221,6 +236,9 @@ function LogIntervalSetting({
                     onChange={(e) => {
                       setDataRetentionPeriodInterval(e.target.value);
                     }}
+                    InputLabelProps={{
+                      style:{fontFamily:'customfont'}
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -231,14 +249,45 @@ function LogIntervalSetting({
               fullWidth
               style={{
                 flexFlow: 'row-reverse',
+                marginTop:'15px'
               }}
             >
               {(userRole === 'systemSpecialist' || userRole === 'superAdmin') && 
-                <Button type="submit">
+                <Button type="submit"
+                style={{
+                  background: 'rgb(19 60 129)',}}
+                sx={{
+                  m: 1,
+                  height: '40px',
+                  color: 'white',
+                  padding: '8px 19px',
+                  marginTop: '10px',
+                  marginRight: '10px',
+                  marginBottom: '35px',
+                  bordeRadius: '10px',
+                  fontWeight: '600',
+                  fontFamily: 'customfont',
+                  letterSpacing: '1px'
+                }}>
                   Update
                 </Button>
               }
-              <Button onClick={handleCancel}>
+              <Button onClick={handleCancel}
+               style={{
+                background: 'rgb(19 60 129)',}}
+              sx={{
+                m: 1,
+                height: '40px',
+                color: 'white',
+                padding: '8px 19px',
+                marginTop: '10px',
+                marginRight: '10px',
+                marginBottom: '35px',
+                bordeRadius: '10px',
+                fontWeight: '600',
+                fontFamily: 'customfont',
+                letterSpacing: '1px'
+              }}>
                 Cancel
               </Button>
             </Grid>

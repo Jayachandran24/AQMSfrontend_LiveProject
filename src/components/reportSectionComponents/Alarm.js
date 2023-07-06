@@ -344,188 +344,225 @@ function Alarm({ siteId, deviceList }) {
   return (
     <Grid item>
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={1}>
-          <Grid
-            item
-            xs={6}
-            sm={6}
-            md={4}
-            lg={2}
-            xl={2.5}
-          >
-            <TextField
-              fullWidth
-              label="From Date"
-              type="date"
-              value={fromDate}
-              variant="outlined"
-              required
-              onChange={(e) => {
-                setFromDate(e.target.value);
-              }}
-              autoComplete="off"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                max: currentDateValidator()
-              }}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            sm={6}
-            md={4}
-            lg={2}
-            xl={2.5}
-          >
-            <TextField
-              fullWidth
-              label="To Date"
-              type="date"
-              value={toDate}
-              variant="outlined"
-              required
-              onChange={(e) => {
-                setToDate(e.target.value);
-              }}
-              autoComplete="off"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                max: currentDateValidator()
-              }}
-            />
+        <Grid container spacing={2}>
+              <Grid item                   
+                  xs={12}
+                  sm={4}
+                  md={4}
+                  lg={4}
+                  xl={4}>
+                <TextField
+                  fullWidth
+                  label="From Date"
+                  type="date"
+                  value={fromDate}
+                  variant="standard"
+                  required
+                  onChange={(e) => {
+                    setFromDate(e.target.value);
+                  }}
+                  autoComplete="off"
+                  InputLabelProps={{
+                    shrink: true, style: { fontFamily: 'customfont' }
+                  }}
+                  inputProps={{
+                    max: currentDateValidator()
+                  }}
+                />
+              </Grid>
+              <Grid item                   
+                  xs={12}
+                  sm={4}
+                  md={4}
+                  lg={4}
+                  xl={4}>
+                <TextField
+                  fullWidth
+                  label="To Date"
+                  type="date"
+                  value={toDate}
+                  variant="standard"
+                  required
+                  onChange={(e) => {
+                    setToDate(e.target.value);
+                  }}
+                  autoComplete="off"
+                  InputLabelProps={{
+                    shrink: true, style: { fontFamily: 'customfont' }
+                  }}
+                  inputProps={{
+                    max: currentDateValidator()
+                  }}
+                />
 
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={12}
-            md={4}
-            lg={2}
-            xl={3}
-          >
-            <FormControl fullWidth>
-              <InputLabel>Devices</InputLabel>
-              <Select
-                value={deviceId}
-                label="Devices"
-                onChange={(e) => {
-                  HandleDeviceChange(e.target.value);
-                }}
+              </Grid>
+              <Grid item 
+                xs={12}
+                sm={4}
+                md={4}
+                lg={4}
+                xl={4}
               >
-                <MenuItem value="" key={0}>
-                  <em style={{ fontWeight: 'bold' }}>All</em>
-                </MenuItem>
-                {deviceList?.map((data, index) => (
-                  <MenuItem value={data.id} key={index + 1}>{data.deviceName}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            sm={3}
-            md={3}
-            lg={1.5}
-            xl={1}
-            style={{
-              alignSelf: 'center',
-            }}
-          >
-            <FormControl fullWidth>
-              <Button size="medium" variant="contained" autoFocus type="submit">
-                Submit
-              </Button>
-            </FormControl>
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            sm={3}
-            md={3}
-            lg={1.5}
-            xl={1}
-            style={{
-              alignSelf: 'center',
-            }}
-          >
-            <FormControl fullWidth>
-              <Button size="medium" variant="contained" autoFocus onClick={handleCancel}>
-                Cancel
-              </Button>
-            </FormControl>
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            sm={3}
-            md={3}
-            lg={1.5}
-            xl={1}
-            style={{
-              alignSelf: 'center',
-            }}
-          >
-            <FormControl fullWidth>
-              <Button
-                size="medium"
-                variant="contained"
-                autoFocus
-                onClick={() => {
-                  DownloadCsv();
-                }}
-                endIcon={enableDownload === true ? <CircularProgress style={{ height: '25px', width: '25px' }} /> : <DownloadIcon />}
-                disabled={enableDownload}
-              >
-                Download
-              </Button>
-            </FormControl>
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            sm={3}
-            md={3}
-            lg={1.5}
-            xl={1}
-            style={{
-              alignSelf: 'center',
-            }}
-          >
-            <FormControl fullWidth>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  SendEmail();
-                }}
-                endIcon={enableSend === true ? <CircularProgress style={{ height: '25px', width: '25px' }} /> : <SendIcon />}
-                disabled={enableSend}
-              >
-                Send
-              </Button>
-            </FormControl>
-          </Grid>
-          <div style={{ height: '620px', width: '100%', marginTop: 12 }}>
-            <DataGrid
-              rows={alarmReportList}
-              rowCount={rowCountState}
-              loading={isLoading}
-              pagination
-              page={page}
-              pageSize={pageSize}
-              paginationMode="server"
-              onPageChange={onPageChange}
-              onPageSizeChange={onPageSizeChange}
-              columns={columns}
-              // rowHeight={70}
-              getRowHeight={() => 'auto'}
-            />
-          </div>
+                <FormControl fullWidth>
+                  <InputLabel sx={{ fontFamily: 'customfont', color: 'black' }}>Devices</InputLabel>
+                  <Select
+                    value={deviceId}
+                    label="Devices"
+                    variant="standard"
+                    onChange={(e) => {
+                      HandleDeviceChange(e.target.value);
+                    }}
+                  >
+                    <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
+                      <em className={'font-bold'}>All</em>
+                    </MenuItem>
+                    {deviceList?.map((data, index) => (
+                      <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.deviceName}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+                <Grid item 
+                  xs={12}
+                  sm={3}
+                  md={3}
+                  lg={3}
+                  xl={3}
+                 className={'self-center'}>
+                  <FormControl fullWidth>
+                    <Button
+                      sx={{
+                        height: '0',
+                        padding: "10px 19px",
+                        color: 'white',
+                        marginTop: '20px',
+                        marginBottom: '15px',
+                        fontSize: '13px',
+                        borderRadius: '10px',
+                        fontWeight: '600',
+                        fontFamily: 'customfont',
+                        letterSpacing: '1px'
+                      }}
+                      style={{
+                        background: 'rgb(120 53 15)',}}
+                      autoFocus type="submit">
+                      Submit
+                    </Button>
+                  </FormControl>
+                </Grid>
+                <Grid item 
+                  xs={12}
+                  sm={3}
+                  md={3}
+                  lg={3}
+                  xl={3}
+                 className={'self-center'}>
+                  <FormControl fullWidth>
+                    <Button
+                      sx={{
+                        height: '0',
+                        padding: "10px 19px",
+                        color: 'white',
+                        marginTop: '20px',
+                        marginBottom: '15px',
+                        fontSize: '13px',
+                        borderRadius: '10px',
+                        fontWeight: '600',
+                        fontFamily: 'customfont',
+                        letterSpacing: '1px'
+                      }}
+                      style={{
+                        background: 'rgb(120 53 15)',}}
+                      autoFocus onClick={handleCancel}>
+                      Cancel
+                    </Button>
+                  </FormControl>
+                </Grid>
+                <Grid item 
+                  xs={12}
+                  sm={3}
+                  md={3}
+                  lg={3}
+                  xl={3}
+                 className={'self-center'}>
+                  <FormControl fullWidth>
+                    <Button
+                      sx={{
+                        height: '0',
+                        padding: "9px 19px",
+                        color: 'white',
+                        marginTop: '20px',
+                        marginBottom: '15px',
+                        fontSize: '13px',
+                        borderRadius: '10px',
+                        fontWeight: '600',
+                        fontFamily: 'customfont',
+                        letterSpacing: '1px'
+                      }}
+                      style={{
+                        background: 'rgb(19, 60, 129)',}}
+                      autoFocus
+                      onClick={() => {
+                        DownloadCsv();
+                      }}
+                      endIcon={enableDownload === true ? <CircularProgress className={'h-6 w-6'} /> : <DownloadIcon />}
+                      disabled={enableDownload}
+                    >
+                      Download
+                    </Button>
+                  </FormControl>
+                </Grid>
+                <Grid item 
+                  xs={12}
+                  sm={3}
+                  md={3}
+                  lg={3}
+                  xl={3}
+                 className={'self-center'}>
+                  <FormControl fullWidth>
+                    <Button
+                      sx={{
+                        height: '0',
+                        padding: "10px 19px",
+                        color: 'white',
+                        marginTop: '20px',
+                        marginBottom: '15px',
+                        fontSize: '13px',
+                        borderRadius: '10px',
+                        fontWeight: '600',
+                        fontFamily: 'customfont',
+                        letterSpacing: '1px'
+                      }}
+                      style={{
+                        background: 'rgb(19, 60, 129)',}}
+                      onClick={() => {
+                        SendEmail();
+                      }}
+                      endIcon={enableSend === true ? <CircularProgress className={'h-6 w-6'} /> : <SendIcon />}
+                      disabled={enableSend}
+                    >
+                      Send
+                    </Button>
+                  </FormControl>
+                </Grid>
+            <div className={'w-full h-[40vh] mt-2 px-0 sm:px-10'}>
+              <DataGrid
+                sx={{ border: 'none', fontFamily: 'customfont' }}
+                rows={alarmReportList}
+                rowCount={rowCountState}
+                loading={isLoading}
+                pagination
+                page={page}
+                pageSize={pageSize}
+                paginationMode="server"
+                onPageChange={onPageChange}
+                onPageSizeChange={onPageSizeChange}
+                columns={columns}
+                // rowHeight={70}
+                getRowHeight={() => 'auto'}
+              />
+            </div>
+
         </Grid>
       </form>
       <NotificationBar

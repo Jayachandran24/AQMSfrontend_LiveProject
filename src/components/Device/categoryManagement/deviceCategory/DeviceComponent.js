@@ -5,7 +5,7 @@ import DeviceListResults from './subComponent/DeviceListResults';
 function DeviceManagementComponent() {
   return (
     <Container maxWidth={true} sx={{ marginTop: 0}} style={{
-      padding: '5px',
+      padding: '0px',
     }}>
       <Grid
         sx={{ marginTop: 0, padding: 0 }}

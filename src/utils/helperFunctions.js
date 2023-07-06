@@ -247,7 +247,7 @@ export function setAlertPriorityAndType(element, data){
   return element.alertPriority < data.alertPriority ? element : 
   {
     alertLabel: data.alertType === 'Critical' ? 'Critical' : data.alertType === 'outOfRange' ? 'Out Of Range' : data.alertType === 'Warning' ? 
-    'Warning' : data.alertType === 'TWA' ? 'TWA': data.alertType === 'Stel' ? 'STEL' :  data.alertType === 'deviceDisconnected'? 'Device is Disconnected' : 'Good',
+    'Warning' : data.alertType === 'TWA' ? 'TWA': data.alertType === 'Stel' ? 'STEL' :  data.alertType === 'deviceDisconnected'? 'Disconnected' : 'Good',
     
     alertColor: data.alertType === 'Critical' ? 'red' : data.alertType === 'outOfRange' ? '#9c27b0' : data.alertType === 'Warning' ? 
     'orange' : data.alertType === 'TWA' ? 'orange': data.alertType === 'Stel' ? 'red' : data.alertType === 'deviceDisconnected' ? 'gray' : 'green',
@@ -286,7 +286,7 @@ export function setAlertPriorityStatus(element, alertType) {
         element.alertColor = 'red';
         break;
       case 'deviceDisconnected':
-        element.alertLabel = 'Device is Disconnected';
+        element.alertLabel = 'Disconnected';
         element.alertColor = 'gray';
         break;
       default:

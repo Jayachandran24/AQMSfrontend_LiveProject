@@ -124,7 +124,8 @@ function BranchModal({
       maxWidth="sm"
       open={open}
     >
-      <DialogTitle>
+      <DialogTitle
+        sx={{ fontFamily: 'customfont', fontSize: '20px', textAlign: 'center', fontWeight: '600', margin: '20px 0', letterSpacing: '1px' }}>
         {isAddButton ? 'Add Branch' : 'Edit Branch'}
       </DialogTitle>
       <DialogContent>
@@ -132,12 +133,12 @@ function BranchModal({
           <div className="rounded-md  -space-y-px ">
 
             <div className="container mx-auto outline-black">
-              <div className="inline">
-                <div className="w-full sm:float-left lg:w-2/5  pr-3 pl-3">
-                  <div className="rounded-md -space-y-px mb-2">
+              <div className="flex flex-col w-full">
+                <div className="w-full flex sm:float-left gap-5 pr-3 pl-3 mb-5 min-[320px]:flex-col min-[768px]:flex-row">
+                  <div className="rounded-md -space-y-px mb-2 w-full">
                     <TextField
                       fullWidth
-                      sx={{ mb: 1 }}
+                      sx={{ mb: 1, width: '100%' }}
                       label="Location Name"
                       type="text"
                       value={branchName}
@@ -151,9 +152,13 @@ function BranchModal({
                       autoComplete="off"
                       error={errorObject?.branchName?.errorStatus}
                       helperText={errorObject?.branchName?.helperText}
+                      InputLabelProps={{
+                        shrink: true,
+                        style: { fontFamily: 'customfont' }
+                      }}
                     />
                   </div>
-                  <div className="rounded-md -space-y-px mb-2">
+                  <div className="rounded-md -space-y-px mb-2 w-full">
                     <TextField
                       fullWidth
                       sx={{ mb: 1 }}
@@ -171,10 +176,11 @@ function BranchModal({
                       helperText={errorObject?.coordinates?.helperText}
                       InputLabelProps={{
                         shrink: true,
+                        style: { fontFamily: 'customfont' }
                       }}
                     />
                   </div>
-                  <div className="rounded-md -space-y-px mb-2">
+                  <div className="rounded-md -space-y-px mb-2 w-full">
                     <TextField
                       fullWidth
                       sx={{ mb: 1 }}
@@ -192,12 +198,13 @@ function BranchModal({
                       helperText={errorObject?.coordinates?.helperText}
                       InputLabelProps={{
                         shrink: true,
+                        style: { fontFamily: 'customfont' }
                       }}
                     />
                   </div>
                 </div>
-                <div className="w-full sm:float-right lg:float-left lg:w-3/5 pr-1">
-                  <Grid item xs={4} sm={4} md={4} lg={4} />
+                <div className="mr-auto ml-auto sm:float-right lg:float-left  pr-1 mb-7 w-full sm:w-[80%]">
+                  <Grid item xs={12} sm={12} md={12} lg={12} />
                   <MapsComponent
                     onMarkerDrop={onMapClick}
                     height="50vh"
@@ -217,14 +224,46 @@ function BranchModal({
               </div>
             </div>
             <div className="float-right">
-              <div className="rounded-md -space-y-px">
+              <div className="rounded-md -space-y-px pb-10 min-[320px]:pb-10 min-[768px]:pb-0">
                 <Button
                   type="submit"
-                  disabled={errorObject?.coordinates?.errorStatus || errorObject?.stateName?.errorStatus}
+                  style={{
+                    background: 'rgb(19 60 129)',}}
+                  sx={{
+                    color: 'white',
+                    padding: "8px 30px",
+                    marginRight: '30px',
+                    fontSize: '13px',
+                    borderRadius: '10px',
+                    fontWeight: '600',
+                    fontFamily: 'customfont',
+                    letterSpacing: '1px',
+                    boxShadow: 'none',
+                    "&.Mui-disabled": {
+                      background: "#eaeaea",
+                      color: "#c0c0c0"
+                    }
+                  }}
+                  disabled={
+                    errorObject?.coordinates?.errorStatus
+                    || errorObject?.stateName?.errorStatus
+                  }
                 >
                   {isAddButton ? 'Add' : 'Update'}
                 </Button>
                 <Button
+                  style={{
+                    background: 'rgb(19 60 129)',}}
+                  sx={{
+                    color: 'white',
+                    padding: "8px 19px",
+                    fontSize: '13px',
+                    borderRadius: '10px',
+                    fontWeight: '600',
+                    fontFamily: 'customfont',
+                    letterSpacing: '1px',
+                    boxShadow: 'none'
+                  }}
                   onClick={() => {
                     setOpen(false);
                     setErrorObject({});

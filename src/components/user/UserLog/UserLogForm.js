@@ -15,6 +15,7 @@ import {
 } from '../../../services/LoginPageService';
 import { currentDateValidator, dateRangevalidator } from '../../../utils/helperFunctions';
 import NotificationBar from '../../notification/ServiceNotificationBar';
+import { styled } from '@mui/material/styles';
 
 export default function UserLogForm() {
   const [location_id, setLocation_id] = useState('');
@@ -271,229 +272,229 @@ export default function UserLogForm() {
       message: '',
     });
   };
+  const Buttons = styled(Button)(
+    () => ({
+      padding: "10px 25px",
+      color: 'white',
+      marginTop: '20px',
+      marginBottom: '15px',
+      fontSize: '13px',
+      borderRadius: '10px',
+      fontWeight: '600',
+      fontFamily: 'customfont',
+      letterSpacing: '1px'
+    })
+  )
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={1}>
+    <div className='h-[60vh] overflow-auto ' >
+      <form onSubmit={handleSubmit} className='border-b-[1px]'>
+        <Grid container spacing={1} className='mb-0'>
           <Grid sx={{ mt: 1 }} item xs={12} sm={6} md={4} lg={4} xl={4}>
             <Box sx={{ minWidth: 200 }}>
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Location</InputLabel>
+                {/* <InputLabel id="demo-simple-select-label" style={{fontFamily:'customfont'}}>Location</InputLabel> */}
+                <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500'>Location :</label>
                 <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
+                  className='text-left px-2 py-1 bg-[#f9f9f9] mr-3 sm:mr-4'
+                  sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                  size='small'
+                  displayEmpty
+                  // labelId="demo-simple-select-label"
+                  // id="demo-simple-select"
                   value={location_id}
-                  label="Location"
+                  // label="Location"                  
+                  // inputProps={{ 'aria-label': 'Without label' }}
                   onChange={(e) => {
                     setLocation_id(e.target.value);
                     LocationChanged(e.target.value);
                   }}
                 >
-                  <MenuItem value="" key={0}>
-                    <em>N/A</em>
+                  <MenuItem value="" sx={{ fontFamily: 'customfont' }}>
+                    <em >N/A</em>
                   </MenuItem>
                   {locationList.map((data, index) => (
-                    <MenuItem value={data.id} key={index + 1}>{data.stateName}</MenuItem>
+                    <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont', fontSize: '15px' }}>{data.stateName}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
             </Box>
           </Grid>
-          <Grid
-            sx={{ mt: 1, padding: 0 }}
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            lg={4}
-            xl={4}
-          >
+          <Grid sx={{ mt: 1, padding: 0 }} item xs={12} sm={6} md={4} lg={4} xl={4}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Branch</InputLabel>
+              {/* <InputLabel id="demo-simple-select-label" style={{fontFamily:'customfont'}} >Branch</InputLabel> */}
+              <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500'>Branch :</label>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                className='text-left px-2 py-1 bg-[#f9f9f9] mr-0 sm:mr-4'
+                sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                size='small'
+                displayEmpty
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
                 value={branch}
-                label="Branch"
+                // label="Branch"
                 onChange={(e) => {
                   BranchChanged(e.target.value);
                 }}
               >
-                <MenuItem value="" key={0}>
-                  <em>N/A</em>
+                <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
+                  <em >N/A</em>
                 </MenuItem>
                 {branchList.map((data, index) => (
-                  <MenuItem value={data.id} key={index + 1}>{data.branchName}</MenuItem>
+                  <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.branchName}</MenuItem>
                 ))}
               </Select>
             </FormControl>
           </Grid>
           <Grid
-            sx={{ mt: 1, padding: 0 }}
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            lg={4}
-            xl={4}
+            sx={{ mt: 1, padding: 0 }} item xs={12}
+            sm={6} md={4} lg={4} xl={4}
           >
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Facility</InputLabel>
+              {/* <InputLabel id="demo-simple-select-label"style={{fontFamily:'customfont'}}>Facility</InputLabel> */}
+              <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500'>Facility :</label>
+
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                className='text-left px-2 py-1 bg-[#f9f9f9]'
+                sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                size='small'
+                displayEmpty
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
                 value={facility}
-                label="Facility"
+                // label="Facility"
                 onChange={(e) => {
                   FacilityChanged(e.target.value);
                 }}
               >
-                <MenuItem value="" key={0}>
-                  <em>N/A</em>
+                <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
+                  <em >N/A</em>
                 </MenuItem>
                 {facilityList.map((data, index) => (
-                  <MenuItem value={data.id} key={index + 1}>{data.facilityName}</MenuItem>
+                  <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.facilityName}</MenuItem>
                 ))}
               </Select>
             </FormControl>
           </Grid>
-          <Grid
-            sx={{ mt: 1, padding: 0 }}
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            lg={4}
-            xl={4}
-          >
+          <Grid sx={{ mt: 1, padding: 0 }} item xs={12} sm={6} md={4} lg={4} xl={4}>
             <div className="rounded-md -space-y-px">
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-standard-label">Building</InputLabel>
+                {/* <InputLabel id="demo-simple-select-standard-label" style={{fontFamily:'customfont'}}>Building</InputLabel> */}
+                <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500'>Building :</label>
                 <Select
+                  className='text-left px-2 py-1 bg-[#f9f9f9] mr-0 sm:mr-4'
+                  sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                  size='small'
+                  displayEmpty
                   value={building_id}
                   onChange={(e) => onBuildingChange(e.target.value)}
-                  label="Building"
+                // label="Building"
                 >
-                  <MenuItem value="" key={0}>
+                  <MenuItem value="" key={0} style={{ fontFamily: 'customfont' }}>
                     <em>N/A</em>
                   </MenuItem>
                   {buildingList?.map((data, index) => {
                     return (
-                      <MenuItem value={data.id} key={index + 1}>{data.buildingName}</MenuItem>
+                      <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.buildingName}</MenuItem>
                     );
                   })}
                 </Select>
               </FormControl>
             </div>
           </Grid>
-          <Grid
-            sx={{ mt: 1, padding: 0 }}
-            item
-            xs={12}
-            sm={12}
-            md={4}
-            lg={4}
-            xl={4}
-          >
+          <Grid sx={{ mt: 1, padding: 0 }} item xs={12} sm={12} md={4} lg={4} xl={4} >
             <div className="rounded-md -space-y-px">
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-standard-label">Floor</InputLabel>
+                {/* <InputLabel id="demo-simple-select-standard-label" style={{fontFamily:'customfont'}}>Floor</InputLabel> */}
+                <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500'>Floor :</label>
                 <Select
+                  className='text-left px-2 py-1 bg-[#f9f9f9] mr-0 sm:mr-4'
+                  sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                  size='small'
+                  displayEmpty
                   value={floor_id}
                   onChange={(e) => onFloorChange(e.target.value)}
-                  label="Floor"
+                // label="Floor"
                 >
-                  <MenuItem value="" key={0}>
+                  <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
                     <em>N/A</em>
                   </MenuItem>
                   {floorList?.map((data, index) => {
                     return (
-                      <MenuItem value={data.id} key={index + 1}>{data.floorName}</MenuItem>
+                      <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.floorName}</MenuItem>
                     );
                   })}
                 </Select>
               </FormControl>
             </div>
           </Grid>
-          <Grid
-            sx={{ mt: 1, padding: 0 }}
-            item
-            xs={12}
-            sm={12}
-            md={4}
-            lg={4}
-            xl={4}
-          >
+          <Grid sx={{ mt: 1, padding: 0 }} item xs={12} sm={12} md={4} lg={4} xl={4}>
             <div className="rounded-md -space-y-px">
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-standard-label">Lab</InputLabel>
+                {/* <InputLabel id="demo-simple-select-standard-label" style={{fontFamily:'customfont'}}>Lab</InputLabel> */}
+                <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500'>Lab :</label>
                 <Select
+                  className='text-left px-2 py-1 bg-[#f9f9f9]  mr-0 sm:mr-0'
+                  style={{ fontFamily: 'customfont', fontSize: '15px' }}
+                  size='small'
+                  displayEmpty
                   value={lab_id}
                   onChange={(e) => onLabChange(e.target.value)}
-                  label="Lab"
+                // label="Lab"
                 >
-                  <MenuItem value="" key={0}>
-                    <em>N/A</em>
+                  <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
+                    <em >N/A</em>
                   </MenuItem>
                   {labList?.map((data, index) => {
                     return (
-                      <MenuItem value={data.id} key={index + 1}>{data.labDepName}</MenuItem>
+                      <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.labDepName}</MenuItem>
                     );
                   })}
                 </Select>
               </FormControl>
             </div>
           </Grid>
-          <Grid
-            sx={{ mt: 1, padding: 0 }}
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            lg={4}
-            xl={4}
-          >
+          <Grid sx={{ mt: 1, padding: 0 }} item xs={12} sm={6} md={4} lg={4} xl={4}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">User</InputLabel>
+              {/* <InputLabel id="demo-simple-select-label" style={{fontFamily:'customfont'}}>User</InputLabel> */}
+              <label className='text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500'>User :</label>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                className='text-left px-2 py-1 bg-[#f9f9f9] mr-0 sm:mr-4'
+                sx={{ fontFamily: 'customfont', fontSize: '15px' }}
+                size='small'
+                displayEmpty
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
                 value={userId}
                 // required
-                label="User"
+                // label="User"
                 onChange={(e) => {
                   setUserId(e.target.value);
                 }}
               >
-                <MenuItem value="" key={0}>
-                  <em>N/A</em>
+                <MenuItem value="" key={0} sx={{ fontFamily: 'customfont' }}>
+                  <em >N/A</em>
                 </MenuItem>
                 {userList?.map((data, index) => (
-                  <MenuItem value={data.id} key={index + 1}>{data.name}</MenuItem>
+                  <MenuItem value={data.id} key={index + 1} sx={{ fontFamily: 'customfont' }}>{data.name}</MenuItem>
                 ))}
               </Select>
             </FormControl>
           </Grid>
 
-          <Grid
-            sx={{ mt: 1, padding: 0 }}
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            lg={4}
-            xl={4}
-          >
+          <Grid sx={{ mt: 1, padding: 0 }} item xs={12} sm={6} md={4} lg={4} xl={4}>
+            <label className='w-full text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500 inline-block'>From Date :</label>
             <TextField
+              sx={{ mb: 1, width: '97%', marginRight: '20px' }}
               fullWidth
-              sx={{ mb: 1 }}
-              label="From Date"
+              // sx={{ mb: 1 }}
+              // label="From Date"
               type="date"
+              size='small'
               value={fromDate}
               variant="outlined"
               className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500
-              text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
+              text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm "
               required
               onChange={(e) => {
                 setFromDate(e.target.value);
@@ -503,28 +504,28 @@ export default function UserLogForm() {
                 shrink: true,
               }}
               inputProps={{
-                max: currentDateValidator()
+                max: currentDateValidator(),
+
+              }}
+              InputProps={{
+                className: 'bg-[#f9f9f9] py-1 px-2 text-slate-500',
+                // color:'red'
               }}
             />
           </Grid>
-          <Grid
-            sx={{ mt: 1, padding: 0 }}
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            lg={4}
-            xl={4}
-          >
-            <TextField
+          <Grid sx={{ mt: 1, padding: 0 }} item xs={12} sm={6} md={4} lg={4} xl={4}>
+            <label className='w-full text-left font-[customfont] font-medium mb-2 tracking-[1px] text-slate-500 inline-block'>To date :</label>
+            <TextField sx={{ mb: 1 }}
               fullWidth
-              sx={{ mb: 1 }}
-              label="to date"
+              // sx={{ mb: 1 }}
+              // label="to date"
               type="date"
+              size='small'
               value={toDate}
               variant="outlined"
-              className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500
-              text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
+              // className="mb-2 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500
+              // text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500  sm:text-sm"
+              className='mr-4'
               required
               onChange={(e) => {
                 setToDate(e.target.value);
@@ -535,44 +536,51 @@ export default function UserLogForm() {
               }}
               inputProps={{
                 max: currentDateValidator()
+
+              }}
+              InputProps={{
+                className: 'bg-[#f9f9f9] py-1'
+
               }}
             />
           </Grid>
-          <Grid
-            sx={{ mt: 0, padding: 0 }}
-            item
-            xs={12}
-            sm={12}
-            md={12}
-            lg={12}
-            xl={12}
-            style={{
-              paddingTop: '0px'
-            }}
-          >
-            <div className="ml-2 float-right inline-block">
+          <Grid sx={{ mt: 0, padding: 0 }} item xs={12} sm={12} md={12} lg={12} xl={12}>
+            <div className="ml-2 float-right inline-block ">
               <FormControl sx={{ margin: '5px' }}>
-                <Button autoFocus onClick={handleCancel}>
+                <Buttons autoFocus onClick={handleCancel}
+                  style={{
+                    background: 'rgb(19, 60, 129)',}}
+                  sx={{
+                    marginRight: '0px',
+                    transition: '0.9'
+                  }}>
                   Cancel
-                </Button>
+                </Buttons>
               </FormControl>
               <FormControl sx={{ margin: '5px' }}>
-                <Button type="submit">
+                <Buttons type="submit"
+                  style={{
+                    background: 'rgb(19, 60, 129)',}}
+                  sx={{
+                    marginRight: '0px',
+                    transition: '0.9'
+                  }}>
                   Submit
-                </Button>
+                </Buttons>
               </FormControl>
             </div>
           </Grid>
         </Grid>
       </form>
       <Grid>
-        <div style={{ height: '350px', width: '100%',}}>
+        <div className={'h-[40vh] w-full mt-0 border-none'}>
           <DataGrid
+            sx={{ fontFamily: 'customfont' }}
             rows={userLogList}
             columns={columns}
-            pageSize={5}
+            pageSize={3}
             loading={isLoading}
-            rowsPerPageOptions={[5]}
+            rowsPerPageOptions={[3]}
             disableSelectionOnClick
           />
         </div>
@@ -583,6 +591,6 @@ export default function UserLogForm() {
         openNotification={openNotification.status}
         type={openNotification.type}
       />
-    </div>
+    </div >
   );
 }

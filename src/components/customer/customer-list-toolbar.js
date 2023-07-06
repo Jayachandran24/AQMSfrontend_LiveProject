@@ -15,7 +15,8 @@ export function CustomerListToolbar(props) {
       }}
     >
       <Typography
-        sx={{ m: 1 }}
+        sx={{ m: 1,
+        fontFamily:'customfont', fontWeight:'600', letterSpacing:'1px' }}
         variant="h5"
       >
         Customers
@@ -29,7 +30,23 @@ export function CustomerListToolbar(props) {
         }}
       >
         <Stack direction="row" spacing={2}>
-          <Fab variant="extended" size="medium" color="primary" aria-label="add">
+          <Fab 
+          sx={{
+            height: '0',
+            width:'100%',
+            padding: "10px 19px",
+            color: 'white',
+            marginTop: '20px',
+            marginBottom: '15px',
+            fontSize: '13px',
+            borderRadius: '10px',
+            fontWeight: '600',
+            fontFamily: 'customfont',
+            letterSpacing: '1px'
+          }}
+          style={{
+            background: 'rgb(19, 60, 129)',}}
+          aria-label="add">
             <AddIcon sx={{ mr: 1 }} />
             Add Customer
           </Fab>

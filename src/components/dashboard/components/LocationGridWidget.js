@@ -21,7 +21,7 @@ function LocationGridWidget({
     }
   }, [locationState]);
   return (
-    <div style={{ height: '100%' }}>
+    <div  className={'h-auto p-6'}>
       {
         locationState === 0
           ? (

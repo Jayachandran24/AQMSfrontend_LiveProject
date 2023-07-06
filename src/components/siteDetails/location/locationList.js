@@ -9,6 +9,8 @@ import LocationModal from './LocationModalComponent';
 import NotificationBar from '../../notification/ServiceNotificationBar';
 import { useUserAccess } from '../../../context/UserAccessProvider';
 import DeleteConfirmationDailog from '../../../utils/confirmDeletion';
+import { Card, CardContent, CardHeader, Divider } from '@mui/material';
+import { MdLocationPin } from 'react-icons/md';
 
 export function LocationListResults({ setLocationCoordinationList, centerLat, centerLng }) {
   const [open, setOpen] = useState(false);
@@ -31,8 +33,23 @@ export function LocationListResults({ setLocationCoordinationList, centerLat, ce
     {
       field: 'stateName',
       headerName: 'Location Name',
-      width: 270,
+      width: 300,
       type: 'actions',
+      renderCell: ((params) => {
+        return (
+          <>
+            <div className='flex w-full justify-between'>
+              <div>
+              <MdLocationPin className='text-[18px] text-left w-full' />
+              </div>
+              <div className='w-full'>
+              <LinkTo selectedRow={params.row} />
+              </div>
+            </div>
+
+          </>
+        )
+      }),
       getActions: (params) => [
         <LinkTo selectedRow={params.row} />,
       ],
@@ -41,7 +58,7 @@ export function LocationListResults({ setLocationCoordinationList, centerLat, ce
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      width: 150,
+      width: 200,
       cellClassName: 'actions',
       getActions: (params) => [
         <EditData selectedRow={params.row} />,
@@ -143,48 +160,57 @@ export function LocationListResults({ setLocationCoordinationList, centerLat, ce
   };
 
   return (
-    <div style={{ height: '46vh', width: '100%' }}>
-      <LocationListToolbar
-        setOpen={setOpen}
-        setIsAddButton={setIsAddButton}
-        setEditCustomer={setEditState}
-        userAccess={moduleAccess}
-      />
-      <DataGrid
-        rows={dataList}
-        columns={columns}
-        pageSize={5}
-        loading={isLoading}
-        rowsPerPageOptions={[5]}
-        disableSelectionOnClick
-        style={{ 
-          // maxHeight: `${70}%`,
-          height: '38vh',
-          minHeight: '230px'
-        }}
-      />
-      <LocationModal
-        isAddButton={isAddButton}
-        locationData={editState}
-        open={open}
-        setOpen={setOpen}
-        setRefreshData={setRefreshData}
-        centerCoord={{ lat: centerLat, lng: centerLng }}
-      />
-      <NotificationBar
-        handleClose={handleClose}
-        notificationContent={openNotification.message}
-        openNotification={openNotification.status}
-        type={openNotification.type}
-      />
-      <DeleteConfirmationDailog
-        open={deleteDailogOpen}
-        setOpen={setDeleteDailogOpen}
-        deleteId={deleteId}
-        deleteService={LocationDeleteService}
-        handleSuccess={deletehandleSuccess}
-        handleException={deletehandleException}
-      />
-    </div>
+    <>
+      <Card className='h-[50vh] sm:h-[41vh]'
+        sx={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', borderRadius: '12px' }}>
+        <CardHeader
+          sx={{ padding: '16px', paddingBottom: '0', }}
+          title={
+            <>
+              <LocationListToolbar
+                setOpen={setOpen}
+                setIsAddButton={setIsAddButton}
+                setEditCustomer={setEditState}
+                userAccess={moduleAccess}
+              />
+            </>
+          }
+        />
+        <CardContent className='h-[350px] sm:h-[320px] lg:h-[85%]'>
+          <DataGrid
+            sx={{ border: 'none', fontFamily: 'customfont', color: 'black' }}
+            rows={dataList}
+            columns={columns}
+            pageSize={3}
+            loading={isLoading}
+            rowsPerPageOptions={[3]}
+            disableSelectionOnClick
+            // className={'h-full min-h-[380px]'}
+          />
+          <LocationModal
+            isAddButton={isAddButton}
+            locationData={editState}
+            open={open}
+            setOpen={setOpen}
+            setRefreshData={setRefreshData}
+            centerCoord={{ lat: centerLat, lng: centerLng }}
+          />
+          <NotificationBar
+            handleClose={handleClose}
+            notificationContent={openNotification.message}
+            openNotification={openNotification.status}
+            type={openNotification.type}
+          />
+          <DeleteConfirmationDailog
+            open={deleteDailogOpen}
+            setOpen={setDeleteDailogOpen}
+            deleteId={deleteId}
+            deleteService={LocationDeleteService}
+            handleSuccess={deletehandleSuccess}
+            handleException={deletehandleException}
+          />
+        </CardContent>
+      </Card>
+    </>
   );
 }

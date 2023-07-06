@@ -31,7 +31,7 @@ function LayoutMachine({
       <Grid
         container
         spacing={2}
-        style={{ padding: 1 }}
+        style={{ padding:15 }}
       >
         {sensorListVisibility === true && (
           <div style={{
