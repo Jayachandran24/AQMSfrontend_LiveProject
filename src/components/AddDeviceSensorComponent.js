@@ -119,7 +119,7 @@ function DeviceListResults() {
                 </Typography>
               ) : (
                 <Link underline="hover" color="inherit" to="/Location">
-                  Locion
+                  Location
                 </Link>
               )}
               {branchLabel

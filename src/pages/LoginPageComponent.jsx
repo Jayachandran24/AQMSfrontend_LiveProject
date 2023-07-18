@@ -175,13 +175,6 @@ function LoginPage() {
         });
       });
   };
-  // let src;
-
-  // if (customerImage !== null) {
-  //   src = customerImage;
-  // } else {
-  //   src = loginPageWallpaper;
-  // }
   return (
     <div className="grid grid-flow-row-dense h-screen w-full grid-cols-1 gap-y-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 items-center ">
       <div className="min-h-full flex items-center justify-center lg:px-1 ml-auto mr-auto w-full bg-white h-full">

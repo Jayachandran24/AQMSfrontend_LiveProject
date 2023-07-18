@@ -67,7 +67,11 @@ function AlertModalComponent({ alertOpen, setAlertOpen, locationDetails }) {
             paddingTop: '0px'
           }}>
             <div style={{
+<<<<<<< HEAD
               marginTop:'50px',
+=======
+              marginTop:'45px',
+>>>>>>> d5842180b7181aebad6f39c1b5b88b5fc5b46eb4
               height: '435px',
               width: '100%',
               '& .super-app.Pass': {
@@ -78,7 +82,7 @@ function AlertModalComponent({ alertOpen, setAlertOpen, locationDetails }) {
               paddingTop: '0px'
             }}
             >
-              <AlertWidget dataList={dataList} setRefreshData={setRefreshData} maxHeight='500px' setAlertList={setDataList} setNotification={setNotification} />
+              <AlertWidget dataList={dataList} setRefreshData={setRefreshData}  maxHeight='500px' setAlertList={setDataList} setNotification={setNotification} />
             </div>
           </DialogContent>
           <div className='float-right'>

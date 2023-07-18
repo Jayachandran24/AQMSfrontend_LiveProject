@@ -59,7 +59,11 @@ const _fetchService = (PATH, serviceMethod, data, successCallback, errorCallBack
 
 export const LoginService = (data) => {
   const PATH = 'login';
+<<<<<<< HEAD
   const END_POINT =   `${process.env.REACT_APP_API_ENDPOINT}api/`;
+=======
+  const END_POINT = 'https://wisething.in/aideaLabs/api/';
+>>>>>>> d5842180b7181aebad6f39c1b5b88b5fc5b46eb4
 
   // `${process.env.REACT_APP_API_ENDPOINT}api/`;
   const SERVICE_METHOD = 'POST';
