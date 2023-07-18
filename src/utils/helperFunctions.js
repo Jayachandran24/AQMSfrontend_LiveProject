@@ -351,6 +351,18 @@ export function setAQILabel(value){
   return label;
 }
 
+export function getAQIValue(value){
+  var label = 'NA';
+  if (value > 0) {
+    label=value;
+  }
+  else{
+    label = 'NA';
+  }
+
+  return label;
+}
+
 export function dateRangevalidator(setNotification){
   setNotification({
     status: true,

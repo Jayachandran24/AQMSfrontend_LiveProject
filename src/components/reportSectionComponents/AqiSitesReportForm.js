@@ -11,6 +11,22 @@ import { currentDateValidator, dateRangevalidator, setAQIColor } from '../../uti
 import AQITrendModal from './AQITrendModal';
 import NotificationBar from '../notification/ServiceNotificationBar';
 import CircleIcon from '@mui/icons-material/Circle';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import {BsFillInfoSquareFill} from 'react-icons/bs'
+
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 function AqiSitesReportForm({ siteId, deviceList }) {
   const [fromDate, setFromDate] = useState('');
@@ -50,6 +66,10 @@ function AqiSitesReportForm({ siteId, deviceList }) {
     const dateValue = `${date[2]}-${date[1]}-${date[0]}`;
     return dateValue;
   };
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClosea = () => setOpen(false);
+
 
   const columns = [
     {
@@ -131,13 +151,35 @@ function AqiSitesReportForm({ siteId, deviceList }) {
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => (
-        <span style={{
+        <div className='flex justify-between'>
+        <div style={{
           color: setAQIColor(parseFloat(params.value)),
         }}
         >
           
           {params.value}
-        </span>
+
+        </div>
+            <div className='ml-3' style={{color: setAQIColor(parseFloat(params.value)),}}>
+            <button onClick={handleOpen} className='text-xl'><BsFillInfoSquareFill/></button>
+              <Modal
+            keepMounted
+            open={open}
+            onClose={handleClosea}
+            aria-labelledby="keep-mounted-modal-title"
+            aria-describedby="keep-mounted-modal-description"
+              >
+            <Box sx={style}>
+              <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
+                Text in a modal
+              </Typography>
+              <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+              </Typography>
+            </Box>
+          </Modal>
+          </div>
+        </div>
       ),
     },
     {
@@ -154,7 +196,9 @@ function AqiSitesReportForm({ siteId, deviceList }) {
         >
           {/* {params.value} */}
           <CircleIcon/>
+          
         </span>
+        
       ),
     },
 

@@ -4,7 +4,7 @@ import { darken, lighten } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import { FetchLocationService } from '../../../../services/LoginPageService';
 import ApplicationStore from '../../../../utils/localStorageUtil';
-import { setAlertPriorityAndType, setAQIColor, setAQILabel } from '../../../../utils/helperFunctions';
+import { setAlertPriorityAndType, setAQIColor, getAQIValue, setAQILabel } from '../../../../utils/helperFunctions';
 import { LatestAlertAccess } from '../../../../context/UserAccessProvider';
 import { MdLocationPin } from 'react-icons/md';
 import './LocationGridComponent.css';
@@ -23,6 +23,9 @@ function LocationGridComponent(props) {
   const [notificationStatus, setNotificationStatus] = useState(locationIdList);
   const [isLoading, setGridLoading] = useState(true);
   const {alertStatus, setAlertStatus} = LatestAlertAccess();
+  console.log(dataList);
+  // console.log(alertStatus);
+  // console.log(isLoading);
   const columns = [
 
     {
@@ -103,16 +106,20 @@ function LocationGridComponent(props) {
           <Chip
             className='w-[120px] font-[customfont] font-normal text-sm'
             variant="outlined"
-            label={setAQILabel(params.row.aqiIndex.replaceAll(",", ""))}
+            // label={`${getAQIValue(params.row.aqiIndex)} TEST`}
+            label={getAQIValue(params.row.aqiIndex)}
             sx={{
               color: setAQIColor(params.row.aqiIndex),
               borderColor: setAQIColor(params.row.aqiIndex),
 
             }}
           />
+
         )
       }),
+      
     },
+   
     {
       // field: 'aqiIndex',
       headerName: 'AQI Category',
@@ -142,7 +149,6 @@ function LocationGridComponent(props) {
     setGridLoading(true);
     FetchLocationService(handleSuccess, handleException);
     const { locationDetails } = ApplicationStore().getStorage('userDetails');
-
     setProgressState((oldValue) => {
       let newValue = 0;
       if (locationDetails.lab_id) {
@@ -178,6 +184,7 @@ function LocationGridComponent(props) {
 
   function LinkTo({ selectedRow }) {
     const { locationDetails } = ApplicationStore().getStorage('userDetails');
+
     return (
       <h3
         className='text-sm font-[customfont] font-medium cursor-pointer'
@@ -194,6 +201,7 @@ function LocationGridComponent(props) {
           const coordList = selectedRow.coordinates.replaceAll('"', '').split(',') || [];
           setCenterLatitude(parseFloat(coordList[0]));
           setCenterLongitude(parseFloat(coordList[1]));
+          console.log(coordList);
         }}
       >
         {selectedRow.stateName}
@@ -205,6 +213,8 @@ function LocationGridComponent(props) {
     setDataList(dataObject.data);
     const newArray = dataObject.data ? dataObject.data.map((item) => {
       const coordinates = item.coordinates ? item.coordinates.replaceAll('"', '').split(',') : [];
+      console.log("dataobject"+dataObject.data);
+      console.log("item" + item)
       return {
         id: item.id,
         name: item.stateName,
@@ -214,7 +224,9 @@ function LocationGridComponent(props) {
         },
       };
     })
+    
       : [];
+      console.log("newArray" + newArray);
     setLocationCoordinationList(newArray);
     setZoomLevel(4);
   };
@@ -259,11 +271,14 @@ function LocationGridComponent(props) {
                 border: 'none',
               }}
             />
+            
           </CardContent>
+        
         </Paper>
       </Card >
     </>
   );
 }
+
 
 export default LocationGridComponent;

@@ -17,7 +17,7 @@ export function FacilityListResults(props) {
   const branchColumns = [
     {
       field: 'facilityName',
-      headerName: 'Branch Name',
+      headerName: 'Facility Name',
       width: 270,
       type: 'actions',
       renderCell: ((params) => {

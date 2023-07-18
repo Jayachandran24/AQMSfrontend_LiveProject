@@ -401,13 +401,13 @@ export default function ManagementReportTab() {
                                     <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Sensor Status" {...a11yProps(1)} />
                                     <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Alarms" {...a11yProps(2)} />
                                     <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Limit Edit Logs" {...a11yProps(3)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Server Utilization" {...a11yProps(4)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Application version" {...a11yProps(5)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Firmware Version" {...a11yProps(6)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="H/W Model No" {...a11yProps(7)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="BumpTest" {...a11yProps(8)} />
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Calibration" {...a11yProps(9)} /> 
-                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="EVENT LOG" {...a11yProps(10)} />        
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="BumpTest" {...a11yProps(4)} />
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Calibration" {...a11yProps(5)} /> 
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="EVENT LOG" {...a11yProps(6)} />  
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Server Utilization" {...a11yProps(7)} />
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Application version" {...a11yProps(8)} />
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="Firmware Version" {...a11yProps(9)} />
+                                    <Tab sx={{ fontFamily: 'customfont', fontWeight: '600', letterSpacing: '0.7px' }} label="H/W Model No" {...a11yProps(10)} />      
                                 </Tabs>
                             </Box>
                             <TabPanel value={value} index={0}>
@@ -434,42 +434,43 @@ export default function ManagementReportTab() {
                                     siteId={{ location_id, branch_id, facility_id, building_id, floor_id, lab_id }}
                                 />
                             </TabPanel>
+                            
                             <TabPanel value={value} index={4}>
-                                <ServerUtilization />
-                            </TabPanel>
-                            <TabPanel value={value} index={5}>
-                                <SoftwareVersion />
-                            </TabPanel>
-                            <TabPanel value={value} index={6}>
-                                <FirmwareVersion
-                                    deviceList={deviceList}
-                                    siteId={{ location_id, branch_id, facility_id, building_id, floor_id, lab_id }}
-                                />
-                            </TabPanel>
-                            <TabPanel value={value} index={7}>
-                                <HardwareModelVersion
-                                    deviceList={deviceList}
-                                    siteId={{ location_id, branch_id, facility_id, building_id, floor_id, lab_id }}
-                                />
-                            </TabPanel>
-                            <TabPanel value={value} index={8}>
                                 <BumpTest
                                     deviceList={deviceList}
                                     siteId={{ location_id, branch_id, facility_id, building_id, floor_id, lab_id }}
                                 />
                             </TabPanel>
-                            <TabPanel value={value} index={9}>
+                            <TabPanel value={value} index={5}>
                             <CalibrationReport 
                                 deviceList={deviceList} 
                                 siteId ={{location_id, branch_id, facility_id, building_id, floor_id, lab_id}}
                             />
                         </TabPanel>
-                        <TabPanel value={value} index={10}>
+                        <TabPanel value={value} index={6}>
                             <EVENT_LOG 
                                 deviceList={deviceList} 
                                 siteId ={{location_id, branch_id, facility_id, building_id, floor_id, lab_id}}
                             />
                         </TabPanel>
+                        <TabPanel value={value} index={7}>
+                                <ServerUtilization />
+                            </TabPanel>
+                            <TabPanel value={value} index={8}>
+                                <SoftwareVersion />
+                            </TabPanel>
+                            <TabPanel value={value} index={9}>
+                                <FirmwareVersion
+                                    deviceList={deviceList}
+                                    siteId={{ location_id, branch_id, facility_id, building_id, floor_id, lab_id }}
+                                />
+                            </TabPanel>
+                            <TabPanel value={value} index={10}>
+                                <HardwareModelVersion
+                                    deviceList={deviceList}
+                                    siteId={{ location_id, branch_id, facility_id, building_id, floor_id, lab_id }}
+                                />
+                            </TabPanel>
                         {/* </Grid> */}
                     </CardContent>
                 </Card>

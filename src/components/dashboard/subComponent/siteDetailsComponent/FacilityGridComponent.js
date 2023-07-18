@@ -2,7 +2,7 @@ import { Breadcrumbs, Card, CardHeader, CardContent, Chip, Typography, Paper } f
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { FetchFacilitiyService } from '../../../../services/LoginPageService';
-import { setAlertPriorityAndType, setAQIColor, setAQILabel } from '../../../../utils/helperFunctions';
+import { setAlertPriorityAndType, setAQIColor, setAQILabel, getAQIValue } from '../../../../utils/helperFunctions';
 import ApplicationStore from '../../../../utils/localStorageUtil';
 import { MdLocationPin } from 'react-icons/md'
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -96,7 +96,8 @@ function FacilityGridComponent(props) {
           <Chip
             className='w-[120px] font-[customfont] font-normal text-sm'
             variant="outlined"
-            label={setAQILabel(params.row.aqiIndex.replaceAll(",", ""))}
+            // label={setAQILabel(params.row.aqiIndex.replaceAll(",", ""))}
+            label={getAQIValue(params.row.aqiIndex)}
             style={{
               color: setAQIColor(params.row.aqiIndex),
               borderColor: setAQIColor(params.row.aqiIndex),

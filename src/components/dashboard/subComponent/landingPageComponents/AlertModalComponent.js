@@ -62,13 +62,14 @@ function AlertModalComponent({ alertOpen, setAlertOpen, locationDetails }) {
           }}
         >
           <DialogContent style={{
+
             height: '51vh',
             paddingTop: '0px'
           }}>
             <div style={{
+              marginTop:'50px',
               height: '435px',
               width: '100%',
-              margin: '0px',
               '& .super-app.Pass': {
                 backgroundColor: '#d47483',
                 color: '#1a3e72',

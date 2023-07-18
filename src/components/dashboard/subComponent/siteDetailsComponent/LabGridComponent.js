@@ -2,7 +2,7 @@ import { Breadcrumbs, Card, CardHeader, CardContent, Chip, Typography, Paper } f
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { HooterStatusService, LabfetchService } from '../../../../services/LoginPageService';
-import { setAlertPriorityAndType, setAQIColor, setAQILabel } from '../../../../utils/helperFunctions';
+import { setAlertPriorityAndType, setAQIColor, setAQILabel, getAQIValue } from '../../../../utils/helperFunctions';
 import ApplicationStore from '../../../../utils/localStorageUtil';
 import { GlobalHooter } from '../../GlobalHooter';
 import CentralHooterModal from '../../../siteDetails/CentralHooter/CentralHooterModal';
@@ -105,7 +105,8 @@ function LabGridComponent(props) {
           <Chip
             className='w-[120px] font-[customfont] font-normal text-sm'
             variant="outlined"
-            label={setAQILabel(params.row.aqiIndex.replaceAll(",", ""))}
+            // label={setAQILabel(params.row.aqiIndex.replaceAll(",", ""))}
+            label={getAQIValue(params.row.aqiIndex)}
             sx={{
               color: setAQIColor(params.row.aqiIndex),
               borderColor: setAQIColor(params.row.aqiIndex),
