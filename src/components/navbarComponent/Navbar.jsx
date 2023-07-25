@@ -1,26 +1,14 @@
 import './navbar.scss';
 import {
-  ChatBubbleOutlineOutlined,
-  AccountCircle,
   ErrorOutlineOutlined,
-  WarningAmber,
   Fullscreen,
   FullscreenExit,
-  PriorityHigh,
-  InfoOutlined,
-  Info,
   BrowserUpdatedRounded,
   CalendarMonthRounded,
 } from '@mui/icons-material';
-// import { GiLifeTap } from 'react-icons/gi';
-// import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
-import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
 import { RiUserShared2Line } from 'react-icons/ri';
-import PersonIcon from '@mui/icons-material/Person';
 import { IoMdNotificationsOutline } from 'react-icons/io'
-import PermDeviceInformationIcon from '@mui/icons-material/PermDeviceInformation';
 import PrivacyTipOutlinedIcon from '@mui/icons-material/PrivacyTipOutlined';
-// import { BiMessageSquareError } from 'react-icons/bi'
 import { useEffect, useState } from 'react';
 import {
   IconButton, Toolbar, Menu, MenuItem, ListSubheader, ListItemAvatar, ListItemText, ListItem, Typography, Tooltip, Zoom, Chip, createTheme, ThemeProvider,
@@ -29,13 +17,11 @@ import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import { LogoutService } from '../../services/LoginPageService';
 import NotificationBar from '../notification/ServiceNotificationBar';
-
+import {BsCloudDownloadFill} from 'react-icons/bs'
 import ApplicationStore from '../../utils/localStorageUtil';
 import LogIntervalSetting from './LogIntervalSettingComponent';
-
-// import { DarkModeContext } from "../../context/darkModeContext";
-// import { useContext } from "react";
-/* eslint-disable no-nested-ternary */
+import { Link } from 'react-router-dom';
+import UserManual from '../../assets/pdf/User_Manual.pdf'
 
 function Navbar(props) {
   // const { dispatch } = useContext(DarkModeContext);
@@ -452,7 +438,7 @@ function Navbar(props) {
                 {/* style={{
                 padding : '10px '
               }} */}
-                <div className='flex w-full gap-1' >
+                <div className='flex w-full gap-1 mb-1' >
                   {/* style={{
                   display: 'flex',
                   width: '100%',
@@ -478,7 +464,7 @@ function Navbar(props) {
                     </span>
                   </div>
                 </div>
-                <div className='flex w-full gap-1'>
+                <div className='flex w-full gap-1 mb-1'>
                   <CalendarMonthRounded />
                   <div className='flex flex-row w-[inherit] justify-between flex-nowrap'>
                     <span className='font-bold'>
@@ -490,6 +476,16 @@ function Navbar(props) {
                     <span>
                       {releaseDate}
                     </span>
+                  </div>
+                </div>
+                <div className='flex gap-2 mb-1  '>
+                  <BsCloudDownloadFill className='text-[20px] mt-1' />
+                  <div className=''>
+                    <span className='font-bold cursor-pointer'>
+                      <a href={UserManual} target='_blank' rel="noreferrer noopener">
+                      User Manual</a>
+                    </span>
+                    
                   </div>
                 </div>
               </div>

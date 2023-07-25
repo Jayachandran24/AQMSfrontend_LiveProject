@@ -98,9 +98,13 @@ function FacilityGridComponent(props) {
             variant="outlined"
             // label={setAQILabel(params.row.aqiIndex.replaceAll(",", ""))}
             label={getAQIValue(params.row.aqiIndex)}
-            style={{
-              color: setAQIColor(params.row.aqiIndex),
-              borderColor: setAQIColor(params.row.aqiIndex),
+            // style={{
+            //   color: setAQIColor(params.row.aqiIndex),
+            //   borderColor: setAQIColor(params.row.aqiIndex),
+            // }}
+            sx={{
+              color: 'black',
+              fontWeight:'600',
             }}
           />
         )

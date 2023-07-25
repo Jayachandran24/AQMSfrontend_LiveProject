@@ -109,9 +109,9 @@ function LocationGridComponent(props) {
             // label={`${getAQIValue(params.row.aqiIndex)} TEST`}
             label={getAQIValue(params.row.aqiIndex)}
             sx={{
-              color: setAQIColor(params.row.aqiIndex),
-              borderColor: setAQIColor(params.row.aqiIndex),
-
+              color: 'black',
+              // borderColor: setAQIColor(params.row.aqiIndex),
+              fontWeight:'600',
             }}
           />
 

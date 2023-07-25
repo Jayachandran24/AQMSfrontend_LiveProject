@@ -160,16 +160,17 @@ function AqiSitesReportForm({ siteId, deviceList }) {
           {params.value}
 
         </div>
-            <div className='ml-3' style={{color: setAQIColor(parseFloat(params.value)),}}>
+            <div className='ml-3' style={{color:'gray'}}>
             <button onClick={handleOpen} className='text-xl'><BsFillInfoSquareFill/></button>
               <Modal
-            keepMounted
+               sx={{ '& .MuiBackdrop-root': { backgroundColor: 'transparent' } }}
             open={open}
             onClose={handleClosea}
             aria-labelledby="keep-mounted-modal-title"
             aria-describedby="keep-mounted-modal-description"
               >
-            <Box sx={style}>
+            <Box sx={style}
+              style={{boxShadow:'none'}}>
               <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
                 Text in a modal
               </Typography>

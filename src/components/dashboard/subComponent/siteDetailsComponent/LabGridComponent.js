@@ -107,9 +107,13 @@ function LabGridComponent(props) {
             variant="outlined"
             // label={setAQILabel(params.row.aqiIndex.replaceAll(",", ""))}
             label={getAQIValue(params.row.aqiIndex)}
+            // sx={{
+            //   color: setAQIColor(params.row.aqiIndex),
+            //   borderColor: setAQIColor(params.row.aqiIndex),
+            // }}
             sx={{
-              color: setAQIColor(params.row.aqiIndex),
-              borderColor: setAQIColor(params.row.aqiIndex),
+              color: 'black',
+              fontWeight:'600',
             }}
           />
         )
