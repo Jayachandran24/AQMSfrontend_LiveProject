@@ -58,994 +58,965 @@ class ReportController extends Controller
     
     
     public function DeviceAqiReport(Request $request){
+                    
+             $startDate = date("Y-m-d",strtotime($request->fromDate));
+             $endDate = date("Y-m-d", strtotime($request->toDate));
+             
+             if($request->deviceId != "")
+             {
+        if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !="" && $request->floor_id !="" && $request->lab_id !=""){
 
-        $startDate = date("Y-m-d",strtotime($request->fromDate));
-        $endDate = date("Y-m-d", strtotime($request->toDate));
+            $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
+                         ->where('customerId','=',$this->companyCode)
+                         ->where('labId','=',$request->lab_id)
+                         ->where('floorId','=',$request->floor_id)
+                         ->where('buildingId','=',$request->building_id)
+                          ->where('facilityId','=',$request->facility_id)
+                          ->where('branchId','=',$request->branch_id)
+                          ->where('locationId','=',$request->location_id)
+                           ->where('deviceId','=',$request->deviceId)
+                         ->groupBy(DB::raw('Date(sampled_date_time)'));
 
-        if($request->deviceId != "")
-        {
-   if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !="" && $request->floor_id !="" && $request->lab_id !=""){
-
-       $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-            ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue ,ROUND(MAX(AqiValue),2) as AqiStatus, DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-                    ->where('customerId','=',$this->companyCode)
-                    ->where('labId','=',$request->lab_id)
-                    ->where('floorId','=',$request->floor_id)
-                    ->where('buildingId','=',$request->building_id)
-                     ->where('facilityId','=',$request->facility_id)
-                     ->where('branchId','=',$request->branch_id)
-                     ->where('locationId','=',$request->location_id)
-                      ->where('deviceId','=',$request->deviceId)
-                    ->groupBy(DB::raw('Date(sampled_date_time)'))
-                    ->orderBy('AqiValue', 'desc');
-
-           //  $summaryAqiValue = DB::table('Aqi_values_per_device')
-           //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
-           //                      ->where('labId','=',$request->lab_id)
-           //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
-           //                      ->get();
-
-   }
-   else if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !="" && $request->floor_id !=""){
-                   $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-            ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue ,ROUND(MAX(AqiValue),2) as AqiStatus, DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-           // ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','aqi.id')
-                    ->where('customerId','=',$this->companyCode)
-                   //  ->where('companyCode','=',$this->companyCode)
-                    ->where('floorId','=',$request->floor_id)
-                    ->where('buildingId','=',$request->building_id)
-                     ->where('facilityId','=',$request->facility_id)
-                     ->where('branchId','=',$request->branch_id)
-                     ->where('locationId','=',$request->location_id)
-                       ->where('deviceId','=',$request->deviceId)
-                    ->groupBy(DB::raw('Date(sampled_date_time)'))
-                    ->orderBy('AqiValue', 'desc');
-
-           //  $summaryAqiValue = DB::table('Aqi_values_per_device')
-           //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
-           //                      ->where('labId','=',$request->lab_id)
-           //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
-           //                      ->get();
-
-   }
-   else if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !=""){
-           $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-            ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue ,ROUND(MAX(AqiValue),2) as AqiStatus, DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-           // ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-                    ->where('customerId','=',$this->companyCode)
-                    ->where('buildingId','=',$request->building_id)
-                    ->where('facilityId','=',$request->facility_id)
-                    ->where('branchId','=',$request->branch_id)
-                    ->where('locationId','=',$request->location_id)
-                    ->where('deviceId','=',$request->deviceId)
-                    ->groupBy(DB::raw('Date(sampled_date_time)'))
-                    ->orderBy('AqiValue', 'desc');
-
-           //  $summaryAqiValue = DB::table('Aqi_values_per_device')
-           //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
-           //                      ->where('labId','=',$request->lab_id)
-           //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
-           //                      ->get();
-
-             }
-         else if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""){
-           $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-            ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue ,ROUND(MAX(AqiValue),2) as AqiStatus, DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-                     ->where('customerId','=',$this->companyCode)
-                     ->where('facilityId','=',$request->facility_id)
-                     ->where('branchId','=',$request->branch_id)
-                     ->where('locationId','=',$request->location_id)
-                     ->where('deviceId','=',$request->deviceId)
-                    ->groupBy(DB::raw('Date(sampled_date_time)'))
-                    ->orderBy('AqiValue', 'desc');
-
-           //  $summaryAqiValue = DB::table('Aqi_values_per_device')
-           //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
-           //                      ->where('labId','=',$request->lab_id)
-           //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
-           //                      ->get();
-
-         }
-       else if($request->location_id != "" && $request->branch_id != ""){
-             $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-            ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue ,ROUND(MAX(AqiValue),2) as AqiStatus, DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-                    ->where('customerId','=',$this->companyCode)
-                     ->where('branchId','=',$request->branch_id)
-                     ->where('locationId','=',$request->location_id)
-                     ->where('deviceId','=',$request->deviceId)
-                    ->groupBy(DB::raw('Date(sampled_date_time)'))
-                    ->orderBy('AqiValue', 'desc');
-
-           //  $summaryAqiValue = DB::table('Aqi_values_per_device')
-           //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
-           //                      ->where('labId','=',$request->lab_id)
-           //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
-           //                      ->get();
-       }
-    else if($request->location_id != ""){
-        $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-            ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue ,ROUND(MAX(AqiValue),2) as AqiStatus, DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-                    ->where('customerId','=',$this->companyCode)
-                     ->where('locationId','=',$request->location_id)
-                     ->where('deviceId','=',$request->deviceId)
-                    ->groupBy(DB::raw('Date(sampled_date_time)'))
-                    ->orderBy('AqiValue', 'desc');
-
-           //  $summaryAqiValue = DB::table('Aqi_values_per_device')
-           //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
-           //                      ->where('labId','=',$request->lab_id)
-           //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
-           //                      ->get();
-   }
-   else{
-        $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-            ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue ,ROUND(MAX(AqiValue),2) as AqiStatus, DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id','aqi.companyCode')
-                  ->where('customerId','=',$this->companyCode)
-                 ->where('deviceId','=',$request->deviceId)
-                   ->groupBy(DB::raw('Date(sampled_date_time)'))
-                   ->orderBy('AqiValue', 'desc');
-           }
+                //  $summaryAqiValue = DB::table('Aqi_values_per_device')
+                //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
+                //                      ->where('labId','=',$request->lab_id)
+                //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
+                //                      ->get();
+                    
         }
-       else{
+        else if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !="" && $request->floor_id !=""){
+                        $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
+                         ->where('customerId','=',$this->companyCode)
+                        //  ->where('companyCode','=',$this->companyCode)
+                         ->where('floorId','=',$request->floor_id)
+                         ->where('buildingId','=',$request->building_id)
+                          ->where('facilityId','=',$request->facility_id)
+                          ->where('branchId','=',$request->branch_id)
+                          ->where('locationId','=',$request->location_id)
+                            ->where('deviceId','=',$request->deviceId)
+                         ->groupBy(DB::raw('Date(sampled_date_time)'));
 
-   if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !="" && $request->floor_id !="" && $request->lab_id !=""){
+                //  $summaryAqiValue = DB::table('Aqi_values_per_device')
+                //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
+                //                      ->where('labId','=',$request->lab_id)
+                //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
+                //                      ->get();
+            
+        }
+        else if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !=""){
+                $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
+                         ->where('customerId','=',$this->companyCode)
+                         ->where('buildingId','=',$request->building_id)
+                         ->where('facilityId','=',$request->facility_id)
+                         ->where('branchId','=',$request->branch_id)
+                         ->where('locationId','=',$request->location_id)
+                         ->where('deviceId','=',$request->deviceId)
+                         ->groupBy(DB::raw('Date(sampled_date_time)'));
 
-       $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-           //  ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-           ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue ,ROUND(MAX(AqiValue),2) as AqiStatus, DATE(sampled_date_time) as date'),'l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-                    ->where('customerId','=',$this->companyCode)
-                    ->where('labId','=',$request->lab_id)
-                    ->where('floorId','=',$request->floor_id)
-                    ->where('buildingId','=',$request->building_id)
-                     ->where('facilityId','=',$request->facility_id)
-                     ->where('branchId','=',$request->branch_id)
-                     ->where('locationId','=',$request->location_id)
+                //  $summaryAqiValue = DB::table('Aqi_values_per_device')
+                //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
+                //                      ->where('labId','=',$request->lab_id)
+                //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
+                //                      ->get();
+                      
+                  }
+              else if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""){
+                $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
+                          ->where('customerId','=',$this->companyCode)
+                          ->where('facilityId','=',$request->facility_id)
+                          ->where('branchId','=',$request->branch_id)
+                          ->where('locationId','=',$request->location_id)
+                          ->where('deviceId','=',$request->deviceId)
+                         ->groupBy(DB::raw('Date(sampled_date_time)'));
 
-                    ->groupBy(DB::raw('Date(sampled_date_time)'))
-                    ->orderBy('AqiValue', 'desc');
+                //  $summaryAqiValue = DB::table('Aqi_values_per_device')
+                //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
+                //                      ->where('labId','=',$request->lab_id)
+                //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
+                //                      ->get();
+                  
+              }
+            else if($request->location_id != "" && $request->branch_id != ""){ 
+                  $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
+                         ->where('customerId','=',$this->companyCode)
+                          ->where('branchId','=',$request->branch_id)
+                          ->where('locationId','=',$request->location_id)
+                          ->where('deviceId','=',$request->deviceId)
+                         ->groupBy(DB::raw('Date(sampled_date_time)'));
 
-           //  $summaryAqiValue = DB::table('Aqi_values_per_device')
-           //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
-           //                      ->where('labId','=',$request->lab_id)
-           //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
-           //                      ->get();
-
-   }
-   else if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !="" && $request->floor_id !=""){
-                   $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-           //  ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-           ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue ,ROUND(MAX(AqiValue),2) as AqiStatus, DATE(sampled_date_time) as date'),'l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','aqi.id')
-                    ->where('customerId','=',$this->companyCode)
-                   //  ->where('companyCode','=',$this->companyCode)
-                    ->where('floorId','=',$request->floor_id)
-                    ->where('buildingId','=',$request->building_id)
-                     ->where('facilityId','=',$request->facility_id)
-                     ->where('branchId','=',$request->branch_id)
-                     ->where('locationId','=',$request->location_id)
-
-                    ->groupBy(DB::raw('Date(sampled_date_time)'))
-                    ->orderBy('AqiValue', 'desc');
-
-           //  $summaryAqiValue = DB::table('Aqi_values_per_device')
-           //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
-           //                      ->where('labId','=',$request->lab_id)
-           //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
-           //                      ->get();
-
-   }
-   else if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !=""){
-           $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-           //  ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-           ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue ,ROUND(MAX(AqiValue),2) as AqiStatus, DATE(sampled_date_time) as date'),'l.stateName','b.branchName','f.facilityName','bl.buildingName','aqi.id')
-                    ->where('customerId','=',$this->companyCode)
-                    ->where('buildingId','=',$request->building_id)
-                    ->where('facilityId','=',$request->facility_id)
-                    ->where('branchId','=',$request->branch_id)
-                    ->where('locationId','=',$request->location_id)
-
-                    ->groupBy(DB::raw('Date(sampled_date_time)'))
-                    ->orderBy('AqiValue', 'desc');
-
-           //  $summaryAqiValue = DB::table('Aqi_values_per_device')
-           //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
-           //                      ->where('labId','=',$request->lab_id)
-           //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
-           //                      ->get();
-
-             }
-         else if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""){
-           $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-           //  ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-           ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue ,ROUND(MAX(AqiValue),2) as AqiStatus, DATE(sampled_date_time) as date'),'l.stateName','b.branchName','f.facilityName','aqi.id')
-                     ->where('customerId','=',$this->companyCode)
-                     ->where('facilityId','=',$request->facility_id)
-                     ->where('branchId','=',$request->branch_id)
-                     ->where('locationId','=',$request->location_id)
-
-                    ->groupBy(DB::raw('Date(sampled_date_time)'))
-                    ->orderBy('AqiValue', 'desc');
-
-           //  $summaryAqiValue = DB::table('Aqi_values_per_device')
-           //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
-           //                      ->where('labId','=',$request->lab_id)
-           //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
-           //                      ->get();
-
-         }
-       else if($request->location_id != "" && $request->branch_id != ""){
+                //  $summaryAqiValue = DB::table('Aqi_values_per_device')
+                //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
+                //                      ->where('labId','=',$request->lab_id)
+                //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
+                //                      ->get();
+            }
+         else if($request->location_id != ""){  
              $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-           //  ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-           ->select(DB::raw('ROUND(AVG(AqiValue), 2) as AqiValue,ROUND(AVG(AqiValue),2) as AqiStatus, DATE(sampled_date_time) as date, l.stateName, b.branchName, aqi.id'))
-                    ->where('customerId','=',$this->companyCode)
-                     ->where('branchId','=',$request->branch_id)
-                     ->where('locationId','=',$request->location_id)
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
+                         ->where('customerId','=',$this->companyCode)
+                          ->where('locationId','=',$request->location_id)
+                          ->where('deviceId','=',$request->deviceId)
+                         ->groupBy(DB::raw('Date(sampled_date_time)'));
 
-                    ->groupBy(DB::raw('Date(sampled_date_time)'))
-                    ->orderBy('AqiValue', 'desc');
+                //  $summaryAqiValue = DB::table('Aqi_values_per_device')
+                //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
+                //                      ->where('labId','=',$request->lab_id)
+                //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
+                //                      ->get();
+        }
+        else{
+             $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id','aqi.companyCode')
+                       ->where('customerId','=',$this->companyCode)
+                      ->where('deviceId','=',$request->deviceId)
+                        ->groupBy(DB::raw('Date(sampled_date_time)'));
+                }
+             }
+            else{
+                    
+        if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !="" && $request->floor_id !="" && $request->lab_id !=""){
 
-           //  $summaryAqiValue = DB::table('Aqi_values_per_device')
-           //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
-           //                      ->where('labId','=',$request->lab_id)
-           //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
-           //                      ->get();
-       }
-    else if($request->location_id != ""){
-        $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-           //  ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
-           // ->where('customerId','=',$this->companyCode)
-           //           ->where('locationId','=',$request->location_id)
-           //          ->groupBy(DB::raw('Date(sampled_date_time)'));
-           ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue ,ROUND(MAX(AqiValue),2) as AqiStatus, DATE(sampled_date_time) as date'),'l.stateName','aqi.id')
-                    ->where('customerId','=',$this->companyCode)
-                     ->where('locationId','=',$request->location_id)
-                    ->groupBy(DB::raw('Date(sampled_date_time)'))
-                    ->where('customerId','=',$this->companyCode)
-                    ->where('locationId','=',$request->location_id)
-                   ->groupBy(DB::raw('Date(sampled_date_time)'))
-                   ->orderBy('AqiValue', 'desc');
-           //  $summaryAqiValue = DB::table('Aqi_values_per_device')
-           //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
-           //                      ->where('labId','=',$request->lab_id)
-           //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
-           //                      ->get();
-   }
-   else{
-        $summaryAqiValue = DB::table('customers as c')
-               ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
-               ->Join('branches as b', function($join){
-                   $join->on('l.id', '=', 'b.location_id')
-                        ->on('c.customerId', '=', 'b.companyCode');
-               })
-               ->Join('facilities as f', function($join){
-                   $join->on('c.customerId', '=', 'f.companyCode')
-                       ->on('l.id', '=', 'f.location_id')
-                       ->on('b.id', '=', 'f.branch_id');
-               })
-               ->Join('buildings as bl', function($join){
-                   $join->on('c.customerId', '=', 'bl.companyCode')
-                       ->on('l.id', '=', 'bl.location_id')
-                       ->on('b.id', '=', 'bl.branch_id')
-                       ->on('f.id','=','bl.facility_id');
-               })
-               ->Join('floors as fl', function($join){
-                   $join->on('c.customerId', '=', 'fl.companyCode')
-                       ->on('l.id', '=', 'fl.location_id')
-                       ->on('b.id', '=', 'fl.branch_id')
-                       ->on('f.id','=','fl.facility_id')
-                       ->on('bl.id','=','fl.building_id');
-               })
-               ->Join('lab_departments as lb', function($join){
-                   $join->on('c.customerId', '=', 'lb.companyCode')
-                       ->on('l.id', '=', 'lb.location_id')
-                       ->on('b.id', '=', 'lb.branch_id')
-                       ->on('f.id','=','lb.facility_id')
-                       ->on('bl.id','=','lb.building_id')
-                       ->on('fl.id','=','lb.floor_id');
-               })
-               ->Join('devices as d', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'd.location_id')
-                       ->on('b.id', '=', 'd.branch_id')
-                       ->on('f.id','=','d.facility_id')
-                       ->on('bl.id','=','d.building_id')
-                       ->on('fl.id','=','d.floor_id')
-                       ->on('lb.id','=','d.lab_id');
-               })
-               ->Join('Aqi_values_per_device as aqi', function($join){
-                   $join->on('c.customerId', '=', 'd.companyCode')
-                       ->on('l.id', '=', 'aqi.locationId')
-                       ->on('b.id', '=', 'aqi.branchId')
-                       ->on('f.id','=','aqi.facilityId')
-                       ->on('bl.id','=','aqi.buildingId')
-                       ->on('fl.id','=','aqi.floorId')
-                       ->on('lb.id','=','aqi.labId')
-                       ->on('d.id','=','aqi.deviceId');
-               })
-           //  ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id','aqi.companyCode')
-           // ->select(DB::raw(' DATE(sampled_date_time) as date'),'aqi.id','aqi.companyCode')
-           ->select(DB::raw(' DATE(sampled_date_time) as date'),'aqi.id','aqi.companyCode')
-                  ->where('customerId','=',$this->companyCode)
+            $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
+                         ->where('customerId','=',$this->companyCode)
+                         ->where('labId','=',$request->lab_id)
+                         ->where('floorId','=',$request->floor_id)
+                         ->where('buildingId','=',$request->building_id)
+                          ->where('facilityId','=',$request->facility_id)
+                          ->where('branchId','=',$request->branch_id)
+                          ->where('locationId','=',$request->location_id)
+                           
+                         ->groupBy(DB::raw('Date(sampled_date_time)'));
 
-                   ->groupBy(DB::raw('Date(sampled_date_time)'));
-                   // ->orderBy('AqiValue', 'desc');
+                //  $summaryAqiValue = DB::table('Aqi_values_per_device')
+                //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
+                //                      ->where('labId','=',$request->lab_id)
+                //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
+                //                      ->get();
+                    
+        }
+        else if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !="" && $request->floor_id !=""){
+                        $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
+                         ->where('customerId','=',$this->companyCode)
+                        //  ->where('companyCode','=',$this->companyCode)
+                         ->where('floorId','=',$request->floor_id)
+                         ->where('buildingId','=',$request->building_id)
+                          ->where('facilityId','=',$request->facility_id)
+                          ->where('branchId','=',$request->branch_id)
+                          ->where('locationId','=',$request->location_id)
+                           
+                         ->groupBy(DB::raw('Date(sampled_date_time)'));
 
+                //  $summaryAqiValue = DB::table('Aqi_values_per_device')
+                //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
+                //                      ->where('labId','=',$request->lab_id)
+                //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
+                //                      ->get();
+            
+        }
+        else if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !=""){
+                $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
+                         ->where('customerId','=',$this->companyCode)
+                         ->where('buildingId','=',$request->building_id)
+                         ->where('facilityId','=',$request->facility_id)
+                         ->where('branchId','=',$request->branch_id)
+                         ->where('locationId','=',$request->location_id)
+                        
+                         ->groupBy(DB::raw('Date(sampled_date_time)'));
 
+                //  $summaryAqiValue = DB::table('Aqi_values_per_device')
+                //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
+                //                      ->where('labId','=',$request->lab_id)
+                //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
+                //                      ->get();
+                      
+                  }
+              else if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""){
+                $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
+                          ->where('customerId','=',$this->companyCode)
+                          ->where('facilityId','=',$request->facility_id)
+                          ->where('branchId','=',$request->branch_id)
+                          ->where('locationId','=',$request->location_id)
+                         
+                         ->groupBy(DB::raw('Date(sampled_date_time)'));
 
+                //  $summaryAqiValue = DB::table('Aqi_values_per_device')
+                //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
+                //                      ->where('labId','=',$request->lab_id)
+                //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
+                //                      ->get();
+                  
+              }
+            else if($request->location_id != "" && $request->branch_id != ""){ 
+                  $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
+                         ->where('customerId','=',$this->companyCode)
+                          ->where('branchId','=',$request->branch_id)
+                          ->where('locationId','=',$request->location_id)
+                         
+                         ->groupBy(DB::raw('Date(sampled_date_time)'));
 
-           }
+                //  $summaryAqiValue = DB::table('Aqi_values_per_device')
+                //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
+                //                      ->where('labId','=',$request->lab_id)
+                //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
+                //                      ->get();
+            }
+         else if($request->location_id != ""){  
+             $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
+                         ->where('customerId','=',$this->companyCode)
+                          ->where('locationId','=',$request->location_id)
+                        
+                         ->groupBy(DB::raw('Date(sampled_date_time)'));
+
+                //  $summaryAqiValue = DB::table('Aqi_values_per_device')
+                //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
+                //                      ->where('labId','=',$request->lab_id)
+                //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
+                //                      ->get();
+        }
+        else{
+             $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('ROUND(MAX(AqiValue),2) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id','aqi.companyCode')
+                       ->where('customerId','=',$this->companyCode)
+                       
+                        ->groupBy(DB::raw('Date(sampled_date_time)'));
+                    
+                    
+                    
+                    
+                    
+                }
 
 }
 
-          if($startDate === $endDate){
-               $summaryAqiValue->whereDate('aqi.sampled_date_time','=',$startDate);
-           }
-           else {
-                 $summaryAqiValue->whereDate('aqi.sampled_date_time', '>=', $startDate)
-                         ->whereDate('aqi.sampled_date_time', '<=', $endDate);
-           }
+               if($startDate === $endDate){
+                    $summaryAqiValue->whereDate('aqi.sampled_date_time','=',$startDate); 
+                }
+                else {
+                      $summaryAqiValue->whereDate('aqi.sampled_date_time', '>=', $startDate)
+                              ->whereDate('aqi.sampled_date_time', '<=', $endDate);
+                }
+                
 
-
-           $getData = new ReportsDataUtilityController($request,$summaryAqiValue);
-
-           $response = [
-               "data"=>$getData->getData()
-           ];
-           $status = 200;
-           return response($response,$status);
-
+                $getData = new ReportsDataUtilityController($request,$summaryAqiValue);
+                  
+                $response = [
+                    "data"=>$getData->getData()
+                ];
+                $status = 200;
+                return response($response,$status);
+                    
 }
-
-
     
     public function reportBumpTest(Request $request){
         
@@ -1103,7 +1074,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                             ->where('customerId','=',$this->companyCode)
                           ->where('lb.id','=',$request->lab_id)
                          ->where('fl.id','=',$request->floor_id)
@@ -1160,7 +1131,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                              ->where('customerId','=',$this->companyCode)
                          ->where('fl.id','=',$request->floor_id)
                          ->where('bl.id','=',$request->building_id)
@@ -1216,7 +1187,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                             ->where('customerId','=',$this->companyCode)
                          ->where('bl.id','=',$request->building_id)
                           ->where('f.id','=',$request->facility_id)
@@ -1271,7 +1242,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                             ->where('customerId','=',$this->companyCode)
                           ->where('f.id','=',$request->facility_id)
                           ->where('b.id','=',$request->branch_id)
@@ -1325,7 +1296,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                               ->where('customerId','=',$this->companyCode)
                           ->where('b.id','=',$request->branch_id)
                           ->where('l.id','=',$request->location_id)
@@ -1378,7 +1349,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                                ->where('customerId','=',$this->companyCode)
                           ->where('l.id','=',$request->location_id)
                                ->where('device_id','=',$request->device_id);
@@ -1430,7 +1401,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                                ->where('customerId','=',$this->companyCode)
                                ->where('device_id','=',$request->device_id);
                            
@@ -1486,7 +1457,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                             ->where('customerId','=',$this->companyCode)
                              ->where('lb.id','=',$request->lab_id)
                              ->where('fl.id','=',$request->floor_id)
@@ -1542,7 +1513,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                              ->where('customerId','=',$this->companyCode)
                          ->where('fl.id','=',$request->floor_id)
                          ->where('bl.id','=',$request->building_id)
@@ -1597,7 +1568,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                             ->where('customerId','=',$this->companyCode)
                          ->where('bl.id','=',$request->building_id)
                           ->where('f.id','=',$request->facility_id)
@@ -1651,7 +1622,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                             ->where('customerId','=',$this->companyCode)
                           ->where('f.id','=',$request->facility_id)
                           ->where('b.id','=',$request->branch_id)
@@ -1704,7 +1675,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                               ->where('customerId','=',$this->companyCode)
                           ->where('b.id','=',$request->branch_id)
                           ->where('l.id','=',$request->location_id);
@@ -1756,7 +1727,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                                ->where('customerId','=',$this->companyCode)
                               ->where('l.id','=',$request->location_id);
                        }
@@ -1807,7 +1778,7 @@ class ReportController extends Controller
                                     ->on('d.id', '=', 'btr.device_id');             
                                     
                             })
-                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result','btr.userEmail')
+                            ->select('c.customerId', 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','btr.id','d.deviceName','btr.sensorTagName','btr.lastDueDate','btr.typeCheck','btr.percentageDeviation','btr.created_at','btr.result')
                                ->where('customerId','=',$this->companyCode);
                        }
         }
@@ -3379,8 +3350,9 @@ public function emailBumpTest(Request $request) {
                     $query->whereDate('btr.created_at','=',$startDate); 
                 }
                 else {
+                    // $query->whereBetween('btr.created_at', [$startDate, $endDate]); 
                       $query->whereDate('btr.created_at', '>=', $startDate)
-                             ->whereDate('btr.created_at', '<=', $endDate);
+                              ->whereDate('btr.created_at', '<=', $endDate);
                 }
         
              
@@ -3388,9 +3360,10 @@ public function emailBumpTest(Request $request) {
                 
                 $attachment =  Excel::raw(new BumpTestReportExport($query), BaseExcel::XLSX);
             
+                //   $email = "developer2@rdltech.in";
+                
                 $userEmail = $this->userId;
-                $email = $request->header('Userid');
-                $url = env('APPLICATION_URL');
+                $email = $this->fetchVerifiedEmailUsers($userEmail);
                 
                 if($email == 0){
                     $response = [      
@@ -3401,22 +3374,21 @@ public function emailBumpTest(Request $request) {
                 }else{
 
                     $data = [
-                        'meassage' => 'Bumptest Reports',
-                        'url' => $url
+                        'userid'=>$email,
+                        'body' =>"BumpTest Reports"
                     ];
                     
-                    Mail::send('BumptestReport',$data, function($messages) use ($email, $attachment){
+                    Mail::send('BumptestReport',$data, function($messages) use ($email,$attachment){
                         $messages->to($email);
-                        $messages->subject('Bumptest Reports');    
+                        $messages->subject('BumpTest Reports');    
                         $messages->attachData($attachment, 'ReportBumpTest.xlsx',[
-                        ]);
+                             ]);
                     });
                     
                        $response = [      
                             "message"=>"Reports data sent Successfully"
                         ];
                         $status = 200;
-                        
                      return response($response, $status);
                 }
     
@@ -3661,7 +3633,7 @@ public function emailBumpTest(Request $request) {
                     $join->on('c.customerId', '=', 'alarm.companyCode')
                           ->on('d.id', '=', 'alarm.deviceId');
                 })
-                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmClearedUser')
+                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -3719,7 +3691,7 @@ public function emailBumpTest(Request $request) {
                         $join->on('c.customerId', '=', 'alarm.companyCode')
                               ->on('d.id', '=', 'alarm.deviceId');
                     })
-                    ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmClearedUser')
+                    ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration')
                             ->where('customerId','=',$this->companyCode)
                             ->where('l.id','=',$request->location_id) 
                             ->where('b.id','=',$request->branch_id)
@@ -3775,7 +3747,7 @@ public function emailBumpTest(Request $request) {
                             $join->on('c.customerId', '=', 'alarm.companyCode')
                                   ->on('d.id', '=', 'alarm.deviceId');
                         })
-                        ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmClearedUser')
+                        ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration')
                                 ->where('customerId','=',$this->companyCode)
                                 ->where('l.id','=',$request->location_id) 
                                 ->where('b.id','=',$request->branch_id)
@@ -3830,7 +3802,7 @@ public function emailBumpTest(Request $request) {
                                     $join->on('c.customerId', '=', 'alarm.companyCode')
                                           ->on('d.id', '=', 'alarm.deviceId');
                                 })
-                                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmClearedUser')
+                                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration')
                                         ->where('customerId','=',$this->companyCode)
                                         ->where('l.id','=',$request->location_id) 
                                         ->where('b.id','=',$request->branch_id)
@@ -3884,7 +3856,7 @@ public function emailBumpTest(Request $request) {
                                     $join->on('c.customerId', '=', 'alarm.companyCode')
                                           ->on('d.id', '=', 'alarm.deviceId');
                                 })
-                                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmClearedUser')
+                                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration')
                                         ->where('customerId','=',$this->companyCode)
                                         ->where('l.id','=',$request->location_id) 
                                         ->where('b.id','=',$request->branch_id)
@@ -3937,7 +3909,7 @@ public function emailBumpTest(Request $request) {
                                     $join->on('c.customerId', '=', 'alarm.companyCode')
                                           ->on('d.id', '=', 'alarm.deviceId');
                                 })
-                                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmClearedUser')
+                                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration')
                                         ->where('customerId','=',$this->companyCode)
                                         ->where('l.id','=',$request->location_id) 
                                         ->WHERE('deviceId','=',$request->deviceId)
@@ -3989,7 +3961,7 @@ public function emailBumpTest(Request $request) {
                             $join->on('c.customerId', '=', 'alarm.companyCode')
                                   ->on('d.id', '=', 'alarm.deviceId');
                         })
-                        ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType','alarm.alarmClearedUser')
+                        ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType')
                                 ->where('customerId','=',$this->companyCode)
                                 ->WHERE('deviceId','=',$request->deviceId)
                                 ->orderBy('id', 'DESC');
@@ -4043,7 +4015,7 @@ public function emailBumpTest(Request $request) {
                     $join->on('c.customerId', '=', 'alarm.companyCode')
                           ->on('d.id', '=', 'alarm.deviceId');
                 })
-                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType','alarm.alarmClearedUser')
+                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -4101,7 +4073,7 @@ public function emailBumpTest(Request $request) {
                         $join->on('c.customerId', '=', 'alarm.companyCode')
                               ->on('d.id', '=', 'alarm.deviceId');
                     })
-                    ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType','alarm.alarmClearedUser')
+                    ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType')
                             ->where('customerId','=',$this->companyCode)
                             ->where('l.id','=',$request->location_id) 
                             ->where('b.id','=',$request->branch_id)
@@ -4157,7 +4129,7 @@ public function emailBumpTest(Request $request) {
                             $join->on('c.customerId', '=', 'alarm.companyCode')
                                   ->on('d.id', '=', 'alarm.deviceId');
                         })
-                        ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType','alarm.alarmClearedUser')
+                        ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType')
                                 ->where('customerId','=',$this->companyCode)
                                 ->where('l.id','=',$request->location_id) 
                                 ->where('b.id','=',$request->branch_id)
@@ -4212,7 +4184,7 @@ public function emailBumpTest(Request $request) {
                                     $join->on('c.customerId', '=', 'alarm.companyCode')
                                           ->on('d.id', '=', 'alarm.deviceId');
                                 })
-                                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType','alarm.alarmClearedUser')
+                                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType')
                                         ->where('customerId','=',$this->companyCode)
                                         ->where('l.id','=',$request->location_id) 
                                         ->where('b.id','=',$request->branch_id)
@@ -4266,7 +4238,7 @@ public function emailBumpTest(Request $request) {
                                     $join->on('c.customerId', '=', 'alarm.companyCode')
                                           ->on('d.id', '=', 'alarm.deviceId');
                                 })
-                                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType','alarm.alarmClearedUser')
+                                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType')
                                         ->where('customerId','=',$this->companyCode)
                                         ->where('l.id','=',$request->location_id) 
                                         ->where('b.id','=',$request->branch_id)
@@ -4319,7 +4291,7 @@ public function emailBumpTest(Request $request) {
                                     $join->on('c.customerId', '=', 'alarm.companyCode')
                                           ->on('d.id', '=', 'alarm.deviceId');
                                 })
-                                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType','alarm.alarmClearedUser')
+                                ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType')
                                         ->where('customerId','=',$this->companyCode)
                                         ->where('l.id','=',$request->location_id) 
                                         // ->WHERE('deviceId','=',$request->deviceId)
@@ -4371,7 +4343,7 @@ public function emailBumpTest(Request $request) {
                             $join->on('c.customerId', '=', 'alarm.companyCode')
                                   ->on('d.id', '=', 'alarm.deviceId');
                         })
-                        ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType','alarm.alarmClearedUser')
+                        ->select('alarm.id','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertStandardMessage','alarm.sensorId','alarm.a_date','alarm.a_time','alarm.alertTriggeredDuration','alarm.alarmType')
                                 ->where('customerId','=',$this->companyCode)
                                 // ->WHERE('deviceId','=',$request->deviceId)
                                 ->orderBy('id', 'DESC');
@@ -5976,15 +5948,12 @@ else if($request->location_id != "" && $request->branch_id != "" && $request->fa
                     
             $attachment =  Excel::raw(new ReportExport($query), BaseExcel::XLSX);
             
-            $userEmail = $this->userId;
+             $userEmail = $this->userId;
             $email = $this->fetchVerifiedEmailUsers($userEmail);
-            // $email = 'vaishakkpoojary@gmail.com';
-            $url = env('APPLICATION_URL');
 
             $data = [
                 'userid'=>$email,
-                'body' =>"Alarm Data",
-                'url' => $url
+                'body' =>"Alarm Data"
             ];
             
             Mail::send('alarmReport',$data, function($messages) use ($email,$attachment){
@@ -8864,33 +8833,39 @@ public function emailDeviceLog(Request $request)
             $query->whereBetween('slc.created_at', [$startDate, $endDate]);    
         }
 
-       $attachment =  Excel::raw(new LimitEditLogsExport($query), BaseExcel::XLSX);
-
-        // $email = "vaishakkpoojary@gmail.com";
-        $userEmail = $this->userId;
-        $email = $this->fetchVerifiedEmailUsers($userEmail);
-        $url = env('APPLICATION_URL');
-
-        $data = [
-            'userid'=>$email,
-            'body' =>"Limit Edit Logs",
-            'url' => $url
-        ];
+        // return Excel::download(new SensorLogReport($query), 'SensorLogReport.xlsx');
         
-        Mail::send('LimitEditLogs', $data, function($messages) use ($email,$attachment){
-            $messages->to($email);
-            $messages->subject('Limit edit logs');    
-            $messages->attachData($attachment, 'LimitEditLogs.xlsx',[
-                 ]);
-        });
         
+            $attachment =  Excel::raw(new LimitEditLogsExport($query), BaseExcel::XLSX);
+
+//   $email = "developer2@rdltech.in";
+
+$userEmail = $this->userId;
+$email = $this->fetchVerifiedEmailUsers($userEmail);
+
+
+
+    $data = [
+        'userid'=>$email,
+        'body' =>"Limit Edit Logs"
+    ];
+    
+    Mail::send('LimitEditLogs',$data, function($messages) use ($email,$attachment){
+        $messages->to($email);
+        $messages->subject('Limit edit logs data');    
+        $messages->attachData($attachment, 'LimitEditLogs.xlsx',[
+             ]);
+    });
+    
        $response = [      
             "message"=>"Reports data sent Successfully"
         ];
         $status = 200;
-            
-         return response($response, $status);
-    }
+     return response($response, $status);
+        
+    
+        
+}
 
         
         
@@ -10208,7 +10183,7 @@ $query = DB::table('customers as c')
                                     ->on('d.id', '=', 'fvr.device_id');
                                     
                             })
-                            ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                            ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                             ->where('customerId','=',$this->companyCode)
                             ->where('l.id','=',$request->location_id) 
                             ->where('b.id','=',$request->branch_id)
@@ -10267,7 +10242,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                        ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -10324,7 +10299,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                        ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -10380,7 +10355,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                        ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -10435,7 +10410,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                        ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -10489,7 +10464,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                        ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('device_id','=',$request->deviceId)
@@ -10542,7 +10517,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                        ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('device_id','=',$request->deviceId)
                         ->orderBy('id', 'asc');
@@ -10600,7 +10575,7 @@ $query = DB::table('customers as c')
                                         ->on('d.id', '=', 'fvr.device_id');
                                         
                                 })
-                                ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                                ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                                 ->where('customerId','=',$this->companyCode)
                                 ->where('l.id','=',$request->location_id) 
                                 ->where('b.id','=',$request->branch_id)
@@ -10658,7 +10633,7 @@ $query = DB::table('customers as c')
                                         ->on('d.id', '=', 'fvr.device_id');
                                         
                                 })
-                                ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                                ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                                 ->where('customerId','=',$this->companyCode)
                                 ->where('l.id','=',$request->location_id) 
                                 ->where('b.id','=',$request->branch_id)
@@ -10716,7 +10691,7 @@ $query = DB::table('customers as c')
                                         ->on('d.id', '=', 'fvr.device_id');
                                         
                                 })
-                                ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                                ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                                 ->where('customerId','=',$this->companyCode)
                                 ->where('l.id','=',$request->location_id) 
                                 ->where('b.id','=',$request->branch_id)
@@ -10772,7 +10747,7 @@ $query = DB::table('customers as c')
                                         ->on('d.id', '=', 'fvr.device_id');
                                         
                                 })
-                                ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                                ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                                 ->where('customerId','=',$this->companyCode)
                                 ->where('l.id','=',$request->location_id) 
                                 ->where('b.id','=',$request->branch_id)
@@ -10827,7 +10802,7 @@ $query = DB::table('customers as c')
                                         ->on('d.id', '=', 'fvr.device_id');
                                     
                                     })
-                                    ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                                    ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                                     ->where('customerId','=',$this->companyCode)
                                     ->where('l.id','=',$request->location_id) 
                                     ->where('b.id','=',$request->branch_id)
@@ -10881,7 +10856,7 @@ $query = DB::table('customers as c')
                                         ->on('d.id', '=', 'fvr.device_id');
                                         
                                 })
-                                ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                                ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                                 ->where('customerId','=',$this->companyCode)
                                 ->where('l.id','=',$request->location_id) 
                                 ->orderBy('id', 'asc');
@@ -10934,7 +10909,7 @@ $query = DB::table('customers as c')
                                         ->on('d.id', '=', 'fvr.device_id');
                                         
                                 })
-                                ->select('fvr.*','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
+                                ->select('fvr.id','c.customerId','fvr.companyCode','fvr.device_id','fvr.created_at','fvr.updated_at','fvr.deviceName','fvr.firmwareVersion')
                                 ->where('customerId','=',$this->companyCode)
                                 ->orderBy('id', 'asc');
                             }
@@ -10952,8 +10927,8 @@ $query = DB::table('customers as c')
                 }
                 
                 
-                public function FirmwareVersionExport(Request $request)
-                {
+                 public function FirmwareVersionExport(Request $request)
+                    {
                             // $startDate = date("Y-m-d",strtotime($request->input(key:'fromDate')));
                             // $endDate = date("Y-m-d", strtotime($request->input(key:'toDate')));
                             
@@ -11007,7 +10982,7 @@ $query = DB::table('customers as c')
                                     ->on('d.id', '=', 'fvr.device_id');
                                     
                             })
-                            ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                            ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                             ->where('customerId','=',$this->companyCode)
                             ->where('l.id','=',$request->location_id) 
                             ->where('b.id','=',$request->branch_id)
@@ -11066,7 +11041,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -11123,7 +11098,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -11179,7 +11154,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -11234,7 +11209,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                         ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                         ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -11288,7 +11263,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('device_id','=',$request->deviceId)
@@ -11341,7 +11316,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('device_id','=',$request->deviceId)
                         ->orderBy('fvr.id', 'asc');
@@ -11396,7 +11371,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -11454,7 +11429,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                    ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                    ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -11512,7 +11487,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -11568,7 +11543,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -11623,7 +11598,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -11677,7 +11652,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->orderBy('fvr.id', 'asc');
@@ -11730,7 +11705,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName', 'fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->orderBy('fvr.id', 'asc');
                          }
@@ -11752,12 +11727,144 @@ $query = DB::table('customers as c')
                     
                     
                     
-           
-    public function EmailFirmwareVersion(Request $request)
-    {
+            /*        
+                public function FirmwareVersionExport(Request $request)
+                    {
+                            // $startDate = date("Y-m-d",strtotime($request->input(key:'fromDate')));
+                            // $endDate = date("Y-m-d", strtotime($request->input(key:'toDate')));
+                            
+                             $query = DB::table('customers as c')
+                                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                                    ->Join('branches as b', function($join){
+                                        $join->on('l.id', '=', 'b.location_id')
+                                             ->on('c.customerId', '=', 'b.companyCode');
+                                    })
+                                    ->Join('facilities as f', function($join){
+                                        $join->on('c.customerId', '=', 'f.companyCode')
+                                            ->on('l.id', '=', 'f.location_id')
+                                            ->on('b.id', '=', 'f.branch_id');
+                                    })
+                                    ->Join('buildings as bl', function($join){
+                                        $join->on('c.customerId', '=', 'bl.companyCode')
+                                            ->on('l.id', '=', 'bl.location_id')
+                                            ->on('b.id', '=', 'bl.branch_id')
+                                            ->on('f.id','=','bl.facility_id');
+                                    })
+                                    ->Join('floors as fl', function($join){
+                                        $join->on('c.customerId', '=', 'fl.companyCode')
+                                            ->on('l.id', '=', 'fl.location_id')
+                                            ->on('b.id', '=', 'fl.branch_id')
+                                            ->on('f.id','=','fl.facility_id')
+                                            ->on('bl.id','=','fl.building_id');
+                                    })
+                                    ->Join('lab_departments as lb', function($join){
+                                        $join->on('c.customerId', '=', 'lb.companyCode')
+                                            ->on('l.id', '=', 'lb.location_id')
+                                            ->on('b.id', '=', 'lb.branch_id')
+                                            ->on('f.id','=','lb.facility_id')
+                                            ->on('bl.id','=','lb.building_id')
+                                            ->on('fl.id','=','lb.floor_id');
+                                    })
+                                    ->Join('devices as d', function($join){
+                                        $join->on('c.customerId', '=', 'd.companyCode')
+                                            ->on('l.id', '=', 'd.location_id')
+                                            ->on('b.id', '=', 'd.branch_id')
+                                            ->on('f.id','=','d.facility_id')
+                                            ->on('bl.id','=','d.building_id')
+                                            ->on('fl.id','=','d.floor_id')
+                                            ->on('lb.id','=','d.lab_id');
+                                    })
+                                ->Join('firmware_version_reports as fvr', function($join){
+                                    $join->on('c.customerId', '=', 'fvr.companyCode')
+                                        ->on('d.id', '=', 'fvr.device_id');
+                                        
+                                })
+                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
+                                ->WHERE('customerId','=',$this->companyCode)
+                                ->WHERE('fvr.device_id','=',$request->deviceId)
+                                ->orderBy('fvr.id', 'asc');
+                                
+                                
+                    // if($startDate === $endDate){
+                    //     $query->whereDate('fvr.created_at','=',$startDate); 
+                    // }
+                    // else {
+                    //     $query->whereBetween('fvr.created_at', [$startDate, $endDate]);    
+                    // }
+    
+    
+                        return Excel::download(new FirmwareVersionExport($query), 'firmware.xlsx');
+                 }
+              */   
+            public function EmailFirmwareVersion(Request $request)
+                    {
                       
-                           
-                if( $request->deviceId !=""){
+                            
+                            //  $startDate = date("Y-m-d",strtotime($request->fromDate));
+                            //  $endDate = date("Y-m-d", strtotime($request->toDate));
+                            
+                        /*     $query = DB::table('customers as c')
+                                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                                    ->Join('branches as b', function($join){
+                                        $join->on('l.id', '=', 'b.location_id')
+                                             ->on('c.customerId', '=', 'b.companyCode');
+                                    })
+                                    ->Join('facilities as f', function($join){
+                                        $join->on('c.customerId', '=', 'f.companyCode')
+                                            ->on('l.id', '=', 'f.location_id')
+                                            ->on('b.id', '=', 'f.branch_id');
+                                    })
+                                    ->Join('buildings as bl', function($join){
+                                        $join->on('c.customerId', '=', 'bl.companyCode')
+                                            ->on('l.id', '=', 'bl.location_id')
+                                            ->on('b.id', '=', 'bl.branch_id')
+                                            ->on('f.id','=','bl.facility_id');
+                                    })
+                                    ->Join('floors as fl', function($join){
+                                        $join->on('c.customerId', '=', 'fl.companyCode')
+                                            ->on('l.id', '=', 'fl.location_id')
+                                            ->on('b.id', '=', 'fl.branch_id')
+                                            ->on('f.id','=','fl.facility_id')
+                                            ->on('bl.id','=','fl.building_id');
+                                    })
+                                    ->Join('lab_departments as lb', function($join){
+                                        $join->on('c.customerId', '=', 'lb.companyCode')
+                                            ->on('l.id', '=', 'lb.location_id')
+                                            ->on('b.id', '=', 'lb.branch_id')
+                                            ->on('f.id','=','lb.facility_id')
+                                            ->on('bl.id','=','lb.building_id')
+                                            ->on('fl.id','=','lb.floor_id');
+                                    })
+                                    ->Join('devices as d', function($join){
+                                        $join->on('c.customerId', '=', 'd.companyCode')
+                                            ->on('l.id', '=', 'd.location_id')
+                                            ->on('b.id', '=', 'd.branch_id')
+                                            ->on('f.id','=','d.facility_id')
+                                            ->on('bl.id','=','d.building_id')
+                                            ->on('fl.id','=','d.floor_id')
+                                            ->on('lb.id','=','d.lab_id');
+                                    })
+                                ->Join('firmware_version_reports as fvr', function($join){
+                                    $join->on('c.customerId', '=', 'fvr.companyCode')
+                                        ->on('d.id', '=', 'fvr.device_id');
+                                        
+                                })
+                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
+                                ->WHERE('customerId','=',$this->companyCode)
+                                ->WHERE('fvr.device_id','=',$request->deviceId)
+                                ->orderBy('fvr.id', 'asc');
+                                
+                                */
+                    // if($startDate === $endDate){
+                    //     $query->whereDate('fvr.created_at','=',$startDate); 
+                    // }
+                    // else {
+                    //     $query->whereBetween('fvr.created_at', [$startDate, $endDate]);    
+                    // }
+    
+                    // return Excel::download(new FirmwareVersionExport($query), 'firmware.xlsx');
+                    
+                      if( $request->deviceId !=""){
                         
                     if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !="" && $request->floor_id !="" && $request->lab_id !="")
                         {
@@ -11807,7 +11914,7 @@ $query = DB::table('customers as c')
                                     ->on('d.id', '=', 'fvr.device_id');
                                     
                             })
-                            ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                            ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                             ->where('customerId','=',$this->companyCode)
                             ->where('l.id','=',$request->location_id) 
                             ->where('b.id','=',$request->branch_id)
@@ -11866,7 +11973,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -11923,7 +12030,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -11979,7 +12086,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -12034,7 +12141,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                         ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -12088,7 +12195,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('device_id','=',$request->deviceId)
@@ -12141,7 +12248,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('device_id','=',$request->deviceId)
                         ->orderBy('fvr.id', 'asc');
@@ -12196,7 +12303,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -12254,7 +12361,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                    ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -12312,7 +12419,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -12368,7 +12475,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -12423,7 +12530,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->where('b.id','=',$request->branch_id)
@@ -12477,7 +12584,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->where('l.id','=',$request->location_id) 
                         ->orderBy('fvr.id', 'asc');
@@ -12530,7 +12637,7 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'fvr.device_id');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'l.stateName', 'b.branchName', 'f.facilityName', 'bl.buildingName','fl.floorName','lb.labDepName','fvr.deviceName','fvr.firmwareVersion', 'fvr.userEmail', 'fvr.status')
+                                ->select(DB::raw('DATE_FORMAT(fvr.created_at, "%d-%b-%Y") as date'),DB::raw('TIME(fvr.created_at) as time'),'fvr.deviceName','fvr.firmwareVersion')
                         ->where('customerId','=',$this->companyCode)
                         ->orderBy('fvr.id', 'asc');
                          }
@@ -12539,11 +12646,14 @@ $query = DB::table('customers as c')
                         
                     $attachment =  Excel::raw(new FirmwareVersionExport($query), BaseExcel::XLSX);
             
-                    $url = env('APPLICATION_URL');
-                    $email = $request->header('Userid');
+                    // $email = "developer2@rdltech.in";
+                    
+                    $userEmail = $this->userId;
+                    $email = $this->fetchVerifiedEmailUsers($userEmail);
+
                     $data = [
-                        'meassage' => 'Firmware Version Reports',
-                        'url' => $url
+                        'userid'=>$email,
+                        'body' =>"Firmware Version Reports"
                     ];
                     
                     Mail::send('FirmwareVersion',$data, function($messages) use ($email,$attachment){
@@ -12554,8 +12664,7 @@ $query = DB::table('customers as c')
                     });
                     
                        $response = [      
-                            "message"=>"Reports data sent Successfully",
-                            "data" => $query
+                            "message"=>"Reports data sent Successfully"
                         ];
                         
                         $status = 200;
@@ -12618,32 +12727,28 @@ $query = DB::table('customers as c')
         $query = DB::table('server_usage_statitics')
                 ->select(DB::raw('DATE_FORMAT(date, "%d-%m-%Y") as date'),'time','perc_memory_usage','disk_usage','avg_cpu_load');
 
-        if($startDate === $endDate){
-            $query->whereDate('date','=',$startDate); 
-        }
-        else {
-            $query->whereBetween('date', [$startDate, $endDate]);    
-        }
+            if($startDate === $endDate){
+                $query->whereDate('date','=',$startDate); 
+            }
+            else {
+                $query->whereBetween('date', [$startDate, $endDate]);    
+            }
 
+
+        // return Excel::download(new serverUtilizationReportExport($query), 'serverUtiliExport.xlsx');
         $attachment =  Excel::raw(new serverUtilizationReportExport($query), BaseExcel::XLSX);
     
-        //$email = "developer2@rdltech.in";
-        // $userEmail = $this->userId;
-        // $email = $this->fetchVerifiedEmailUsers($userEmail);
-
-        // $data = [
-        //     'userid'=>$email,
-        //     'body' =>"Server Utilization Reports"
-        // ];
+        //   $email = "developer2@rdltech.in";
         
-        $url = env('APPLICATION_URL');
-        $email = $request->header('Userid');
+        $userEmail = $this->userId;
+        $email = $this->fetchVerifiedEmailUsers($userEmail);
+
         $data = [
-            'meassage' => 'Server Utilization',
-            'url' => $url
+            'userid'=>$email,
+            'body' =>"Server Utilization Reports"
         ];
         
-        Mail::send('ServerUtilization', $data, function($messages) use ($email,$attachment){
+        Mail::send('ServerUtilization',$data, function($messages) use ($email,$attachment){
             $messages->to($email);
             $messages->subject('Server Utilization Reports');    
             $messages->attachData($attachment, 'serverUtiliExport.xlsx',[
@@ -13714,14 +13819,16 @@ $query = DB::table('customers as c')
         // return Excel::download(new SensorStatusReportExport($query), 'sensorStatusReportExport.xlsx');
         $attachment =  Excel::raw(new SensorStatusReportExport($query, $locationDetail), BaseExcel::XLSX);
              
-        $url = env('APPLICATION_URL');
-        $email = $request->header('Userid');
+        $userEmail = $this->userId;
+        $email = $this->fetchVerifiedEmailUsers($userEmail);
+        
+
         $data = [
-            'meassage' => 'Sensor Status Reports',
-            'url' => $url
+            'userid'=>$email,
+            'body' =>"Sensor Status Report"
         ];
         
-        Mail::send('sensorStatus', $data, function($messages) use ($email,$attachment){
+        Mail::send('sensorStatus',$data, function($messages) use ($email,$attachment){
             $messages->to($email);
             $messages->subject('Sensor Status Reports');    
             $messages->attachData($attachment, 'sensorStatusReport.xlsx',[
@@ -13735,15 +13842,120 @@ $query = DB::table('customers as c')
         
         return response($response, $status);
     }
+  
+            
+            
+            
+        /*    
+            
+    // alarm send email attachment file
+    
+    
+//      public function alarmReportCsvFile(Request $request) 
+//         {    
+//             $startDate = date("Y-m-d",strtotime($request->fromDate));
+//             $endDate = date("Y-m-d", strtotime($request->toDate));
+    
+//             // $startDate = date("Y-m-d",strtotime($request->input(key:'fromDate')));
+//             // $endDate = date("Y-m-d", strtotime($request->input(key:'toDate')));
+    
+//             $query = DB::table('customers as c')
+//             ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+//             ->Join('branches as b', function($join){
+//                 $join->on('l.id', '=', 'b.location_id')
+//                      ->on('c.customerId', '=', 'b.companyCode');
+//             })
+//             ->Join('facilities as f', function($join){
+//                 $join->on('c.customerId', '=', 'f.companyCode')
+//                     ->on('l.id', '=', 'f.location_id')
+//                     ->on('b.id', '=', 'f.branch_id');
+//             })
+//             ->Join('buildings as bl', function($join){
+//                 $join->on('c.customerId', '=', 'bl.companyCode')
+//                     ->on('l.id', '=', 'bl.location_id')
+//                     ->on('b.id', '=', 'bl.branch_id')
+//                     ->on('f.id','=','bl.facility_id');
+//             })
+//             ->Join('floors as fl', function($join){
+//                 $join->on('c.customerId', '=', 'fl.companyCode')
+//                     ->on('l.id', '=', 'fl.location_id')
+//                     ->on('b.id', '=', 'fl.branch_id')
+//                     ->on('f.id','=','fl.facility_id')
+//                     ->on('bl.id','=','fl.building_id');
+//             })
+//             ->Join('lab_departments as lb', function($join){
+//                 $join->on('c.customerId', '=', 'lb.companyCode')
+//                     ->on('l.id', '=', 'lb.location_id')
+//                     ->on('b.id', '=', 'lb.branch_id')
+//                     ->on('f.id','=','lb.facility_id')
+//                     ->on('bl.id','=','lb.building_id')
+//                     ->on('fl.id','=','lb.floor_id');
+//             })
+//             ->Join('devices as d', function($join){
+//                 $join->on('c.customerId', '=', 'd.companyCode')
+//                     ->on('l.id', '=', 'd.location_id')
+//                     ->on('b.id', '=', 'd.branch_id')
+//                     ->on('f.id','=','d.facility_id')
+//                     ->on('bl.id','=','d.building_id')
+//                     ->on('fl.id','=','d.floor_id')
+//                     ->on('lb.id','=','d.lab_id');
+//             })
+//             ->Join('alert_crons as alarm', function($join){
+//                 $join->on('c.customerId', '=', 'alarm.companyCode')
+//                       ->on('d.id', '=', 'alarm.deviceId');
+//             })
+//               ->select('alarm.a_date','alarm.a_time','d.deviceName','lb.labDepName','alarm.sensorTag','alarm.alertType','alarm.Reason')
+//                     ->WHERE('customerId','=','A-TEST')
+//                     ->WHERE('deviceId','=',$request->input(key:'deviceId'));
+//                     // ->orderBy('id', 'DESC');
+//                     if($startDate === $endDate){
+//                         $query->whereDate('alarm.a_date','=',$startDate);
+//                     }
+//                     else {
+//                         $query->whereBetween('alarm.a_date', [$startDate, $endDate]);  
+//                     }
+//             // $attachment = Excel::download(new ReportExport($query), 'ReportAlarm.csv');
+            
+//             $attachment = Excel::download(new ReportExport($query),BaseExcel::xlsx);
+            
+//             $email = "developer2@rdltech.in";
+            
+            
+//             $email =$row["email"];
+            
+            
+            
+            
+            
+            
+            
+//             $data = [
+//                 'userid'=>$email,
+            
+//                 'body' =>"Alarm Data"
+//             ];
+//             Mail::send('reportsMail',$data, function($messages) use ($email,$attachment){
+//                 $messages->to($email);
+//                 $messages->subject('Alarm Reports');    
+//                 $messages->attachData($attachment, 'AlarmReport.csv',[
+//                     'mime' => 'application/csv',
+//                      ]);
+//             });
+//         }
+        
+// }
+
+
+*/
      
      
-    public function AqiReportMailExcelFile(Request $request) 
+     
+     
+public function AqiReportMailExcelFile(Request $request) 
     {
     
-        // $startDate = date("Y-m-d",strtotime($request->input(key:'fromDate')));
-        // $endDate = date("Y-m-d", strtotime($request->input(key:'toDate')));
-        $startDate = date("Y-m-d",strtotime($request->fromDate));
-        $endDate = date("Y-m-d", strtotime($request->toDate));
+        $startDate = date("Y-m-d",strtotime($request->input(key:'fromDate')));
+        $endDate = date("Y-m-d", strtotime($request->input(key:'toDate')));
         
         if($request->location_id != "" && $request->branch_id != "" && $request->facility_id != ""  && $request->building_id !="" && $request->floor_id !="" && $request->lab_id !=""){
 
@@ -14195,45 +14407,39 @@ $query = DB::table('customers as c')
                       ->groupBy(DB::raw('Date(sampled_date_time)'));
         }
 
-        if(!$request->deviceId){
-            if($startDate === $endDate){
-                $summaryAqiValue->whereDate('aqi.sampled_date_time','=',$startDate);
-            }
-            else {
-                $summaryAqiValue->whereDate('aqi.sampled_date_time','>=',$startDate)
-                                ->whereDate('aqi.sampled_date_time','<=',$endDate);
-            }
 
-        }else{
-            if($startDate === $endDate){
-                $summaryAqiValue->whereDate('aqi.sampled_date_time','=',$startDate)
-                                ->where('aqi.deviceId',$request->deviceId); 
-            }
-            else {
-                $summaryAqiValue->whereDate('aqi.sampled_date_time','>=',$startDate)
-                                ->whereDate('aqi.sampled_date_time','<=',$endDate)
-                                ->where('aqi.deviceId',$request->deviceId);   
-            }
+        //   if($startDate === $endDate){
+        //         $summaryAqiValue->whereDate('aqi.sampled_date_time','=',$startDate); 
+        //     }
+        //     else {
+        //         $summaryAqiValue->whereBetween('aqi.sampled_date_time', [$startDate, $endDate]);    
+        //     }
+
+        if($startDate === $endDate){
+            $summaryAqiValue->whereDate('aqi.sampled_date_time','=',$startDate); 
+        }
+        else {
+            $summaryAqiValue->whereDate('aqi.sampled_date_time','>=',$startDate)
+                            ->whereDate('aqi.sampled_date_time','<=',$endDate);    
         }
     
             
         $attachment =  Excel::raw(new AqiReportExport($summaryAqiValue), BaseExcel::XLSX);
         
-        $url = env('APPLICATION_URL');
-        // $email = "vaishakkpoojary@gmail.com";
+        // $email = "developer2@rdltech.in";
         $userEmail = $this->userId;
         $email = $this->fetchVerifiedEmailUsers($userEmail);
 
         $data = [
             'userid'=>$email,
-            'url' => $url
+            'body' =>"Air Quality Index Data"
         ];
         
-        Mail::send('AqiReport', $data, function($messages) use ($email,$attachment){
+        Mail::send('AqiReport',$data, function($messages) use ($email,$attachment){
             $messages->to($email);
-            $messages->subject('Air quality Index Report');    
+            $messages->subject('Air quality Index Reports');    
             $messages->attachData($attachment, 'AirQualityIndexReports.xlsx',[
-            ]);
+                    ]);
         });
         
         $response = [      
@@ -15811,7 +16017,66 @@ $query = DB::table('customers as c')
          
          
          
-          
+            /*        
+            public function ExportDeviceModelLog(Request $request)
+                    {
+                         $query = DB::table('customers as c')
+                                ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                                ->Join('branches as b', function($join){
+                                    $join->on('l.id', '=', 'b.location_id')
+                                         ->on('c.customerId', '=', 'b.companyCode');
+                                })
+                                ->Join('facilities as f', function($join){
+                                    $join->on('c.customerId', '=', 'f.companyCode')
+                                        ->on('l.id', '=', 'f.location_id')
+                                        ->on('b.id', '=', 'f.branch_id');
+                                })
+                                ->Join('buildings as bl', function($join){
+                                    $join->on('c.customerId', '=', 'bl.companyCode')
+                                        ->on('l.id', '=', 'bl.location_id')
+                                        ->on('b.id', '=', 'bl.branch_id')
+                                        ->on('f.id','=','bl.facility_id');
+                                })
+                                ->Join('floors as fl', function($join){
+                                    $join->on('c.customerId', '=', 'fl.companyCode')
+                                        ->on('l.id', '=', 'fl.location_id')
+                                        ->on('b.id', '=', 'fl.branch_id')
+                                        ->on('f.id','=','fl.facility_id')
+                                        ->on('bl.id','=','fl.building_id');
+                                })
+                                ->Join('lab_departments as lb', function($join){
+                                    $join->on('c.customerId', '=', 'lb.companyCode')
+                                        ->on('l.id', '=', 'lb.location_id')
+                                        ->on('b.id', '=', 'lb.branch_id')
+                                        ->on('f.id','=','lb.facility_id')
+                                        ->on('bl.id','=','lb.building_id')
+                                        ->on('fl.id','=','lb.floor_id');
+                                })
+                                ->Join('devices as d', function($join){
+                                    $join->on('c.customerId', '=', 'd.companyCode')
+                                        ->on('l.id', '=', 'd.location_id')
+                                        ->on('b.id', '=', 'd.branch_id')
+                                        ->on('f.id','=','d.facility_id')
+                                        ->on('bl.id','=','d.building_id')
+                                        ->on('fl.id','=','d.floor_id')
+                                        ->on('lb.id','=','d.lab_id');
+                                })
+                            ->Join('device_model_logs as dml', function($join){
+                                $join->on('c.customerId', '=', 'dml.companyName')
+                                    ->on('d.id', '=', 'dml.deviceId');
+                                    
+                            })
+                            ->select(DB::raw('DATE_FORMAT(dml.created_at, "%d-%m-%Y") as date'),DB::raw('TIME(dml.created_at) as time'), 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName' ,'dml.deviceModel')
+                            ->WHERE('customerId','=',$this->companyCode)
+                            ->WHERE('dml.deviceId','=',$request->deviceId)
+                            ->orderBy('dml.id', 'asc');
+                    
+                            
+                    return Excel::download(new DeviceModelLogExport($query), 'DeviceModelLogs.xlsx');
+
+                }
+                */
+                
             public function EmailDeviceModelLog(Request $request)
                     {
                                             if( $request->deviceId !=""){
@@ -16564,34 +16829,789 @@ $query = DB::table('customers as c')
                                 ->on('d.id', '=', 'dml.deviceId');
                                 
                         })
-                        ->select(DB::raw('DATE_FORMAT(dml.created_at, "%d-%m-%Y") as date'),DB::raw('TIME(dml.created_at) as time'), 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName' ,'dml.deviceModel')                            ->where('customerId','=',$this->companyCode)
+  ->select(DB::raw('DATE_FORMAT(dml.created_at, "%d-%m-%Y") as date'),DB::raw('TIME(dml.created_at) as time'), 'l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName' ,'dml.deviceModel')                            ->where('customerId','=',$this->companyCode)
                             ->orderBy('dml.id', 'asc');
                      }
                 }
-        
-        $attachment =  Excel::raw(new DeviceModelLogExport($query), BaseExcel::XLSX);
+                    
+                            
+                    // return Excel::download(new DeviceModelLogExport($query), 'DeviceModelLogs.xlsx');
+                    
 
-        $url = env('APPLICATION_URL');
-        $email = $request->header('Userid');
-        $data = [
-            'meassage' => 'Device Model Log',
-            'url' => $url
-        ];
-        
-        Mail::send('HardwareVersionModelNo',$data, function($messages) use ($email,$attachment){
-            $messages->to($email);
-            $messages->subject('Device Model Log');    
-            $messages->attachData($attachment, 'DeviceModelLogs.xlsx',[
-                 ]);
-        });
-        
-           $response = [      
-                "message"=>"Reports data sent Successfully"
-            ];
-            $status = 200;
+                    $attachment =  Excel::raw(new DeviceModelLogExport($query), BaseExcel::XLSX);
             
-        return response($response, $status);
-    }
+             
+                    $userEmail = $this->userId;
+                    $email = $this->fetchVerifiedEmailUsers($userEmail);
+                    
+
+                    $data = [
+                        'userid'=>$email,
+                        'body' =>"Device Model Log"
+                    ];
+                    
+                    Mail::send('HardwareVersionModelNo',$data, function($messages) use ($email,$attachment){
+                        $messages->to($email);
+                        $messages->subject('Device Model Log');    
+                        $messages->attachData($attachment, 'DeviceModelLogs.xlsx',[
+                             ]);
+                    });
+                    
+                       $response = [      
+                            "message"=>"Reports data sent Successfully"
+                        ];
+                        $status = 200;
+                     return response($response, $status);
+        }
             
  }
+ 
+ 
+            
+//  unused functions
+
+     /*       
+            public function SensorStatusReport(Request $request){
+                
+                $deviceId = $request->deviceId;
+                
+                $sensorTagList = DB::table('sensors')
+                                ->select('sensorTag', 'id')
+                                ->where('deviceId','=',$deviceId)
+                                ->get();
+                                
+                $gassCollectionData = array();     
+                $datas = array();
+                $data = array();
+                $sensorList = array();
+                $sensorIdList = array();
+                
+                $fromDate = "2022-10-10";
+                $toDate = "2022-10-14"; 
+                
+                function getDatesFromRange($start, $end, $format = 'Y-m-d') {
+                    $array = array();
+                    $interval = new DateInterval('P1D');
+                
+                    $realEnd = new DateTime($end);
+                    $realEnd->add($interval);
+                
+                    $period = new DatePeriod(new DateTime($start), $interval, $realEnd);
+                
+                    foreach($period as $date) { 
+                        $array[] = $date->format($format); 
+                    }
+                
+                    return $array;
+                }
+                
+                $dates = getDatesFromRange($fromDate, $toDate);
+               
+                //sensor List as gasscollection
+                foreach($sensorTagList as $sensorTag => $tagValue) {
+                    $sensorList[] = $tagValue->sensorTag;
+                    $sensorIdList[] = $tagValue->id;
+                }
+                 
+                $datas["gasCollection"] = $sensorList; //sensorList
+           
+                $results = array("min","max","avg");
+                // $dates = array("2022-10-14","2022-10-11");
+                $arrlength = count($dates);
+                    
+                for($x=0;$x<$arrlength;$x++) {
+                  	$resultCount = count($results);
+                    for($j=0;$j<$resultCount;$j++){
+                      
+                        $sensorCnt = count($sensorIdList);
+                        for($y=0;$y<$sensorCnt;$y++){
+                            
+                        	if($results[$j] == "min"){
+                        	    $dateQuery = DB::table('sampled_sensor_data_details_MinMaxAvg')
+                                              ->selectRaw('MIN(avg_val) as minVal')
+                                              ->where('sensor_id','=',$sensorIdList[$y])
+                                              ->where ('device_id','=',$deviceId)
+                                              ->whereDate('current_date_time','=',$dates[$x])
+                                              //->groupBy(DB::raw('CAST(sample_date_time AS DATE)'))
+                                              ->get();
+                                $minVAL = $dateQuery[0]->minVal;
+                                
+                                if($minVAL!=null){
+                                    $data[$dates[$x]][$results[$j]][] = $minVAL;     
+                                }else{
+                                    $data[$dates[$x]][$results[$j]][] = "NA";     
+                                }
+                            }
+                            
+                            if($results[$j] == "max"){
+                            	$dateQuery = DB::table('sampled_sensor_data_details_MinMaxAvg')
+                                              ->selectRaw('MAX(avg_val) as maxVal')
+                                              ->where('sensor_id','=',$sensorIdList[$y])
+                                              ->where ('device_id','=',$deviceId)
+                                              ->whereDate('current_date_time','=',$dates[$x])
+                                              //->groupBy(DB::raw('CAST(sample_date_time AS DATE)'))
+                                              ->get();
+                                $maxVAL = $dateQuery[0]->maxVal;
+                                
+                                if($maxVAL!=null){
+                                    $data[$dates[$x]][$results[$j]][] = $maxVAL;     
+                                }else{
+                                    $data[$dates[$x]][$results[$j]][] = "NA";     
+                                }
+                            }
+                            if($results[$j] == "avg"){
+                            	$dateQuery = DB::table('sampled_sensor_data_details_MinMaxAvg')
+                                              ->selectRaw('AVG(avg_val) as avgVal')
+                                              ->where('sensor_id','=',$sensorIdList[$y])
+                                              ->where ('device_id','=',$deviceId)
+                                              ->whereDate('current_date_time','=',$dates[$x])
+                                              //->groupBy(DB::raw('CAST(sample_date_time AS DATE)'))
+                                              ->get();
+                                $avgVAL = $dateQuery[0]->avgVal;
+                                
+                                if($avgVAL!=null){
+                                    $data[$dates[$x]][$results[$j]][] = $avgVAL;     
+                                }else{
+                                    $data[$dates[$x]][$results[$j]][] = "NA";     
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // $datas["data"] = $data;
+                    
+                $response = [
+                              "headerItem"=>$datas,
+                              "data"=>$data
+                ];
+                $status = 200;
+                return response($response,$status);
+            }
+            */
+
+     /*   public function fetchComputeAqmoAqi(Request $request){
+            
+            //  $deviceId = $request->deviceId;
+                
+            //     $sensorTagList = DB::table('sensors')
+            //                     ->select('sensorTag', 'id')
+            //                     ->where('deviceId','=',$deviceId)
+            //                     ->get();
+                                
+            $deviceId = $request->deviceId;
+                
+                $sensorTagList = DB::table('sensors')
+                                ->select('sensorTag', 'id')
+                                ->where('deviceId','=',$deviceId)
+                                ->get();
+                                
+                $gassCollectionData = array();     
+                $datas = array();
+                $data = array();
+                $sensorList = array();
+                $sensorIdList = array();
+                
+                $fromDate = "2022-10-10";
+                $toDate = "2022-10-14"; 
+                
+                function getDatesFromRange($start, $end, $format = 'Y-m-d') {
+                    $array = array();
+                    $interval = new DateInterval('P1D');
+                
+                    $realEnd = new DateTime($end);
+                    $realEnd->add($interval);
+                
+                    $period = new DatePeriod(new DateTime($start), $interval, $realEnd);
+                
+                    foreach($period as $date) { 
+                        $array[] = $date->format($format); 
+                    }
+                
+                    return $array;
+                }
+                
+                $dates = getDatesFromRange($fromDate, $toDate);
+               
+                //sensor List as gasscollection
+                foreach($sensorTagList as $sensorTag => $tagValue) {
+                    $sensorList[] = $tagValue->sensorTag;
+                    $sensorIdList[] = $tagValue->id;
+                }
+                 
+                $datas["gasCollection"] = $sensorList; //sensorList
+           
+                $results = array("min","max","avg","status");
+                // $dates = array("2022-10-14","2022-10-11");
+                $arrlength = count($dates);
+                    
+                for($x=0;$x<$arrlength;$x++) {
+                  	$resultCount = count($results);
+                    for($j=0;$j<$resultCount;$j++){
+                      
+                        $sensorCnt = count($sensorIdList);
+                        for($y=0;$y<$sensorCnt;$y++){
+                            
+                        	if($results[$j] == "min"){
+                        	    $dateQuery = DB::table('sampled_sensor_data_details_MinMaxAvg')
+                                              ->selectRaw('MIN(avg_val) as minVal')
+                                              ->where('sensor_id','=',$sensorIdList[$y])
+                                              ->where ('device_id','=',$deviceId)
+                                              ->whereDate('current_date_time','=',$dates[$x])
+                                              //->groupBy(DB::raw('CAST(sample_date_time AS DATE)'))
+                                              ->get();
+                                $minVAL = $dateQuery[0]->minVal;
+                                
+                                if($minVAL!=null){
+                                    $data[$dates[$x]][$results[$j]][] = $minVAL;     
+                                }else{
+                                    $data[$dates[$x]][$results[$j]][] = "NA";     
+                                }
+                            }
+                            
+                            if($results[$j] == "max"){
+                            	$dateQuery = DB::table('sampled_sensor_data_details_MinMaxAvg')
+                                              ->selectRaw('MAX(avg_val) as maxVal')
+                                              ->where('sensor_id','=',$sensorIdList[$y])
+                                              ->where ('device_id','=',$deviceId)
+                                              ->whereDate('current_date_time','=',$dates[$x])
+                                              //->groupBy(DB::raw('CAST(sample_date_time AS DATE)'))
+                                              ->get();
+                                $maxVAL = $dateQuery[0]->maxVal;
+                                
+                                if($maxVAL!=null){
+                                    $data[$dates[$x]][$results[$j]][] = $maxVAL;     
+                                }else{
+                                    $data[$dates[$x]][$results[$j]][] = "NA";     
+                                }
+                            }
+                            if($results[$j] == "avg"){
+                            	$dateQuery = DB::table('sampled_sensor_data_details_MinMaxAvg')
+                                              ->selectRaw('AVG(avg_val) as avgVal')
+                                              ->where('sensor_id','=',$sensorIdList[$y])
+                                              ->where ('device_id','=',$deviceId)
+                                              ->whereDate('current_date_time','=',$dates[$x])
+                                              //->groupBy(DB::raw('CAST(sample_date_time AS DATE)'))
+                                              ->get();
+                                $avgVAL = $dateQuery[0]->avgVal;
+                                
+                                if($avgVAL!=null){
+                                    $data[$dates[$x]][$results[$j]][] = $avgVAL;     
+                                }else{
+                                    $data[$dates[$x]][$results[$j]][] = "NA";     
+                                }
+                            }
+                            if($results[$j] == "status"){
+                                
+                            // $dateQuery = DB::table('sampled_sensor_data_details_MinMaxAvg')
+                            //                   ->select('alertType')
+                            //                   ->where('sensor_id','=',$sensorIdList[$y])
+                            //                   ->where ('device_id','=',$deviceId)
+                            //                   ->whereDate('current_date_time','=',$dates[$x])
+                            //                   //->groupBy(DB::raw('CAST(sample_date_time AS DATE)'))
+                            //                   ->get()->toArray();
+                            
+                            //       $avgVAL[] = $dateQuery[0]->avgVal;
+                                
+                            //     if($avgVAL!=null){
+                            //         $data[$dates[$x]][$results[$j]][] = $avgVAL;     
+                            //     }else{
+                            //         $data[$dates[$x]][$results[$j]][] = "NA";     
+                            //     }
+                            
+                            }
+                            
+                        }
+                    }
+                }
+                
+                // $datas["data"] = $data;
+                    
+                $response = [
+                              "headerItem"=>$datas,
+                              "data"=>$data
+                ];
+                $status = 200;
+                return response($response,$status);
+            }*/
+            
+     /*     public function SensorAlertStatus($dateQuery) {
+          
+          $sensorAlertObject = [
+              "priority"=>6,
+              "alertType"=>"Normal",
+              "alertColor"=>"green"
+          ]
+          
+          foreach($dateQuery as $x => $val) {
+          $alert = $val->alertType;
+          
+          if($alert === "critical")
+          {
+              $sensorAlertObject = [
+                  "priority"=>1,
+                  "alertType"=>"Critical",
+                  "alertColor"=>"red"
+                ]
+              
+          }
+          else if($alert ==="warning")
+          {
+              if($sensorAlertObject->priority >2)
+              {
+                  $sensorAlertObject = [
+                      "priority"=>2,
+                      "alertType"=>"warning",
+                      "alertColor"=>"yellow"
+                    ]
+              }
+              
+          }
+        else if($alert ==="outOfRange")
+          {
+              if($sensorAlertObject->priority >3)
+              {
+                  $sensorAlertObject = [
+                      "priority"=>3,
+                      "alertType"=>"outOfRange",
+                      "alertColor"=>"red"
+                    ]
+              }
+              
+          }
+        else if($alert ==="stell")
+          {
+              if($sensorAlertObject->priority >4)
+              {
+                  $sensorAlertObject = [
+                      "priority"=>4,
+                      "alertType"=>"stell",
+                      "alertColor"=>"purple"
+                    ]
+              }
+              
+          }
+        else if($alert ==="twa")
+          {
+              if($sensorAlertObject->priority >5)
+              {
+                  $sensorAlertObject = [
+                      "priority"=>5,
+                      "alertType"=>"twa",
+                      "alertColor"=>"maroon"
+                    ]
+              }
+              
+          }
+
+        }
+        
+        // return ($sensorAlertObject)
+        return $alert 
+}
+*/
+
+     /*                   
+            public function fetchComputeAqmoAqi(Request $request){
+                
+                // $query = Device::query();
+                // $query->where('companyCode','=',$this->companyCode);    
+                // $query->where('location_id','=',$request->location_id); 
+                // $query->where('branch_id','=',$request->branch_id); 
+                // $query->where('facility_id','=',$request->facility_id); 
+                // $query->where('building_id','=',$request->building_id); 
+                // $query->where('floor_id','=',$request->floor_id); 
+                // $query->where('lab_id','=',$request->lab_id); 
+                
+                $query = DB::table('customers as c')
+                        ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                        ->Join('branches as b', function($join){
+                            $join->on('l.id', '=', 'b.location_id')
+                                 ->on('c.customerId', '=', 'b.companyCode');
+                        })
+                        ->Join('facilities as f', function($join){
+                            $join->on('c.customerId', '=', 'f.companyCode')
+                                ->on('l.id', '=', 'f.location_id')
+                                ->on('b.id', '=', 'f.branch_id');
+                        })
+                        ->Join('buildings as bl', function($join){
+                            $join->on('c.customerId', '=', 'bl.companyCode')
+                                ->on('l.id', '=', 'bl.location_id')
+                                ->on('b.id', '=', 'bl.branch_id')
+                                ->on('f.id','=','bl.facility_id');
+                        })
+                        ->Join('floors as fl', function($join){
+                            $join->on('c.customerId', '=', 'fl.companyCode')
+                                ->on('l.id', '=', 'fl.location_id')
+                                ->on('b.id', '=', 'fl.branch_id')
+                                ->on('f.id','=','fl.facility_id')
+                                ->on('bl.id','=','fl.building_id');
+                        })
+                        ->Join('lab_departments as lb', function($join){
+                            $join->on('c.customerId', '=', 'lb.companyCode')
+                                ->on('l.id', '=', 'lb.location_id')
+                                ->on('b.id', '=', 'lb.branch_id')
+                                ->on('f.id','=','lb.facility_id')
+                                ->on('bl.id','=','lb.building_id')
+                                ->on('fl.id','=','lb.floor_id');
+                        })
+                        ->Join('devices as d', function($join){
+                            $join->on('c.customerId', '=', 'd.companyCode')
+                                ->on('l.id', '=', 'd.location_id')
+                                ->on('b.id', '=', 'd.branch_id')
+                                ->on('f.id','=','d.facility_id')
+                                ->on('bl.id','=','d.building_id')
+                                ->on('fl.id','=','d.floor_id')
+                                ->on('lb.id','=','d.lab_id');
+                        })
+                        ->select('l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','d.id')
+                        ->WHERE('customerId','=',$this->companyCode)
+                        ->where('l.id','=',$request->location_id) 
+                        ->where('b.id','=',$request->branch_id)
+                        ->where('f.id','=',$request->facility_id)
+                        ->where('bl.id','=',$request->building_id)
+                        ->where('fl.id','=',$request->floor_id) 
+                        ->where('lb.id','=',$request->lab_id);
+                        //->WHERE('deviceId','=',$deviceId)
+                        //->get();
+        
+                $data = $query->get();
+        
+                $deviceData = array();
+                        
+                $deviceCount = count($data);
+            
+                for($x=0;$x<$deviceCount;$x++){
+                    
+                    
+                      $deviceStatusCount = DB::table('sampled_sensor_data_details')
+                                            ->selectRaw('alertType,sample_date_time')
+                                            ->where('device_id','=',$data[$x]->id)
+                                            ->orderBy('id','desc')
+                                            ->first();
+                         
+                        
+        
+                          if($deviceStatusCount){
+                            $alertTypeVal = $deviceStatusCount->alertType;
+                            $dateTime = $deviceStatusCount->sample_date_time;
+            
+                            if($alertTypeVal === "Critical"){
+                                $alertColor = $this->alertColor['CRITICAL'];
+                                $alertLightColor = $this->alertColor['CRITICALLIGHTCOLOR'];
+                            }
+                            if($alertTypeVal === "Warning"){
+                                $alertColor = $this->alertColor['WARNING'];
+                                 $alertLightColor = $this->alertColor['WARNINGLIGHTCOLOR'];
+                            }
+                            if($alertTypeVal === "outOfRange"){
+                                $alertColor = $this->alertColor['CRITICAL'];
+                                $alertLightColor = $this->alertColor['CRITICALLIGHTCOLOR'];
+                            }
+                            if($alertTypeVal === "NORMAL"){
+                                $alertColor = $this->alertColor['NORMAL'];
+                                $alertLightColor = $this->alertColor['NORMALLIGHTCOLOR'];
+                            }
+                            
+                                
+                          }else{
+                              $alertTypeVal = "NA";
+                              $alertColor = "NA";
+                              $alertLightColor = "NA";
+                              $dateTime = "NA";
+                          }
+                          $data[$x]->alertType = $alertTypeVal;
+                          $data[$x]->alertColor =$alertColor;
+                          $data[$x]->alertLightColor = $alertLightColor;
+                          $data[$x]->sample_date_time = $dateTime;
+                          $deviceData[] = $data[$x];
+                         }
+        
+                   $response = [
+                        "data"=>$deviceData
+                    ];
+                   $status = 200;
+                   return response($response,$status);
+            }*/
+            
+     /*  public function DeviceAqiReport(Request $request){
+                    
+             $startDate = date("Y-m-d",strtotime($request->fromDate));
+             $endDate = date("Y-m-d", strtotime($request->toDate));
+                    
+                
+            $summaryAqiValue = DB::table('customers as c')
+                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                    ->Join('branches as b', function($join){
+                        $join->on('l.id', '=', 'b.location_id')
+                             ->on('c.customerId', '=', 'b.companyCode');
+                    })
+                    ->Join('facilities as f', function($join){
+                        $join->on('c.customerId', '=', 'f.companyCode')
+                            ->on('l.id', '=', 'f.location_id')
+                            ->on('b.id', '=', 'f.branch_id');
+                    })
+                    ->Join('buildings as bl', function($join){
+                        $join->on('c.customerId', '=', 'bl.companyCode')
+                            ->on('l.id', '=', 'bl.location_id')
+                            ->on('b.id', '=', 'bl.branch_id')
+                            ->on('f.id','=','bl.facility_id');
+                    })
+                    ->Join('floors as fl', function($join){
+                        $join->on('c.customerId', '=', 'fl.companyCode')
+                            ->on('l.id', '=', 'fl.location_id')
+                            ->on('b.id', '=', 'fl.branch_id')
+                            ->on('f.id','=','fl.facility_id')
+                            ->on('bl.id','=','fl.building_id');
+                    })
+                    ->Join('lab_departments as lb', function($join){
+                        $join->on('c.customerId', '=', 'lb.companyCode')
+                            ->on('l.id', '=', 'lb.location_id')
+                            ->on('b.id', '=', 'lb.branch_id')
+                            ->on('f.id','=','lb.facility_id')
+                            ->on('bl.id','=','lb.building_id')
+                            ->on('fl.id','=','lb.floor_id');
+                    })
+                    ->Join('devices as d', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'd.location_id')
+                            ->on('b.id', '=', 'd.branch_id')
+                            ->on('f.id','=','d.facility_id')
+                            ->on('bl.id','=','d.building_id')
+                            ->on('fl.id','=','d.floor_id')
+                            ->on('lb.id','=','d.lab_id');
+                    })
+                    ->Join('Aqi_values_per_device as aqi', function($join){
+                        $join->on('c.customerId', '=', 'd.companyCode')
+                            ->on('l.id', '=', 'aqi.locationId')
+                            ->on('b.id', '=', 'aqi.branchId')
+                            ->on('f.id','=','aqi.facilityId')
+                            ->on('bl.id','=','aqi.buildingId')
+                            ->on('fl.id','=','aqi.floorId')
+                            ->on('lb.id','=','aqi.labId')
+                            ->on('d.id','=','aqi.deviceId');
+                    })
+                 ->select(DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date'),'aqi.labId','d.deviceName','l.stateName','b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','aqi.id')
+                         ->where('labId','=',$request->lab_id)
+                         ->groupBy(DB::raw('Date(sampled_date_time)'));
+
+                //  $summaryAqiValue = DB::table('Aqi_values_per_device')
+                //                      ->select( DB::raw('MAX(AqiValue) as AqiValue , DATE(sampled_date_time) as date,deviceId'))
+                //                      ->where('labId','=',$request->lab_id)
+                //                      ->groupBy(DB::raw('Date(sampled_date_time)'))
+                //                      ->get();
+                    
+              if($startDate === $endDate){
+                    $summaryAqiValue->whereDate('aqi.sampled_date_time','=',$startDate); 
+                }
+                else {
+                    $summaryAqiValue->whereBetween('aqi.sampled_date_time', [$startDate, $endDate]);    
+                }
+                
+                $getData = new ReportsDataUtilityController($request,$summaryAqiValue);
+                  
+                $response = [
+                    "data"=>$getData->getData()
+                ];
+                $status = 200;
+                return response($response,$status);
+                    
+            }*/
+            
+     /*      public function alarmReport(Request $request){
+                
+                        $startDate = date("Y-m-d",strtotime($request->fromDate));
+                        $endDate = date("Y-m-d", strtotime($request->toDate));
+                
+                        $query = DB::table('customers as c')
+                        ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                        ->Join('branches as b', function($join){
+                            $join->on('l.id', '=', 'b.location_id')
+                                 ->on('c.customerId', '=', 'b.companyCode');
+                        })
+                        ->Join('facilities as f', function($join){
+                            $join->on('c.customerId', '=', 'f.companyCode')
+                                ->on('l.id', '=', 'f.location_id')
+                                ->on('b.id', '=', 'f.branch_id');
+                        })
+                        ->Join('buildings as bl', function($join){
+                            $join->on('c.customerId', '=', 'bl.companyCode')
+                                ->on('l.id', '=', 'bl.location_id')
+                                ->on('b.id', '=', 'bl.branch_id')
+                                ->on('f.id','=','bl.facility_id');
+                        })
+                        ->Join('floors as fl', function($join){
+                            $join->on('c.customerId', '=', 'fl.companyCode')
+                                ->on('l.id', '=', 'fl.location_id')
+                                ->on('b.id', '=', 'fl.branch_id')
+                                ->on('f.id','=','fl.facility_id')
+                                ->on('bl.id','=','fl.building_id');
+                        })
+                        ->Join('lab_departments as lb', function($join){
+                            $join->on('c.customerId', '=', 'lb.companyCode')
+                                ->on('l.id', '=', 'lb.location_id')
+                                ->on('b.id', '=', 'lb.branch_id')
+                                ->on('f.id','=','lb.facility_id')
+                                ->on('bl.id','=','lb.building_id')
+                                ->on('fl.id','=','lb.floor_id');
+                        })
+                        ->Join('devices as d', function($join){
+                            $join->on('c.customerId', '=', 'd.companyCode')
+                                ->on('l.id', '=', 'd.location_id')
+                                ->on('b.id', '=', 'd.branch_id')
+                                ->on('f.id','=','d.facility_id')
+                                ->on('bl.id','=','d.building_id')
+                                ->on('fl.id','=','d.floor_id')
+                                ->on('lb.id','=','d.lab_id');
+                        })
+                        ->Join('alert_crons as alarm', function($join){
+                            $join->on('c.customerId', '=', 'alarm.companyCode')
+                                  ->on('d.id', '=', 'alarm.deviceId');
+                        })
+                        ->select('alarm.id','c.customerId','l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','alarm.deviceId','alarm.Reason','alarm.sensorTag','alarm.msg','alarm.alertType','alarm.sensorId','alarm.a_date','alarm.a_time')
+                                ->WHERE('customerId','=','A-TEST')
+                                ->WHERE('deviceId','=',$request->deviceId)
+                                ->orderBy('id', 'DESC');
+                                if($startDate === $endDate){
+                                    $query->whereDate('alarm.a_date','=',$startDate); 
+                                }
+                                else {
+                                    $query->whereBetween('alarm.a_date', [$startDate, $endDate]);    
+                                }
+                
+                                $getData = new ReportsDataUtilityController($request,$query);
+                
+                                $response = [
+                                     "data"=>$getData->getData()
+                                ];
+                                
+                                $status = 200;
+                
+                      return response($response,$status);
+                       
+                       
+             }*/
+             
+     /*   public function exportAqiStatusReport(Request $request) 
+                        {  
+                            // $query = Device::query();
+                            // $query->where('companyCode','=',$this->companyCode);    
+                            // $query->where('location_id','=',$request->location_id); 
+                            // $query->where('branch_id','=',$request->branch_id); 
+                            // $query->where('facility_id','=',$request->facility_id); 
+                            // $query->where('building_id','=',$request->building_id); 
+                            // $query->where('floor_id','=',$request->floor_id); 
+                            // $query->where('lab_id','=',$request->lab_id); 
+                            
+                            $query = DB::table('customers as c')
+                                    ->join('locations as l', 'c.customerId', '=', 'l.companyCode')
+                                    ->Join('branches as b', function($join){
+                                        $join->on('l.id', '=', 'b.location_id')
+                                             ->on('c.customerId', '=', 'b.companyCode');
+                                    })
+                                    ->Join('facilities as f', function($join){
+                                        $join->on('c.customerId', '=', 'f.companyCode')
+                                            ->on('l.id', '=', 'f.location_id')
+                                            ->on('b.id', '=', 'f.branch_id');
+                                    })
+                                    ->Join('buildings as bl', function($join){
+                                        $join->on('c.customerId', '=', 'bl.companyCode')
+                                            ->on('l.id', '=', 'bl.location_id')
+                                            ->on('b.id', '=', 'bl.branch_id')
+                                            ->on('f.id','=','bl.facility_id');
+                                    })
+                                    ->Join('floors as fl', function($join){
+                                        $join->on('c.customerId', '=', 'fl.companyCode')
+                                            ->on('l.id', '=', 'fl.location_id')
+                                            ->on('b.id', '=', 'fl.branch_id')
+                                            ->on('f.id','=','fl.facility_id')
+                                            ->on('bl.id','=','fl.building_id');
+                                    })
+                                    ->Join('lab_departments as lb', function($join){
+                                        $join->on('c.customerId', '=', 'lb.companyCode')
+                                            ->on('l.id', '=', 'lb.location_id')
+                                            ->on('b.id', '=', 'lb.branch_id')
+                                            ->on('f.id','=','lb.facility_id')
+                                            ->on('bl.id','=','lb.building_id')
+                                            ->on('fl.id','=','lb.floor_id');
+                                    })
+                                    ->Join('devices as d', function($join){
+                                        $join->on('c.customerId', '=', 'd.companyCode')
+                                            ->on('l.id', '=', 'd.location_id')
+                                            ->on('b.id', '=', 'd.branch_id')
+                                            ->on('f.id','=','d.facility_id')
+                                            ->on('bl.id','=','d.building_id')
+                                            ->on('fl.id','=','d.floor_id')
+                                            ->on('lb.id','=','d.lab_id');
+                                    })
+                                    ->select('l.stateName', 'b.branchName','f.facilityName','bl.buildingName','fl.floorName','lb.labDepName','d.deviceName','d.id')
+                                    ->WHERE('customerId','=',$this->companyCode)
+                                    ->where('l.id','=',$request->input(key:'location_id')) 
+                                    ->where('b.id','=',$request->input(key:'branch_id'))
+                                    ->where('f.id','=',$request->input(key:'facility_id'))
+                                    ->where('bl.id','=',$request->input(key:'building_id'))
+                                    ->where('fl.id','=',$request->input(key:'floor_id')) 
+                                    ->where('lb.id','=',$request->input(key:'lab_id'));
+                                    //->WHERE('deviceId','=',$deviceId)
+                                    //->get();
+                    
+                            $data = $query->get();
+                    
+                            $deviceData = array();
+                                    
+                            $deviceCount = count($data);
+                        
+                            for($x=0;$x<$deviceCount;$x++){
+                                  $deviceStatusCount = DB::table('sampled_sensor_data_details')
+                                                        ->selectRaw('alertType,sample_date_time')
+                                                        ->where('device_id','=',$data[$x]->id)
+                                                        ->orderBy('id','desc')
+                                                        ->first();
+                                     
+                                    
+                    
+                                  if($deviceStatusCount){
+                                    $alertTypeVal = $deviceStatusCount->alertType;
+                                    $dateTime = $deviceStatusCount->sample_date_time;
+                    
+                                    if($alertTypeVal === "Critical"){
+                                        $alertColor = $this->alertColor['CRITICAL'];
+                                        $alertLightColor = $this->alertColor['CRITICALLIGHTCOLOR'];
+                                    }
+                                    if($alertTypeVal === "Warning"){
+                                        $alertColor = $this->alertColor['WARNING'];
+                                         $alertLightColor = $this->alertColor['WARNINGLIGHTCOLOR'];
+                                    }
+                                    if($alertTypeVal === "outOfRange"){
+                                        $alertColor = $this->alertColor['CRITICAL'];
+                                        $alertLightColor = $this->alertColor['CRITICALLIGHTCOLOR'];
+                                    }
+                                    if($alertTypeVal === "NORMAL"){
+                                        $alertColor = $this->alertColor['NORMAL'];
+                                        $alertLightColor = $this->alertColor['NORMALLIGHTCOLOR'];
+                                    }
+                                  }else{
+                                      $alertTypeVal = "NA";
+                                      $alertColor = "NA";
+                                      $alertLightColor = "NA";
+                                      $dateTime = "NA";
+                                  }
+                                  $data[$x]->alertType = $alertTypeVal;
+                                  $data[$x]->alertColor =$alertColor;
+                                  $data[$x]->alertLightColor = $alertLightColor;
+                                  $data[$x]->sample_date_time = $dateTime;
+                                  $deviceData[] = $data[$x];
+                            }
+                            
+                    
+                            //   $response = [
+                            //      "data"=>$deviceData
+                            // ];
+                            // $status = 200;
+                            // return response($response,$status);
+                            
+                            
+                            return Excel::download(new AqiStatusReportExport($deviceData), 'AqiStatusReportExport.xlsx');
+                }*/
+
 
