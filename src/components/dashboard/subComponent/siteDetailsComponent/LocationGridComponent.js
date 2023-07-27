@@ -110,7 +110,6 @@ function LocationGridComponent(props) {
             label={getAQIValue(params.row.aqiIndex)}
             sx={{
               color: 'black',
-              // borderColor: setAQIColor(params.row.aqiIndex),
               fontWeight:'600',
             }}
           />

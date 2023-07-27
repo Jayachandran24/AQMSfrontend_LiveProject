@@ -482,8 +482,7 @@ function Navbar(props) {
                   <BsCloudDownloadFill className='text-[20px] mt-1' />
                   <div className=''>
                     <span className='font-bold cursor-pointer'>
-                      <a href={UserManual} target='_blank' rel="noreferrer noopener">
-                      User Manual</a>
+                      <a href={UserManual} target='_blank' rel="noreferrer noopener">User Manual</a>
                     </span>
                     
                   </div>
